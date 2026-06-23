@@ -1,27 +1,68 @@
 ---
 import { profile } from '../data/profile';
 ---
-<section class="banner">
-  <h1>{profile.name}</h1>
-  <p class="type"><span id="tw"></span><span class="cursor">|</span></p>
-  <p class="intent">{profile.intent}</p>
-  <div class="down">⌄</div>
+<section class="banner aurora grid-bg">
+  <div class="inner">
+    <div class="badge reveal">{profile.intent}</div>
+    <h1 class="reveal" data-delay="1"><span class="grad-text">{profile.name}</span></h1>
+    <p class="type reveal" data-delay="2"><span id="tw"></span><span class="cursor">|</span></p>
+    <p class="sub reveal" data-delay="3">{profile.summary}</p>
+  </div>
+  <a class="scroll" href="#main" aria-label="向下滚动">↓</a>
 </section>
 
 <style>
   .banner {
-    background: var(--banner-grad); color: #fff;
-    min-height: 70vh; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; text-align: center; padding: 0 20px;
-    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 24px;
   }
-  .banner h1 { font-size: clamp(32px, 6vw, 56px); font-weight: 800; text-shadow: 0 2px 14px rgba(0,0,0,.18); }
-  .type { font-size: clamp(15px, 2.5vw, 20px); margin-top: 14px; min-height: 1.6em; }
-  .cursor { animation: blink 1s step-end infinite; }
-  .intent { margin-top: 10px; opacity: .9; font-size: 14px; }
-  .down { position: absolute; bottom: 18px; font-size: 26px; opacity: .85; animation: bob 1.6s infinite; }
-  @keyframes blink { 0%,50%{opacity:1} 51%,100%{opacity:0} }
-  @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+  .inner { max-width: 820px; }
+  .badge {
+    display: inline-block;
+    font-size: 13px;
+    color: var(--accent);
+    border: 1px solid var(--border);
+    background: var(--surface-2);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 999px;
+    padding: 6px 16px;
+    margin-bottom: 26px;
+    font-weight: 500;
+  }
+  .banner h1 {
+    font-size: clamp(46px, 9vw, 92px);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+  }
+  .type {
+    font-size: clamp(18px, 3vw, 27px);
+    font-weight: 600;
+    margin-top: 20px;
+    min-height: 1.4em;
+  }
+  .cursor { color: var(--accent); animation: blink 1s step-end infinite; }
+  .sub {
+    color: var(--muted);
+    font-size: clamp(14px, 2vw, 17px);
+    margin: 18px auto 0;
+    max-width: 560px;
+  }
+  .scroll {
+    position: absolute;
+    bottom: 30px;
+    font-size: 24px;
+    color: var(--muted);
+    animation: bob 1.8s infinite;
+  }
+  @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+  @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
 </style>
 
 <script>

@@ -6,14 +6,16 @@ const { title, icon = '', items } = Astro.props;
 ---
 <section class="section-pad">
   <div class="container">
-    <h2 class="sg-title">{icon} {title}</h2>
+    <h2 class="sg-title reveal">{icon} {title}</h2>
     <div class="grid">
-      {items.map((it) => <Card {...it} />)}
+      {items.map((it, i) => (
+        <div class="reveal" data-delay={String((i % 3) + 1)}><Card {...it} /></div>
+      ))}
     </div>
   </div>
 </section>
 
 <style>
-  .sg-title { font-size: 22px; margin-bottom: 20px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px; }
+  .sg-title { font-size: 28px; font-weight: 800; margin-bottom: 28px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 22px; }
 </style>

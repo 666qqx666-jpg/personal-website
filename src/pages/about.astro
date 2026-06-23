@@ -8,18 +8,18 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 <BaseLayout title={`关于 · ${profile.name}`} description={profile.summary}>
   <section class="section-pad">
     <div class="container about">
-      <h1>{profile.name}</h1>
-      <p class="intent">{profile.intent}</p>
-      <p class="summary">{profile.summary}</p>
-      <div class="cta">
+      <h1 class="reveal"><span class="grad-text">{profile.name}</span></h1>
+      <p class="intent reveal" data-delay="1">{profile.intent}</p>
+      <p class="summary reveal" data-delay="1">{profile.summary}</p>
+      <div class="cta reveal" data-delay="2">
         <a class="btn" href={`${base}${profile.resumePdf}`} download>⬇ 下载 PDF 简历</a>
         <a class="btn ghost" href={`mailto:${profile.email}`}>✉ 联系我</a>
       </div>
-      <Timeline />
-      <h3 class="sec-h">技能</h3>
-      <SkillTags />
-      <h3 class="sec-h">链接</h3>
-      <div class="links">
+      <div class="reveal"><Timeline /></div>
+      <h3 class="sec-h reveal">技能</h3>
+      <div class="reveal"><SkillTags /></div>
+      <h3 class="sec-h reveal">链接</h3>
+      <div class="links reveal">
         {profile.links.map((l) => <a href={l.href} target="_blank" rel="noopener">{l.label}</a>)}
       </div>
     </div>
@@ -27,13 +27,20 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 </BaseLayout>
 
 <style>
-  .about { max-width: 780px; }
-  .about h1 { font-size: 32px; }
-  .intent { color: var(--accent); font-weight: 600; margin-top: 8px; }
-  .summary { color: var(--muted); margin-top: 8px; }
-  .cta { display: flex; gap: 12px; margin: 20px 0 8px; flex-wrap: wrap; }
-  .btn { background: var(--accent); color:#fff; border-radius:999px; padding:8px 18px; font-size:14px; }
-  .btn.ghost { background: transparent; border:1px solid var(--accent); color: var(--accent); }
-  .sec-h { margin: 28px 0 12px; }
+  .about { max-width: 800px; }
+  .about h1 { font-size: clamp(36px, 6vw, 52px); font-weight: 800; }
+  .intent { color: var(--accent); font-weight: 600; margin-top: 10px; font-size: 17px; }
+  .summary { color: var(--muted); margin-top: 10px; font-size: 16px; }
+  .cta { display: flex; gap: 12px; margin: 26px 0 8px; flex-wrap: wrap; }
+  .btn {
+    background: var(--accent); color: #fff; border-radius: 999px;
+    padding: 10px 20px; font-size: 14px; font-weight: 500;
+    box-shadow: 0 6px 18px rgba(99, 102, 241, 0.32);
+    transition: transform 0.25s var(--ease);
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn.ghost { background: transparent; border: 1px solid var(--accent); color: var(--accent); box-shadow: none; }
+  .sec-h { margin: 36px 0 14px; font-size: 20px; font-weight: 700; }
   .links { display: flex; gap: 16px; flex-wrap: wrap; }
+  .links a { color: var(--accent); font-weight: 500; }
 </style>

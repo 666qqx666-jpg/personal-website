@@ -24,7 +24,24 @@ const { title, description = '' } = Astro.props;
   </head>
   <body>
     <Nav />
-    <main><slot /></main>
+    <main id="main"><slot /></main>
     <Footer />
+    <script is:inline>
+      // 滚动进入动效
+      const obs = new IntersectionObserver(
+        (es) => {
+          es.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add('in');
+              obs.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.12 }
+      );
+      const run = () => document.querySelectorAll('.reveal').forEach((el) => obs.observe(el));
+      if (document.readyState !== 'loading') run();
+      else document.addEventListener('DOMContentLoaded', run);
+    </script>
   </body>
 </html>
