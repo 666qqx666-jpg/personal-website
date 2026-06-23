@@ -1,0 +1,20 @@
+---
+import { profile } from '../data/profile';
+---
+<footer class="footer">
+  <div class="container">
+    <div class="links">
+      {profile.links.map((l) => <a href={l.href} target="_blank" rel="noopener">{l.label}</a>)}
+      <a href={`mailto:${profile.email}`}>{profile.email}</a>
+    </div>
+    <p class="copy">© {new Date().getFullYear()} {profile.name}</p>
+  </div>
+</footer>
+
+<style>
+  .footer { border-top: 1px solid var(--border); padding: 32px 0; margin-top: 48px; }
+  .footer .links { display: flex; gap: 18px; flex-wrap: wrap; }
+  .footer .links a { color: var(--muted); font-size: 14px; }
+  .footer .links a:hover { color: var(--accent); }
+  .copy { color: var(--muted); font-size: 13px; margin-top: 10px; }
+</style>

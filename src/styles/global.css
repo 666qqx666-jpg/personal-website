@@ -1,0 +1,48 @@
+/* ---- Design Tokens（亮色）---- */
+:root {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --text: #2a3140;
+  --muted: #6b7280;
+  --border: rgba(120, 130, 150, 0.18);
+  --accent: #5b8def;
+  --accent-2: #9d7bea;
+  --banner-grad: linear-gradient(135deg, #5b8def 0%, #9d7bea 100%);
+  --radius: 12px;
+  --shadow: 0 4px 16px rgba(20, 30, 60, 0.08);
+  --shadow-hover: 0 12px 30px rgba(20, 30, 60, 0.16);
+  --nav-bg: rgba(255, 255, 255, 0.7);
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Microsoft YaHei', sans-serif;
+}
+
+/* ---- Design Tokens（暗色）---- */
+:root[data-theme='dark'] {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --text: #e6edf3;
+  --muted: #8b949e;
+  --border: rgba(140, 150, 170, 0.2);
+  --accent: #58a6ff;
+  --accent-2: #bc8cff;
+  --banner-grad: linear-gradient(135deg, #1f6feb 0%, #6e40c9 100%);
+  --shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.55);
+  --nav-bg: rgba(22, 27, 34, 0.7);
+}
+
+/* ---- Reset / 基础排版 ---- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  line-height: 1.6;
+  transition: background 0.3s, color 0.3s;
+}
+a { color: var(--accent); text-decoration: none; }
+img { max-width: 100%; display: block; }
+.container { max-width: 1080px; margin: 0 auto; padding: 0 20px; }
+.section-pad { padding: 56px 0; }
+h1, h2, h3 { line-height: 1.25; }

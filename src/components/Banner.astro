@@ -1,0 +1,42 @@
+---
+import { profile } from '../data/profile';
+---
+<section class="banner">
+  <h1>{profile.name}</h1>
+  <p class="type"><span id="tw"></span><span class="cursor">|</span></p>
+  <p class="intent">{profile.intent}</p>
+  <div class="down">⌄</div>
+</section>
+
+<style>
+  .banner {
+    background: var(--banner-grad); color: #fff;
+    min-height: 70vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center; padding: 0 20px;
+    position: relative;
+  }
+  .banner h1 { font-size: clamp(32px, 6vw, 56px); font-weight: 800; text-shadow: 0 2px 14px rgba(0,0,0,.18); }
+  .type { font-size: clamp(15px, 2.5vw, 20px); margin-top: 14px; min-height: 1.6em; }
+  .cursor { animation: blink 1s step-end infinite; }
+  .intent { margin-top: 10px; opacity: .9; font-size: 14px; }
+  .down { position: absolute; bottom: 18px; font-size: 26px; opacity: .85; animation: bob 1.6s infinite; }
+  @keyframes blink { 0%,50%{opacity:1} 51%,100%{opacity:0} }
+  @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+</style>
+
+<script>
+  import { profile } from '../data/profile';
+  const el = document.getElementById('tw');
+  const phrases = profile.typewriter;
+  let pi = 0, ci = 0, deleting = false;
+  function tick() {
+    const word = phrases[pi];
+    ci += deleting ? -1 : 1;
+    if (el) el.textContent = word.slice(0, ci);
+    let delay = deleting ? 50 : 110;
+    if (!deleting && ci === word.length) { deleting = true; delay = 1400; }
+    else if (deleting && ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; delay = 300; }
+    setTimeout(tick, delay);
+  }
+  tick();
+</script>

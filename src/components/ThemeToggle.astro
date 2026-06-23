@@ -1,0 +1,29 @@
+---
+---
+<button id="theme-toggle" aria-label="切换深浅色" title="切换深浅色">🌙</button>
+
+<style>
+  #theme-toggle {
+    background: transparent; border: 1px solid var(--border);
+    border-radius: 999px; width: 36px; height: 36px; cursor: pointer;
+    font-size: 16px; line-height: 1; color: var(--text);
+  }
+</style>
+
+<script is:inline>
+  (() => {
+    const btn = document.getElementById('theme-toggle');
+    const sync = () => {
+      const dark = document.documentElement.dataset.theme === 'dark';
+      if (btn) btn.textContent = dark ? '☀️' : '🌙';
+    };
+    sync();
+    btn?.addEventListener('click', () => {
+      const root = document.documentElement;
+      const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      localStorage.setItem('theme', next);
+      sync();
+    });
+  })();
+</script>

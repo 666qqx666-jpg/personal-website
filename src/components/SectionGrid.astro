@@ -1,0 +1,19 @@
+---
+import Card from './Card.astro';
+interface Item { title: string; hook?: string; tags?: string[]; href?: string; cover?: string; }
+interface Props { title: string; icon?: string; items: Item[]; }
+const { title, icon = '', items } = Astro.props;
+---
+<section class="section-pad">
+  <div class="container">
+    <h2 class="sg-title">{icon} {title}</h2>
+    <div class="grid">
+      {items.map((it) => <Card {...it} />)}
+    </div>
+  </div>
+</section>
+
+<style>
+  .sg-title { font-size: 22px; margin-bottom: 20px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 18px; }
+</style>

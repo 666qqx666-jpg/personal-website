@@ -1,0 +1,32 @@
+---
+interface Props {
+  title: string; hook?: string; tags?: string[]; href?: string; cover?: string;
+}
+const { title, hook = '', tags = [], href, cover } = Astro.props;
+const Tag = href ? 'a' : 'div';
+---
+<Tag class="card" href={href}>
+  <div class="cover" style={cover ? `background:${cover}` : 'background:var(--banner-grad)'}></div>
+  <div class="body">
+    <h3>{title}</h3>
+    {hook && <p class="hook">{hook}</p>}
+    {tags.length > 0 && (
+      <div class="tags">{tags.map((t) => <span>{t}</span>)}</div>
+    )}
+  </div>
+</Tag>
+
+<style>
+  .card {
+    display: block; background: var(--surface); border-radius: var(--radius);
+    overflow: hidden; box-shadow: var(--shadow); color: var(--text);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); }
+  .cover { height: 90px; }
+  .body { padding: 14px; }
+  .body h3 { font-size: 16px; }
+  .hook { color: var(--muted); font-size: 13px; margin-top: 6px; }
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+  .tags span { font-size: 11px; border: 1px solid var(--border); border-radius: 999px; padding: 2px 9px; color: var(--muted); }
+</style>
