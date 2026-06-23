@@ -1,0 +1,18 @@
+---
+import { skillGroups } from '../data/skills';
+---
+<div class="skills">
+  {skillGroups.map((g) => (
+    <div class="group">
+      <div class="label">{g.group}</div>
+      <div class="tags">{g.items.map((s) => <span>{s}</span>)}</div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .group { margin-bottom: 16px; }
+  .label { font-weight: 700; margin-bottom: 8px; }
+  .tags { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tags span { background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 4px 12px; font-size: 13px; box-shadow: var(--shadow); }
+</style>

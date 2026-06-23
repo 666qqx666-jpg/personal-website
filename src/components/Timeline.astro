@@ -1,0 +1,25 @@
+---
+import { jobs, education } from '../data/resume';
+---
+<div class="timeline">
+  <h3>履历</h3>
+  {jobs.map((j) => (
+    <div class="item">
+      <div class="head"><strong>{j.company}</strong> · {j.title} <span class="period">{j.period}</span></div>
+      <ul>{j.highlights.map((h) => <li>{h}</li>)}</ul>
+    </div>
+  ))}
+  <h3>教育</h3>
+  {education.map((e) => (
+    <div class="item"><strong>{e.school}</strong> · {e.major} <span class="period">{e.period}</span></div>
+  ))}
+</div>
+
+<style>
+  .timeline h3 { margin: 24px 0 12px; }
+  .item { border-left: 2px solid var(--border); padding: 0 0 16px 16px; position: relative; }
+  .item::before { content:''; position:absolute; left:-5px; top:6px; width:8px; height:8px; border-radius:50%; background:var(--accent); }
+  .period { color: var(--muted); font-size: 13px; }
+  .item ul { margin: 6px 0 0 18px; }
+  .item li { font-size: 14px; }
+</style>
