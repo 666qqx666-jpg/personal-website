@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Banner from '../components/Banner.astro';
 import SectionGrid from '../components/SectionGrid.astro';
 import { profile } from '../data/profile';
-const base = import.meta.env.BASE_URL;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const sections = [
   { title: '项目经历', hook: '做过的产品 / 项目，方法论融入案例', href: `${base}projects/`, cover: 'linear-gradient(120deg,#667eea,#764ba2)' },
   { title: 'AI 落地实战', hook: '把 AI 嵌进 PM 工作流的动手证据', href: `${base}ai/`, cover: 'linear-gradient(120deg,#3a7bd5,#00d2ff)' },

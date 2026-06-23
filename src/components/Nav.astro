@@ -1,7 +1,7 @@
 ---
 import ThemeToggle from './ThemeToggle.astro';
 import { profile } from '../data/profile';
-const base = import.meta.env.BASE_URL; // 处理 GitHub Pages 子路径
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/'); // 处理 GitHub Pages 子路径（强制尾斜杠）
 const links = [
   { label: '首页', href: base },
   { label: '项目经历', href: `${base}projects/` },
