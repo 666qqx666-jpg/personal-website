@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionGrid from '../../components/SectionGrid.astro';
+const items = [
+  { title: '置身钉内 → 产品机会', hook: '读一本行业书，产出一张 AI 产品机会卡', tags: ['读书→输出'] },
+  { title: '产品方法论卡片合集', hook: '需求定位四问 / 用户买单信号 / PRD 审查', tags: ['方法论'] },
+  { title: '转型故事 + 周度复盘', hook: '一个传统 PM 怎么跳进 AI', tags: ['成长'] },
+];
+---
+<BaseLayout title="思考与成长"><SectionGrid title="思考与成长" icon="📖" items={items} /></BaseLayout>

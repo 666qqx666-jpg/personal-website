@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionGrid from '../../components/SectionGrid.astro';
+const items = [
+  { title: 'Personal Knowledge Harness', hook: '自建个人知识中枢——旗舰案例（建设中）', tags: ['架构设计', '已落地'] },
+  { title: 'reading-dialogue Skill', hook: '把"读完就忘"变成结构化阅读对话', tags: ['工作流'] },
+  { title: 'Claude Code 源码解析', hook: '拆开 AI Coding 工具的引擎', tags: ['技术理解'] },
+];
+---
+<BaseLayout title="AI 落地实战"><SectionGrid title="AI 落地实战" icon="🔧" items={items} /></BaseLayout>
