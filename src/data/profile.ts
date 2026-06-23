@@ -9,15 +9,19 @@ export interface Profile {
 }
 
 export const profile: Profile = {
-  name: '你的名字',
-  intent: '求职意向：AI 产品经理（AI 应用 / Agent 方向）',
-  summary: '传统互联网 PM 转型 AI 产品，方法论扎实 + 已动手把 AI 落地到产品工作流。',
-  typewriter: ['传统 PM → AI 产品 · 动手派', '方法论 + AI 落地实战', '用作品和思路说话'],
-  email: 'you@example.com',
+  name: 'QQ星',
+  intent: '求职意向：AI 产品经理',
+  summary:
+    '计算机科班出身的 B 端产品经理，2 年 CRM / 数据分析 / 系统架构设计经验，正在动手把 AI 落地到产品工作流。',
+  typewriter: [
+    '计算机背景 · B 端产品 → AI 产品',
+    'CRM / 数据分析 / 系统架构',
+    '懂技术，动手把 AI 落地',
+  ],
+  email: '666qqx666@gmail.com',
   links: [
-    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/your-id' },
-    { label: '脉脉', href: 'https://maimai.cn/' },
-    { label: 'GitHub', href: 'https://github.com/your-id' },
+    { label: 'CSDN', href: 'https://blog.csdn.net/weixin_50178621' },
+    { label: 'GitHub', href: 'https://github.com/666qqx666-jpg' },
   ],
   resumePdf: 'resume.pdf',
 };
