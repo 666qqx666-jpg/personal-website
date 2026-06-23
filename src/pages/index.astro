@@ -1,13 +1,23 @@
 ---
-// 临时占位页，确保 scaffold 阶段 build 可通过；Task 7 会覆盖为真正首页。
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Banner from '../components/Banner.astro';
+import SectionGrid from '../components/SectionGrid.astro';
+import { profile } from '../data/profile';
+const base = import.meta.env.BASE_URL;
+const sections = [
+  { title: '项目经历', hook: '做过的产品 / 项目，方法论融入案例', href: `${base}projects/`, cover: 'linear-gradient(120deg,#667eea,#764ba2)' },
+  { title: 'AI 落地实战', hook: '把 AI 嵌进 PM 工作流的动手证据', href: `${base}ai/`, cover: 'linear-gradient(120deg,#3a7bd5,#00d2ff)' },
+  { title: '思考与成长', hook: '读书笔记 · 方法论 · 转型故事', href: `${base}thinking/`, cover: 'linear-gradient(120deg,#11998e,#38ef7d)' },
+];
 ---
-<!doctype html>
-<html lang="zh-CN">
-  <head>
-    <meta charset="utf-8" />
-    <title>scaffold placeholder</title>
-  </head>
-  <body>
-    <p>scaffold ok</p>
-  </body>
-</html>
+<BaseLayout title={`${profile.name} · 个人主页`} description={profile.summary}>
+  <Banner />
+  <section class="section-pad">
+    <div class="container"><p class="summary">{profile.summary}</p></div>
+  </section>
+  <SectionGrid title="探索" icon="🧭" items={sections} />
+</BaseLayout>
+
+<style>
+  .summary { font-size: clamp(16px,2.4vw,20px); text-align:center; max-width:720px; margin:0 auto; }
+</style>
