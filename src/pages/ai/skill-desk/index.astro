@@ -11,6 +11,7 @@ const hrefFor = (href?: string) => href ? `${base}${href.replace(/^\//, '')}` : 
 <BaseLayout
   title="Skill Desk — QQ星"
   description="把实用 AI workflow 拆成可解释、可验证、可继续产品化的 skill 方法库"
+  bodyClass="skill-desk-shell"
 >
   <section class="section-pad skill-desk-page">
     <div class="container">
@@ -78,8 +79,59 @@ const hrefFor = (href?: string) => href ? `${base}${href.replace(/^\//, '')}` : 
   </section>
 
   <style>
+    :global(body.skill-desk-shell) {
+      --bg: #070b14;
+      --bg-soft: #0a1020;
+      --surface: rgba(15, 22, 38, 0.82);
+      --surface-2: rgba(13, 20, 36, 0.78);
+      --text: #e8ecf5;
+      --muted: #96a3b8;
+      --border: rgba(255, 255, 255, 0.1);
+      --accent: #22d3ee;
+      --accent-2: #8b5cf6;
+      --accent-3: #34d399;
+      --grad: linear-gradient(100deg, #4f8cff 0%, #8b5cf6 50%, #22d3ee 100%);
+      --nav-bg: rgba(7, 11, 20, 0.78);
+      --shadow: 0 16px 42px rgba(0, 0, 0, 0.28);
+      --shadow-lg: 0 22px 58px rgba(0, 0, 0, 0.42);
+      background: #070b14;
+    }
+    :global(body.skill-desk-shell .nav) {
+      border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+    :global(body.skill-desk-shell .footer) {
+      margin-top: 0;
+      background: #070b14;
+      border-top-color: rgba(255, 255, 255, 0.1);
+    }
     .skill-desk-page {
+      position: relative;
+      overflow: hidden;
+      min-height: calc(100vh - 60px);
       padding-top: 72px;
+      background:
+        radial-gradient(620px 420px at 18% 0%, rgba(79, 140, 255, 0.18), transparent 62%),
+        radial-gradient(760px 520px at 88% 12%, rgba(139, 92, 246, 0.14), transparent 64%),
+        radial-gradient(720px 560px at 55% 100%, rgba(34, 211, 238, 0.1), transparent 62%),
+        linear-gradient(180deg, #070b14 0%, #0a1020 48%, #070b14 100%);
+      color: var(--text);
+      isolation: isolate;
+    }
+    .skill-desk-page::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+      background-size: 54px 54px;
+      mask-image: radial-gradient(ellipse 88% 70% at 50% 22%, #000 24%, transparent 82%);
+    }
+    .skill-desk-page :global(.reveal) {
+      opacity: 1;
+      transform: none;
+      transition: none;
     }
     .desk-hero {
       display: grid;
@@ -95,6 +147,10 @@ const hrefFor = (href?: string) => href ? `${base}${href.replace(/^\//, '')}` : 
       text-transform: uppercase;
     }
     .desk-hero h1 {
+      background: var(--grad);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
       font-size: 4.5rem;
       letter-spacing: 0;
       line-height: 1;
@@ -120,9 +176,13 @@ const hrefFor = (href?: string) => href ? `${base}${href.replace(/^\//, '')}` : 
       border: 1px solid var(--border);
       border-radius: 8px;
       box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
     }
     .desk-stats div {
       padding: 16px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.02)),
+        var(--surface);
     }
     .desk-stats strong {
       display: block;
@@ -143,9 +203,14 @@ const hrefFor = (href?: string) => href ? `${base}${href.replace(/^\//, '')}` : 
       border: 1px solid var(--border);
       border-radius: 999px;
       padding: 7px 12px;
-      color: var(--muted);
+      color: #c8d3e4;
       background: var(--surface-2);
       font-size: 0.88rem;
+    }
+    .desk-tabs a:hover {
+      border-color: rgba(34, 211, 238, 0.58);
+      color: var(--text);
+      background: rgba(34, 211, 238, 0.1);
     }
     .desk-grid {
       display: grid;
@@ -167,7 +232,7 @@ const hrefFor = (href?: string) => href ? `${base}${href.replace(/^\//, '')}` : 
     }
     .flagship-card {
       background:
-        linear-gradient(135deg, rgba(6, 182, 212, 0.12), rgba(99, 102, 241, 0.08)),
+        linear-gradient(135deg, rgba(34, 211, 238, 0.16), rgba(139, 92, 246, 0.12)),
         var(--surface);
     }
     .skill-card h2 {
@@ -191,8 +256,8 @@ const hrefFor = (href?: string) => href ? `${base}${href.replace(/^\//, '')}` : 
       border: 1px solid var(--border);
       border-radius: 999px;
       padding: 4px 9px;
-      color: var(--muted);
-      background: var(--bg-soft);
+      color: #c8d3e4;
+      background: rgba(255, 255, 255, 0.045);
       font-size: 0.75rem;
       font-weight: 600;
     }
@@ -216,6 +281,7 @@ const hrefFor = (href?: string) => href ? `${base}${href.replace(/^\//, '')}` : 
     .lane-grid article {
       padding: 16px;
       box-shadow: none;
+      background: rgba(255, 255, 255, 0.045);
     }
     .lane-grid h3 {
       font-size: 0.98rem;
@@ -230,8 +296,11 @@ const hrefFor = (href?: string) => href ? `${base}${href.replace(/^\//, '')}` : 
     .harness-link {
       display: inline-flex;
       margin-top: 24px;
-      color: var(--accent);
+      color: #67e8f9;
       font-weight: 700;
+    }
+    .harness-link:hover {
+      color: var(--text);
     }
     @media (max-width: 900px) {
       .desk-grid,
