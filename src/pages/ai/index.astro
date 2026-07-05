@@ -1,8 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SectionGrid from '../../components/SectionGrid.astro';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const items = [
-  { title: 'Personal Knowledge Harness', hook: '自建个人知识中枢——旗舰案例（建设中）', tags: ['架构设计', '已落地'] },
+  { title: 'Personal Knowledge Harness', hook: '从上下文爆炸到三层知识库 × 多 agent 共用记忆——一个个人 AI 产品的完整决策史', tags: ['旗舰 deck', '架构设计', '已上线'], href: `${base}ai/knowledge-harness/` },
   { title: 'reading-dialogue Skill', hook: '把"读完就忘"变成结构化阅读对话', tags: ['工作流'] },
   { title: 'Claude Code 源码解析', hook: '拆开 AI Coding 工具的引擎', tags: ['技术理解'] },
 ];
