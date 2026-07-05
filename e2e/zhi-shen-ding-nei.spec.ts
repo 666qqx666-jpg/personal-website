@@ -9,6 +9,15 @@ test('AI listing links to Zhi Shen Ding Nei responsibility flow deck', async ({ 
   await expect(card).toHaveAttribute('href', '/personal-website/ai/zhi-shen-ding-nei/');
 });
 
+test('thinking listing replaces Zhi Shen Ding Nei product opportunity card with responsibility flow deck', async ({ page }) => {
+  await page.goto('/personal-website/thinking/');
+  const card = page.locator('.card', { hasText: '置身钉内 → 产品机会' });
+  await expect(card).toBeVisible();
+  await expect(card).toContainText('责任流');
+  await expect(card).toContainText('To B 产品');
+  await expect(card).toHaveAttribute('href', '/personal-website/ai/zhi-shen-ding-nei/');
+});
+
 test('Zhi Shen Ding Nei deck has ten responsibility-flow sections', async ({ page }) => {
   await page.goto('/personal-website/ai/zhi-shen-ding-nei/');
   await expect(page.getByRole('heading', { name: '置身钉内：我读到的不是消息总结，而是责任流' })).toBeVisible();
