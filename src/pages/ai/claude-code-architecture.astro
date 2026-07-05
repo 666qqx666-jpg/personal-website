@@ -1,0 +1,508 @@
+---
+import DeckLayout from '../../layouts/DeckLayout.astro';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+<DeckLayout
+  title="从 Claude Code 到 AI 产品架构 — QQ星"
+  description="我从 AI Coding Agent 源码里抽象出的可迁移产品架构方法"
+>
+  <main id="deck" class="method-deck">
+    <section id="s1">
+      <div class="chapter">AI 产品架构方法论</div>
+      <h1>从 Claude Code 到 AI 产品架构</h1>
+      <p class="sub hero-sub">我拆开的不是一个 coding 工具，<br />而是一套 AI 产品如何组织输入、工具、状态、权限与协作的工程方法。</p>
+      <p class="sub signal-line">system / messages / tools -> context -> control -> runtime -> multi-agent</p>
+      <div class="figure architecture-orbit" aria-label="AI product architecture orbit">
+        <strong>AI Product<br />Architecture</strong>
+        <span>system</span>
+        <span>messages</span>
+        <span>tools</span>
+        <span>context</span>
+        <span>control</span>
+        <span>runtime</span>
+        <span>multi-agent</span>
+      </div>
+      <div class="scroll-hint">↓ 滚动进入框架</div>
+    </section>
+
+    <section id="s2">
+      <div class="chapter">02 · 第一性原理</div>
+      <h2>模型看到的世界，<em>其实很小</em></h2>
+      <div class="split">
+        <div class="method-copy">
+          <div class="lens">关键认知</div>
+          <p>再复杂的 harness，最终也只是把信息塞进 <code>system</code>、<code>messages</code> 和 <code>tools</code>。</p>
+          <div class="method-card">
+            <span>方法论抽象</span>
+            <p>AI 产品经理设计的不是页面流程本身，而是模型能看到什么、不能看到什么，以及能选择哪些行动入口。</p>
+          </div>
+        </div>
+        <div class="figure evidence">
+          <div class="fig-label">源码证据</div>
+          <pre><code>response = client.messages.create(
+    system=SYSTEM,
+    messages=messages,
+    tools=TOOLS,
+)</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="s3">
+      <div class="chapter">03 · Agent Loop</div>
+      <h2>不是固定流程，<em>而是动态控制流</em></h2>
+      <div class="split">
+        <div class="method-copy">
+          <div class="lens">关键认知</div>
+          <p>Agent 产品不是固定 workflow，而是模型驱动的动态控制流。</p>
+          <div class="method-card">
+            <span>方法论抽象</span>
+            <p>产品职责从编排固定步骤，转向设计可控的行动空间。</p>
+          </div>
+        </div>
+        <div class="figure evidence">
+          <div class="fig-label">控制流证据</div>
+          <pre><code>while True:
+    response = call_model(messages, tools)
+    if response.stop_reason != "tool_use":
+        return response
+    results = run_tools(response.content)
+    messages.append(tool_results(results))</code></pre>
+          <div class="flow-row" aria-label="agent loop">
+            <span>model</span><i>-></i><span>tool_use</span><i>-></i><span>tool_result</span><i>-></i><span>next turn</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="s4">
+      <div class="chapter">04 · Tool Interface</div>
+      <h2>工具不是按钮，<em>是给模型看的能力接口</em></h2>
+      <div class="split">
+        <div class="method-copy">
+          <div class="lens">关键认知</div>
+          <p>工具不是功能按钮，而是模型可理解、可选择、可调用的能力接口。</p>
+          <div class="method-card">
+            <span>方法论抽象</span>
+            <p>功能要同时面向人类用户和模型：人要结果，模型要清晰的名称、description、参数边界和失败反馈。</p>
+          </div>
+        </div>
+        <div class="figure evidence">
+          <div class="fig-label">接口证据</div>
+          <div class="flow-row" aria-label="tool interface">
+            <span>schema</span><i>-></i><span>tool_use</span><i>-></i><span>handler</span><i>-></i><span>tool_result</span>
+          </div>
+          <pre><code>tools = [&#123;"name": "read_file", "description": "..."&#125;]
+output = TOOL_HANDLERS[block.name](**block.input)</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="s5">
+      <div class="chapter">05 · Context Architecture</div>
+      <h2>上下文怎么进出，<em>决定产品上限</em></h2>
+      <div class="split">
+        <div class="method-copy">
+          <div class="lens">关键认知</div>
+          <p>Subagent、Skill、Compact 看似是不同模块，本质都在解决同一个问题：上下文怎么进、怎么出、怎么被压缩。</p>
+          <div class="method-card">
+            <span>方法论抽象</span>
+            <p>关键不是让模型知道更多，而是让它每次只看到足够完成当前任务的最小上下文。</p>
+          </div>
+        </div>
+        <div class="figure evidence">
+          <div class="fig-label">上下文证据</div>
+          <div class="mini-grid">
+            <div class="mini-card"><b>Subagent</b><p>独立 sub_messages，只把摘要回传父 agent。</p></div>
+            <div class="mini-card"><b>Skill</b><p>system prompt 放目录，tool result 按需加载全文。</p></div>
+            <div class="mini-card"><b>Compact</b><p>超限后用摘要替换历史 messages。</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="s6">
+      <div class="chapter">06 · Control Plane</div>
+      <h2>把控制权交给模型后，<em>必须加控制层</em></h2>
+      <div class="split">
+        <div class="method-copy">
+          <div class="lens">关键认知</div>
+          <p>一旦让模型决定下一步，产品就必须设计权限、拦截、恢复和观测。</p>
+          <div class="method-card">
+            <span>方法论抽象</span>
+            <p>AI 产品不能只设计模型能做什么，还要设计什么时候不能做、被拦后如何知道、失败后如何继续。</p>
+          </div>
+        </div>
+        <div class="figure evidence">
+          <div class="fig-label">控制层证据</div>
+          <div class="flow-row wide" aria-label="control plane">
+            <span>tool_use</span><i>-></i><span>permission gate</span><i>-></i><span>handler</span><i>-></i><span>hook</span><i>-></i><span>tool_result</span>
+          </div>
+          <div class="source-grid">
+            <p><b>permission</b> 拒绝危险调用，并把原因回写。</p>
+            <p><b>hook</b> 在固定时机审计、提醒或阻止。</p>
+            <p><b>recovery</b> 按截断、超限、网络抖动分别恢复。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="s7">
+      <div class="chapter">07 · Runtime Layer</div>
+      <h2>把一次聊天，<em>变成持续工作系统</em></h2>
+      <div class="split">
+        <div class="method-copy">
+          <div class="lens">关键认知</div>
+          <p>真正可用的 AI 产品必须把一次对话升级为可持续推进的工作系统。</p>
+          <div class="method-card">
+            <span>方法论抽象</span>
+            <p>任务不只是聊天里的待办项，而应该有生命周期、依赖关系、执行槽位和时间触发机制。</p>
+          </div>
+        </div>
+        <div class="figure evidence">
+          <div class="fig-label">运行时证据</div>
+          <div class="mini-grid runtime-grid">
+            <div class="mini-card"><b>Todo</b><p>会话内计划草稿。</p></div>
+            <div class="mini-card"><b>Task</b><p>落盘的持久目标和依赖图。</p></div>
+            <div class="mini-card"><b>Background</b><p>慢命令后台运行，完成后通知主循环。</p></div>
+            <div class="mini-card"><b>Cron</b><p>未来时间自动注入一条 user message。</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="s8">
+      <div class="chapter">08 · Multi-Agent Layer</div>
+      <h2>多 agent 是系统设计，<em>不是多开模型</em></h2>
+      <div class="split">
+        <div class="method-copy">
+          <div class="lens">关键认知</div>
+          <p>多 agent 的核心不是同时调用多个模型，而是角色、状态、通信、协议、执行隔离和外部能力接入。</p>
+          <div class="method-card">
+            <span>方法论抽象</span>
+            <p>先设计组织结构和协作协议，再谈模型数量。</p>
+          </div>
+        </div>
+        <div class="figure evidence">
+          <div class="fig-label">协作证据</div>
+          <div class="flow-row wide" aria-label="multi agent protocol">
+            <span>lead</span><i>-></i><span>inbox</span><i>-></i><span>request</span><i>-></i><span>claim</span><i>-></i><span>worktree</span><i>-></i><span>MCP</span>
+          </div>
+          <div class="source-grid">
+            <p><b>teammate</b> 长期存在，有自己的 messages 和 inbox。</p>
+            <p><b>protocol</b> 用 request id 和状态机追踪协作。</p>
+            <p><b>worktree</b> 为并行任务提供隔离目录。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="s9">
+      <div class="chapter">09 · Framework</div>
+      <h2>我的 AI 产品架构框架</h2>
+      <div class="split">
+        <div class="method-copy">
+          <div class="lens">关键认知</div>
+          <p>从 Claude Code 源码中，可以抽象出一套可迁移的 AI 产品架构框架。</p>
+          <div class="method-card">
+            <span>方法论抽象</span>
+            <p>输入层、工具层、上下文层、控制层、运行时层，构成我看 AI 产品的基础地图。</p>
+          </div>
+        </div>
+        <div class="figure evidence">
+          <div class="fig-label">五层地图</div>
+          <div class="layer-stack">
+            <div class="layer-row"><b>输入层</b><span>system / messages / tools，决定模型看到的世界。</span></div>
+            <div class="layer-row"><b>工具层</b><span>schema、handler、tool result，决定模型能做什么。</span></div>
+            <div class="layer-row"><b>上下文层</b><span>skill、memory、subagent、compact，决定信息如何刚好够用。</span></div>
+            <div class="layer-row"><b>控制层</b><span>permission、hook、recovery、budget，让系统保持可靠。</span></div>
+            <div class="layer-row"><b>运行时层</b><span>todo、task、background、cron、team、worktree、MCP，让工作持续推进。</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="s10">
+      <div class="chapter">10 · Practice</div>
+      <h2>这套方法，<em>后来落到我自己的系统里</em></h2>
+      <div class="split">
+        <div class="method-copy">
+          <div class="lens">关键认知</div>
+          <p>Personal Knowledge Harness 不是凭空来的，而是这套 AI 产品架构方法在个人工作系统上的一次落地。</p>
+          <div class="method-card">
+            <span>方法论抽象</span>
+            <p>AI 产品的真正设计对象，不是模型本身，而是模型周围那套让它可靠工作的环境。</p>
+          </div>
+          <a class="bridge-link" href={`${base}ai/knowledge-harness/`}>查看 Personal Knowledge Harness</a>
+        </div>
+        <div class="figure evidence">
+          <div class="fig-label">实践映射</div>
+          <div class="mini-grid">
+            <div class="mini-card"><b>Context</b><p>三层知识库与 context-pack。</p></div>
+            <div class="mini-card"><b>Control</b><p>能力层、加载规则、入库门禁。</p></div>
+            <div class="mini-card"><b>Runtime</b><p>skill 工作流、复盘、计划。</p></div>
+            <div class="mini-card"><b>Multi-Agent</b><p>Claude、Codex、OpenClaw 共用记忆。</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="timeline" id="tl" aria-label="Deck timeline">
+    {[
+      ['s1', '封面'],
+      ['s2', '输入'],
+      ['s3', '循环'],
+      ['s4', '工具'],
+      ['s5', '上下文'],
+      ['s6', '控制'],
+      ['s7', '运行时'],
+      ['s8', '多 agent'],
+      ['s9', '框架'],
+      ['s10', '实践'],
+    ].map(([id, label]) => (
+      <a href={`#${id}`} data-t={id}><span class="dot"></span><span class="lbl">{label}</span></a>
+    ))}
+  </nav>
+
+  <script is:inline>
+    const links = document.querySelectorAll('#tl a[data-t]');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          links.forEach(l => l.classList.toggle('active', l.dataset.t === e.target.id));
+        }
+      });
+    }, { root: document.getElementById('deck'), threshold: 0.55 });
+    document.querySelectorAll('main section').forEach(s => obs.observe(s));
+  </script>
+
+  <style>
+    .method-deck {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0)),
+        radial-gradient(circle at 50% 38%, rgba(34,211,238,0.08), transparent 34%);
+    }
+    .method-deck section {
+      gap: 0;
+    }
+    .method-deck code {
+      color: #dbeafe;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+    .hero-sub {
+      margin-top: 1.4rem;
+    }
+    .signal-line {
+      margin-top: 1.1rem;
+      font-size: 0.88rem;
+    }
+    .method-copy {
+      display: grid;
+      gap: 0.95rem;
+      max-width: 460px;
+      min-width: 0;
+    }
+    .lens,
+    .fig-label {
+      color: var(--c-cyan);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    .method-copy > p {
+      color: var(--text);
+      font-size: 1rem;
+      line-height: 1.78;
+    }
+    .method-card,
+    .mini-card,
+    .layer-row {
+      border: 1px solid var(--glass-border);
+      background: rgba(255,255,255,0.045);
+      border-radius: 14px;
+      padding: 0.95rem 1rem;
+    }
+    .method-card span,
+    .mini-card b,
+    .layer-row b {
+      display: block;
+      color: var(--c-decide);
+      font-size: 0.82rem;
+      margin-bottom: 0.35rem;
+    }
+    .method-card p,
+    .mini-card p,
+    .layer-row span {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      line-height: 1.65;
+    }
+    .method-deck .figure,
+    .method-deck pre,
+    .method-deck .flow-row {
+      min-width: 0;
+    }
+    .evidence pre {
+      margin-top: 0.8rem;
+      overflow-x: auto;
+      color: #dbeafe;
+      background: rgba(4, 8, 18, 0.62);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 12px;
+      padding: 1rem;
+      font-size: 0.8rem;
+      line-height: 1.65;
+      max-width: 100%;
+    }
+    .method-deck pre code {
+      white-space: pre;
+    }
+    .flow-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      align-items: center;
+      justify-content: center;
+      margin-top: 0.9rem;
+    }
+    .flow-row span,
+    .architecture-orbit span {
+      color: var(--text);
+      border: 1px solid rgba(79,140,255,0.38);
+      background: rgba(79,140,255,0.12);
+      border-radius: 999px;
+      padding: 0.42rem 0.72rem;
+      font-size: 0.78rem;
+      white-space: nowrap;
+    }
+    .flow-row i {
+      color: var(--text-dim);
+      font-style: normal;
+    }
+    .source-grid {
+      display: grid;
+      gap: 0.7rem;
+      margin-top: 1rem;
+    }
+    .source-grid p {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      border-left: 2px solid rgba(34,211,238,0.45);
+      padding-left: 0.8rem;
+    }
+    .source-grid b {
+      color: var(--text);
+    }
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.8rem;
+      margin-top: 0.9rem;
+    }
+    #s5 .mini-grid {
+      grid-template-columns: 1fr;
+    }
+    .layer-stack {
+      display: grid;
+      gap: 0.55rem;
+      margin-top: 0.8rem;
+    }
+    .layer-row {
+      display: grid;
+      gap: 0.15rem;
+    }
+    .bridge-link {
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid rgba(34,211,238,0.42);
+      background: rgba(34,211,238,0.1);
+      border-radius: 999px;
+      padding: 0.58rem 1rem;
+      display: inline-flex;
+      width: fit-content;
+      margin-top: 0.45rem;
+    }
+    .bridge-link:hover {
+      border-color: rgba(34,211,238,0.72);
+    }
+    .architecture-orbit {
+      width: min(560px, 88vw);
+      min-height: 290px;
+      display: grid;
+      place-items: center;
+      position: relative;
+      margin-top: 1.8rem;
+    }
+    .architecture-orbit strong {
+      display: grid;
+      place-items: center;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: rgba(139,92,246,0.16);
+      border: 1px solid rgba(139,92,246,0.48);
+      text-align: center;
+      line-height: 1.35;
+    }
+    .architecture-orbit span {
+      position: absolute;
+    }
+    .architecture-orbit span:nth-of-type(1) { top: 0.85rem; left: 50%; transform: translateX(-50%); }
+    .architecture-orbit span:nth-of-type(2) { left: 1rem; top: 33%; }
+    .architecture-orbit span:nth-of-type(3) { right: 1rem; top: 33%; }
+    .architecture-orbit span:nth-of-type(4) { left: 11%; bottom: 3.7rem; }
+    .architecture-orbit span:nth-of-type(5) { right: 11%; bottom: 3.7rem; }
+    .architecture-orbit span:nth-of-type(6) { left: 28%; bottom: 0.85rem; }
+    .architecture-orbit span:nth-of-type(7) { right: 26%; bottom: 0.85rem; }
+    @media (max-width: 860px) {
+      .method-deck section {
+        padding-top: 5.2rem;
+        padding-bottom: 6.8rem;
+      }
+      .method-copy {
+        max-width: 100%;
+      }
+      .mini-grid {
+        grid-template-columns: 1fr;
+      }
+      .evidence pre {
+        max-width: min(88vw, 480px);
+        font-size: 0.72rem;
+      }
+      .architecture-orbit {
+        min-height: 240px;
+        margin-top: 1.2rem;
+      }
+      .architecture-orbit strong {
+        width: 118px;
+        height: 118px;
+        font-size: 0.86rem;
+      }
+      .architecture-orbit span {
+        font-size: 0.68rem;
+        padding: 0.35rem 0.55rem;
+      }
+    }
+    @media (max-width: 520px) {
+      .method-deck .figure {
+        width: min(100%, 480px);
+        padding: 1rem;
+      }
+      .method-deck .flow-row {
+        justify-content: flex-start;
+      }
+      .signal-line {
+        font-size: 0.76rem;
+      }
+      .architecture-orbit span:nth-of-type(2) { left: 0.2rem; }
+      .architecture-orbit span:nth-of-type(3) { right: 0.2rem; }
+      .architecture-orbit span:nth-of-type(4) { left: 0.4rem; bottom: 3.3rem; }
+      .architecture-orbit span:nth-of-type(5) { right: 0.4rem; bottom: 3.3rem; }
+      .architecture-orbit span:nth-of-type(6) { left: 18%; }
+      .architecture-orbit span:nth-of-type(7) { right: 12%; }
+    }
+  </style>
+</DeckLayout>

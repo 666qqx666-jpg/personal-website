@@ -1,5 +1,6 @@
 ---
 import DeckLayout from '../../layouts/DeckLayout.astro';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 ---
 <DeckLayout
   title="Personal Knowledge Harness — QQ星"
@@ -25,6 +26,7 @@ import DeckLayout from '../../layouts/DeckLayout.astro';
         <div class="ptd-row"><span class="pill p">问题</span><p>课程、对话、笔记散落各处；读完就忘；复盘从不沉淀成可复用的东西。</p></div>
         <div class="ptd-row"><span class="pill t">思考</span><p>拆 Claude Code 源码 → 看懂 harness 工程：<small>核心不是让模型更聪明，而是决定给它塞什么上下文、何时塞、塞多少。</small>学 RAG → 掌握检索增强：<small>知识不必全塞进去，按需检索。</small></p></div>
         <div class="ptd-row"><span class="pill d">决策</span><p>搭一套 Personal Knowledge Harness。<small>目标不是「知识管理」，是「个人工作代理」：持续替我做 PRD、原型分析、竞品分析、复盘，还能发现自己哪里不够好、继续调整。</small></p></div>
+        <a class="source-link" href={`${base}ai/claude-code-architecture/`}>源码方法论篇</a>
       </div>
       <div class="figure">
         <svg viewBox="0 0 520 300">
@@ -372,4 +374,19 @@ import DeckLayout from '../../layouts/DeckLayout.astro';
     }, { root: document.getElementById('deck'), threshold: 0.55 });
     document.querySelectorAll('main section').forEach(s => obs.observe(s));
   </script>
+  <style>
+    .source-link {
+      color: var(--text);
+      text-decoration: none;
+      border: 1px solid rgba(34,211,238,0.38);
+      background: rgba(34,211,238,0.09);
+      border-radius: 999px;
+      padding: 0.5rem 0.9rem;
+      font-size: 0.82rem;
+      width: fit-content;
+    }
+    .source-link:hover {
+      border-color: rgba(34,211,238,0.72);
+    }
+  </style>
 </DeckLayout>
