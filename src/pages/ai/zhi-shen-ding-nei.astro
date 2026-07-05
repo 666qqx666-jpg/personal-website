@@ -1,6 +1,8 @@
 ---
 import DeckLayout from '../../layouts/DeckLayout.astro';
 
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+
 const timeline = [
   ['s1', '封面'],
   ['s2', '阅读'],
@@ -152,6 +154,9 @@ const screens = [
               <span>方法论抽象</span>
               <p>{screen.method}</p>
             </div>
+            {screen.id === 's10' && (
+              <a class="source-link" href={`${base}ai/skill-desk/reading-dialogue/`}>查看这套阅读方法如何被做成 skill</a>
+            )}
           </div>
           <div class={`figure visual visual-${screen.visualMode}`}>
             <div class="fig-label">{screen.visualTitle}</div>
@@ -270,6 +275,21 @@ const screens = [
       color: var(--text-dim);
       font-size: 0.9rem;
       line-height: 1.65;
+    }
+    .source-link {
+      display: inline-flex;
+      width: fit-content;
+      color: var(--text);
+      border: 1px solid rgba(52,211,153,0.45);
+      border-radius: 999px;
+      padding: 0.52rem 0.9rem;
+      background: rgba(52,211,153,0.1);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+    .source-link:hover {
+      border-color: rgba(34,211,238,0.7);
+      background: rgba(34,211,238,0.12);
     }
     .responsibility-deck .figure {
       min-width: 0;
