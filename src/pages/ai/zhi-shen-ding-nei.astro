@@ -1,0 +1,359 @@
+---
+import DeckLayout from '../../layouts/DeckLayout.astro';
+
+const timeline = [
+  ['s1', '封面'],
+  ['s2', '阅读'],
+  ['s3', '张力'],
+  ['s4', '三层'],
+  ['s5', '不确定性'],
+  ['s6', '兜底'],
+  ['s7', '异常'],
+  ['s8', '流程'],
+  ['s9', '胜仗'],
+  ['s10', '资产'],
+];
+
+const screens = [
+  {
+    id: 's2',
+    chapter: '02 · Reading Lens',
+    heading: '我没有把它当成普通书评来读',
+    insight: '《置身钉内》最有价值的部分，不只是钉钉 ONE 做了什么，而是它暴露了企业协同产品里长期存在的责任成本。',
+    points: ['AI 总结、待办、会议、卡片只是表层形态。', '真问题是：谁被看见，谁被打扰，谁要行动，谁承担后果。', '阅读切口从功能复盘转向组织责任流。'],
+    method: '从功能复盘进入组织责任流，才有机会把一次阅读变成可迁移的 To B 产品判断。',
+    visualMode: 'contrast',
+    visualTitle: '表层与深层',
+    visualItems: ['表层：AI 总结 / 工作入口 / 卡片 / 智能待办', '深层：责任成本 / 组织确定性 / 一线压力 / 风险兜底'],
+  },
+  {
+    id: 's3',
+    chapter: '03 · Tension',
+    heading: '发信人基因，和收信人叙事',
+    insight: '钉钉这类组织协同产品天然有发信人基因：确保触达、确保处理、确保组织确定性。但 AI 助手叙事往往更像收信人叙事：过滤噪音、降低打扰、提升个人效率。',
+    points: ['对发信人来说，消息是必须触达。', '对收信人来说，消息可能是噪音。', '对主管来说，高风险事项不能漏。', '对一线来说，系统不能什么都变成我的责任。'],
+    method: '企业 AI 的难点不是选一边，而是设计可解释、可纠错、可复审的中间层。',
+    visualMode: 'tension',
+    visualTitle: '组织确定性 vs 个人降噪',
+    visualItems: ['组织确定性 / 发信人', 'AI 责任判断', '个人降噪 / 收信人'],
+  },
+  {
+    id: 's4',
+    chapter: '04 · Judgment 01',
+    heading: '企业 AI 必须区分信息、任务、责任',
+    insight: '不是所有信息都该变成待办，也不是所有待办都意味着某个人要承担后果。',
+    points: ['信息：需要知道，但不一定要行动。', '任务：需要执行某个动作，但不一定意味着长期责任归属。', '责任：需要有人承接结果、风险、时效或客户后果。'],
+    method: '设计 AI 摘要、智能待办、责任视图、主动提醒时，要先问：系统是在整理信息，推动任务，还是分配责任。',
+    visualMode: 'triad',
+    visualTitle: '语义升级',
+    visualItems: ['信息', '任务', '责任'],
+  },
+  {
+    id: 's5',
+    chapter: '05 · Judgment 02',
+    heading: 'AI 判断不是传统规则里的 1 和 0',
+    insight: '低置信、高损失的判断，不应该直接压到一线责任视图里。它应先进入主管风险池、治理队列或复核机制。',
+    points: ['传统规则更像开关，AI 判断更像概率。', '一线不需要看到复杂概率，但需要知道命中原因、证据来源和可纠错入口。', 'AI 可以参与判断，但不能隐藏不确定性。'],
+    method: '不能让同一个模型既当选手又当唯一裁判；高风险低置信判断需要规则、证据、历史数据或独立评估兜底。',
+    visualMode: 'matrix',
+    visualTitle: '置信度 × 损失',
+    visualItems: ['低置信 / 低损失：低频摘要', '高置信 / 低损失：轻提醒', '低置信 / 高损失：主管风险池', '高置信 / 高损失：一线责任视图'],
+  },
+  {
+    id: 's6',
+    chapter: '06 · Judgment 03',
+    heading: '一线可以说“不归我”，但风险不能漂移',
+    insight: '允许责任异议是必要的，但高风险事项不能因为争议而没人接住。',
+    points: ['责任归属常常有争议：客户经理、客服、项目经理、实施、主管、流程 owner 都可能相关。', 'V0 可以允许一线否认责任，但不能让一线自由重分配责任。', '裁决完成前，需要默认 owner、主管风险队列或流程 owner 临时兜底。'],
+    method: '规则可以争议，风险不能悬空。责任争议流程要回答谁先接住、谁来裁决、裁决前谁兜底、裁决后是否回写长期规则。',
+    visualMode: 'flow',
+    visualTitle: '责任争议流',
+    visualItems: ['默认 owner', '不归我', '争议待裁决', '临时兜底', '主管裁决', '规则回写'],
+  },
+  {
+    id: 's7',
+    chapter: '07 · Judgment 04',
+    heading: '顺流动作要轻，分歧动作要留下证据',
+    insight: 'B 端工作流如果每一步都要求解释，会让一线觉得笨重；但异常动作如果完全不留原因，组织就无法知道问题出在规则、模型、流程还是人。',
+    points: ['已处理、确认、完成：低摩擦。', '误判、不归我、无需处理、重复提醒、规则错误：要求选择原因。', '高风险事项的异常关闭，至少进入轻量复核池。'],
+    method: '正常路径轻，异常路径结构化。驳回不是关闭提醒，而是规则学习数据。',
+    visualMode: 'split',
+    visualTitle: '双路径交互',
+    visualItems: ['正常路径：轻按钮 / 少解释 / 快速结束', '异常路径：原因枚举 / 复核池 / 规则学习'],
+  },
+  {
+    id: 's8',
+    chapter: '08 · Judgment 05',
+    heading: '先用流程定义组织确定性，再让 AI 接管稳定确定性',
+    insight: '企业 AI 早期不应该直接替代流程。很多时候不是模型不够强，而是组织自己还没定义清楚高风险、责任归属、异常处理和裁决机制。',
+    points: ['先用人工流程显性化组织规则。', '让 AI 辅助识别风险、解释原因、记录反馈。', '把误判、不归我、无需处理、主管裁决沉淀成规则数据。', '对重复、稳定、低争议、高一致性的判断逐步自动化。'],
+    method: '流程不是 AI 的反面，而是 AI 冷启动时的训练轨道。',
+    visualMode: 'flow',
+    visualTitle: '渐进自动化',
+    visualItems: ['人工流程', 'AI 辅助识别', '结构化反馈', '规则复审', '局部自动化'],
+  },
+  {
+    id: 's9',
+    chapter: '09 · Learning',
+    heading: '没有胜仗的敏捷，会变成消耗',
+    insight: '团队不怕辛苦，怕的是辛苦之后既没有结果胜仗，也没有学习胜仗。',
+    points: ['结果胜仗：用户真的用起来，指标长出来，关键风险下降。', '学习胜仗：指标未变，但团队改变了问题判断、目标用户、产品边界、核心指标、资源分配或下一轮行动。', '如果连续三轮高强度迭代没有指标变化，应暂停做根因审查。'],
+    method: '敏捷不是为了更快生产可截图变化，而是更快发现误差、校准方向、调整资源。失败要入账，才会变成组织资产。',
+    visualMode: 'cards',
+    visualTitle: '两类胜仗',
+    visualItems: ['结果胜仗：指标变化 / 风险下降', '学习胜仗：判断变化 / 资源重排', '失败入账：规则 / 模板 / 避坑清单 / 下一轮约束'],
+  },
+  {
+    id: 's10',
+    chapter: '10 · From Reading To Assets',
+    heading: '读书不是摘录，而是把判断力变成资产',
+    insight: '这次阅读最后沉淀成 11 张知识卡，但本 deck 不展开讲完整阅读 workflow。',
+    points: ['这次阅读沉淀为需求分析、原型分析、技术分析、项目复盘四类卡片。', '真正复用的不是书摘，而是产品判断。', 'reading-dialogue Skill 的完整设计会单独进入后续常用技能 deck。'],
+    method: '我读《置身钉内》最大的收获不是某个功能怎么做，而是企业 AI 进入组织工作流时，必须理解责任如何产生、如何争议、如何兜底、如何沉淀。',
+    visualMode: 'flow',
+    visualTitle: '阅读到资产',
+    visualItems: ['reading dialogue', '11 knowledge cards', 'product judgment', 'future skill deck'],
+  },
+];
+---
+<DeckLayout
+  title="置身钉内：责任流阅读笔记 — QQ星"
+  description="从钉钉 ONE 复盘里读出企业 AI 的责任流、风险兜底和组织学习方法"
+>
+  <main id="deck" class="responsibility-deck">
+    <section id="s1">
+      <div class="chapter">AI 阅读总结 · 企业 AI 责任流</div>
+      <h1>置身钉内：我读到的不是消息总结，而是责任流</h1>
+      <p class="sub hero-sub">一本钉钉 ONE 复盘，让我重新理解企业 AI 到底该接住什么。</p>
+      <p class="sub signal-line">message -> task -> responsibility -> owner -> review</p>
+      <div class="figure hero-flow" aria-label="responsibility flow">
+        {['message', 'task', 'responsibility', 'owner', 'review'].map((item, index) => (
+          <>
+            <span>{item}</span>
+            {index < 4 && <i>-></i>}
+          </>
+        ))}
+      </div>
+      <div class="scroll-hint">↓ 滚动进入责任流</div>
+    </section>
+
+    {screens.map((screen) => (
+      <section id={screen.id}>
+        <div class="chapter">{screen.chapter}</div>
+        <h2>{screen.heading}</h2>
+        <div class="split">
+          <div class="responsibility-copy">
+            <div class="lens">关键认知</div>
+            <p>{screen.insight}</p>
+            <ul>
+              {screen.points.map((point) => <li>{point}</li>)}
+            </ul>
+            <div class="method-card">
+              <span>方法论抽象</span>
+              <p>{screen.method}</p>
+            </div>
+          </div>
+          <div class={`figure visual visual-${screen.visualMode}`}>
+            <div class="fig-label">{screen.visualTitle}</div>
+            <div class="visual-items">
+              {screen.visualItems.map((item, index) => (
+                <>
+                  <div class="visual-node">{item}</div>
+                  {['flow', 'triad', 'tension'].includes(screen.visualMode) && index < screen.visualItems.length - 1 && <span class="visual-arrow">-></span>}
+                </>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+    ))}
+  </main>
+
+  <nav class="timeline" id="tl" aria-label="Deck timeline">
+    {timeline.map(([id, label]) => (
+      <a href={`#${id}`} data-t={id}><span class="dot"></span><span class="lbl">{label}</span></a>
+    ))}
+  </nav>
+
+  <script is:inline>
+    const links = document.querySelectorAll('#tl a[data-t]');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          links.forEach(l => l.classList.toggle('active', l.dataset.t === e.target.id));
+        }
+      });
+    }, { root: document.getElementById('deck'), threshold: 0.55 });
+    document.querySelectorAll('main section').forEach(s => obs.observe(s));
+  </script>
+
+  <style>
+    .responsibility-deck {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.018), rgba(255,255,255,0)),
+        radial-gradient(circle at 50% 36%, rgba(52,211,153,0.075), transparent 34%);
+    }
+    .responsibility-deck section {
+      gap: 0;
+    }
+    .hero-sub {
+      margin-top: 1.4rem;
+    }
+    .signal-line {
+      margin-top: 1.05rem;
+      font-size: 0.88rem;
+    }
+    .hero-flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1.8rem;
+      max-width: 780px;
+    }
+    .hero-flow span,
+    .visual-node {
+      color: var(--text);
+      border: 1px solid rgba(52,211,153,0.38);
+      background: rgba(52,211,153,0.11);
+      border-radius: 999px;
+      padding: 0.52rem 0.82rem;
+      font-size: 0.82rem;
+      line-height: 1.35;
+    }
+    .hero-flow i,
+    .visual-arrow {
+      color: var(--text-dim);
+      font-style: normal;
+    }
+    .responsibility-copy {
+      display: grid;
+      gap: 0.9rem;
+      max-width: 470px;
+      min-width: 0;
+    }
+    .lens,
+    .fig-label {
+      color: var(--c-decide);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+    .responsibility-copy > p {
+      color: var(--text);
+      font-size: 1rem;
+      line-height: 1.78;
+    }
+    .responsibility-copy ul {
+      display: grid;
+      gap: 0.52rem;
+      padding-left: 1.05rem;
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      line-height: 1.62;
+    }
+    .method-card {
+      border: 1px solid var(--glass-border);
+      background: rgba(255,255,255,0.045);
+      border-radius: 14px;
+      padding: 0.95rem 1rem;
+    }
+    .method-card span {
+      display: block;
+      color: var(--c-cyan);
+      font-size: 0.82rem;
+      margin-bottom: 0.35rem;
+    }
+    .method-card p {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      line-height: 1.65;
+    }
+    .responsibility-deck .figure {
+      min-width: 0;
+    }
+    .visual-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.72rem;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+    .visual-contrast .visual-items,
+    .visual-split .visual-items,
+    .visual-cards .visual-items {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: stretch;
+    }
+    .visual-cards .visual-items {
+      grid-template-columns: 1fr;
+    }
+    .visual-matrix .visual-items {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: stretch;
+    }
+    .visual-contrast .visual-node,
+    .visual-split .visual-node,
+    .visual-matrix .visual-node,
+    .visual-cards .visual-node {
+      border-radius: 14px;
+      white-space: normal;
+      min-height: 76px;
+      display: grid;
+      align-content: center;
+    }
+    .visual-tension .visual-items {
+      min-height: 220px;
+    }
+    .visual-tension .visual-node:nth-of-type(3) {
+      border-color: rgba(34,211,238,0.48);
+      background: rgba(34,211,238,0.12);
+      transform: scale(1.08);
+    }
+    .visual-triad .visual-node:nth-of-type(3),
+    .visual-flow .visual-node:last-of-type {
+      border-color: rgba(34,211,238,0.5);
+      background: rgba(34,211,238,0.12);
+    }
+    @media (max-width: 860px) {
+      .responsibility-deck section {
+        padding-top: 5.2rem;
+        padding-bottom: 6.9rem;
+      }
+      .responsibility-copy {
+        max-width: 100%;
+      }
+      .visual-contrast .visual-items,
+      .visual-split .visual-items,
+      .visual-matrix .visual-items {
+        grid-template-columns: 1fr;
+      }
+      .hero-flow,
+      .visual-items {
+        justify-content: flex-start;
+      }
+      .signal-line {
+        font-size: 0.76rem;
+      }
+    }
+    @media (max-width: 520px) {
+      .responsibility-deck .figure {
+        width: min(100%, 480px);
+        padding: 1rem;
+      }
+      .hero-flow span,
+      .visual-node {
+        font-size: 0.72rem;
+        padding: 0.42rem 0.62rem;
+      }
+      .visual-arrow {
+        display: none;
+      }
+    }
+  </style>
+</DeckLayout>
