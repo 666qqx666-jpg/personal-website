@@ -1,0 +1,194 @@
+---
+import DeckLayout from '../../../layouts/DeckLayout.astro';
+import { readingDialogueSections, readingTimeline } from '../../../data/skillDesk';
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+<DeckLayout
+  title="reading-dialogue Skill：把深度阅读变成知识生产 — QQ星"
+  description="一次真实长阅读任务让我意识到：深度追问如果没有边界，会从阅读沉淀滑进产品共创。"
+>
+  <main id="deck" class="skill-method-deck">
+    <section id="s1">
+      <div class="chapter">Skill Desk · 旗舰子页</div>
+      <h1>reading-dialogue Skill：把深度阅读变成知识生产</h1>
+      <p class="sub hero-copy">一次真实长阅读任务让我意识到：深度追问如果没有边界，会从阅读沉淀滑进产品共创。</p>
+      <div class="pipeline" aria-label="reading dialogue pipeline">
+        {['划线', '追问', '最小记录', '候选池', '入库门禁', '长期资产'].map((item, index) => (
+          <>
+            <span>{item}</span>
+            {index < 5 && <i>-></i>}
+          </>
+        ))}
+      </div>
+      <div class="scroll-hint">↓ 进入一次失控后长出的 skill</div>
+    </section>
+
+    {readingDialogueSections.map((section) => (
+      <section id={section.id}>
+        <div class="chapter">{section.label}</div>
+        <h2>{section.heading}</h2>
+        <div class="method-layout">
+          <div class="method-copy">
+            <div class="lens">{section.chapter}</div>
+            <p>{section.insight}</p>
+            <ul>
+              {section.points.map((point) => <li>{point}</li>)}
+            </ul>
+            {section.id === 's10' && (
+              <a class="method-link" href={`${base}ai/zhi-shen-ding-nei/`}>查看一次真实阅读产出的产品判断</a>
+            )}
+          </div>
+          <div class="figure control-figure">
+            <div class="fig-label">{section.visualTitle}</div>
+            <div class={`visual-items visual-${section.id}`}>
+              {section.visualItems.map((item) => <span>{item}</span>)}
+            </div>
+          </div>
+        </div>
+      </section>
+    ))}
+  </main>
+
+  <nav class="timeline" id="tl" aria-label="Deck timeline">
+    {readingTimeline.map(([id, label]) => (
+      <a href={`#${id}`} data-t={id}><span class="dot"></span><span class="lbl">{label}</span></a>
+    ))}
+  </nav>
+
+  <script is:inline>
+    const links = document.querySelectorAll('#tl a[data-t]');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          links.forEach(l => l.classList.toggle('active', l.dataset.t === e.target.id));
+        }
+      });
+    }, { root: document.getElementById('deck'), threshold: 0.55 });
+    document.querySelectorAll('main section').forEach(s => obs.observe(s));
+  </script>
+
+  <style>
+    .skill-method-deck {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.018), rgba(255,255,255,0)),
+        radial-gradient(circle at 50% 35%, rgba(34,211,238,0.08), transparent 34%);
+    }
+    .hero-copy {
+      margin-top: 1.35rem;
+    }
+    .pipeline,
+    .visual-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      align-items: center;
+      justify-content: center;
+    }
+    .pipeline {
+      margin-top: 1.8rem;
+      max-width: 860px;
+    }
+    .pipeline span,
+    .visual-items span {
+      color: var(--text);
+      border: 1px solid rgba(34,211,238,0.38);
+      background: rgba(34,211,238,0.1);
+      border-radius: 999px;
+      padding: 0.5rem 0.78rem;
+      font-size: 0.82rem;
+      line-height: 1.35;
+    }
+    .pipeline i {
+      color: var(--text-dim);
+      font-style: normal;
+    }
+    .method-layout {
+      display: grid;
+      grid-template-columns: minmax(300px, 460px) minmax(320px, 560px);
+      gap: 3rem;
+      align-items: center;
+      width: min(100%, 1040px);
+    }
+    .method-copy {
+      display: grid;
+      gap: 0.9rem;
+      min-width: 0;
+    }
+    .lens,
+    .fig-label {
+      color: var(--c-cyan);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+    .method-copy > p {
+      color: var(--text);
+      font-size: 1rem;
+      line-height: 1.78;
+    }
+    .method-copy ul {
+      display: grid;
+      gap: 0.52rem;
+      padding-left: 1.05rem;
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      line-height: 1.62;
+    }
+    .control-figure {
+      min-width: 0;
+    }
+    .visual-items {
+      margin-top: 1rem;
+    }
+    .visual-s4 span:nth-child(3),
+    .visual-s5 span:nth-child(2),
+    .visual-s6 span:nth-child(3),
+    .visual-s9 span:nth-child(4) {
+      border-color: rgba(251,113,133,0.45);
+      background: rgba(251,113,133,0.12);
+    }
+    .method-link {
+      display: inline-flex;
+      width: fit-content;
+      color: var(--text);
+      border: 1px solid rgba(34,211,238,0.45);
+      border-radius: 999px;
+      padding: 0.52rem 0.9rem;
+      background: rgba(34,211,238,0.1);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+    @media (max-width: 860px) {
+      .skill-method-deck section {
+        padding-top: 5.2rem;
+        padding-bottom: 6.9rem;
+      }
+      .method-layout {
+        grid-template-columns: 1fr;
+        gap: 1.6rem;
+      }
+      .control-figure {
+        width: min(100%, 480px);
+      }
+      .pipeline,
+      .visual-items {
+        justify-content: flex-start;
+      }
+    }
+    @media (max-width: 520px) {
+      .control-figure {
+        padding: 1rem;
+      }
+      .pipeline span,
+      .visual-items span {
+        font-size: 0.72rem;
+        padding: 0.42rem 0.62rem;
+      }
+      .pipeline i {
+        display: none;
+      }
+    }
+  </style>
+</DeckLayout>
