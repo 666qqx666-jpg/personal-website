@@ -18,7 +18,7 @@ const hrefFor = (href?: string) => href ? `${base}${href.replace(/^\//, '')}` : 
       <div class="desk-hero reveal">
         <p class="eyebrow">AI Workflow Method Library</p>
         <h1>Skill Desk</h1>
-        <p class="hero-copy">把深度阅读、复盘、PRD、竞品分析等高频 AI workflow 拆成可解释、可验证、可继续产品化的 agent skill。</p>
+        <p class="hero-copy">把深度阅读、复盘、需求发现、PRD、竞品分析等高频 AI workflow 拆成可解释、可验证、可继续产品化的 agent skill。</p>
         <div class="desk-stats" aria-label="Skill Desk stats">
           <div><strong>{stableCount}</strong><span>已稳定使用</span></div>
           <div><strong>{iteratingCount}</strong><span>迭代中</span></div>
@@ -242,38 +242,39 @@ const hrefFor = (href?: string) => href ? `${base}${href.replace(/^\//, '')}` : 
         var(--surface);
     }
     .absorbed-card {
-      border-color: rgba(251, 191, 36, 0.62);
+      border-color: rgba(251, 191, 36, 0.24);
       border-style: dashed;
       background:
-        linear-gradient(135deg, rgba(251, 191, 36, 0.17), rgba(52, 211, 153, 0.08)),
-        rgba(15, 22, 38, 0.88);
+        linear-gradient(135deg, rgba(251, 191, 36, 0.045), rgba(255, 255, 255, 0.018)),
+        rgba(15, 22, 38, 0.72);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
     }
     .absorbed-card .card-kicker {
-      color: #fbbf24;
+      color: rgba(251, 191, 36, 0.78);
     }
     a.absorbed-card:hover {
-      border-color: rgba(251, 191, 36, 0.88);
-      box-shadow: 0 22px 58px rgba(251, 191, 36, 0.16);
+      border-color: rgba(251, 191, 36, 0.38);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.28);
     }
     .absorbed-ribbon {
       display: inline-flex;
       width: fit-content;
-      border: 1px solid rgba(251, 191, 36, 0.58);
+      border: 1px solid rgba(251, 191, 36, 0.3);
       border-radius: 999px;
-      padding: 5px 10px;
-      color: #f8e7b2;
-      background: rgba(251, 191, 36, 0.16);
-      font-size: 0.78rem;
-      font-weight: 800;
+      padding: 4px 9px;
+      color: rgba(248, 231, 178, 0.84);
+      background: rgba(251, 191, 36, 0.065);
+      font-size: 0.74rem;
+      font-weight: 700;
       line-height: 1.35;
     }
     .absorbed-note {
-      border-left: 3px solid rgba(251, 191, 36, 0.72);
+      border-left: 2px solid rgba(251, 191, 36, 0.34);
       border-radius: 6px;
-      padding: 9px 10px;
-      color: #dce4f2;
-      background: rgba(251, 191, 36, 0.08);
-      font-size: 0.86rem;
+      padding: 8px 10px;
+      color: rgba(200, 211, 228, 0.82);
+      background: rgba(255, 255, 255, 0.028);
+      font-size: 0.82rem;
       line-height: 1.55;
     }
     .skill-card h2 {

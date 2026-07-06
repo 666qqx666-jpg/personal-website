@@ -1,0 +1,223 @@
+---
+import DeckLayout from '../../../layouts/DeckLayout.astro';
+import { requirementDiscoverySections, requirementDiscoveryTimeline } from '../../../data/skillDesk';
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+<DeckLayout
+  title="requirement-discovery Skill：在方案设计前先刹车 — QQ星"
+  description="从需求还没想清楚时 AI 直接进入方案设计，到用需求来源、角色影响、证据缺口和 V0 收敛先判断真需求。"
+>
+  <main id="deck" class="skill-method-deck discovery-deck">
+    <section id="s1">
+      <div class="chapter">Skill Desk · 方法子页</div>
+      <h1>requirement-discovery Skill：在方案设计前先刹车</h1>
+      <p class="sub hero-copy">它解决的不是“怎么多问几个需求问题”，而是需求还没想清楚时，AI 已经开始深度追问、拆方案、写功能。这个 skill 先判断该不该设计。</p>
+      <div class="pipeline" aria-label="requirement discovery pipeline">
+        {['模糊想法', '档位识别', '来源判断', '角色影响', '证据缺口', 'V0 收敛', 'Handoff'].map((item, index) => (
+          <>
+            <span>{item}</span>
+            {index < 6 && <i>-></i>}
+          </>
+        ))}
+      </div>
+      <div class="scroll-hint">↓ 进入需求发现刹车系统</div>
+    </section>
+
+    {requirementDiscoverySections.map((section) => (
+      <section id={section.id}>
+        <div class="chapter">{section.label}</div>
+        <h2>{section.heading}</h2>
+        <div class="method-layout">
+          <div class="method-copy">
+            <div class="lens">{section.chapter}</div>
+            <p>{section.insight}</p>
+            <ul>
+              {section.points.map((point) => <li>{point}</li>)}
+            </ul>
+            {section.id === 's10' && (
+              <div class="link-row">
+                <a class="method-link" href={`${base}ai/skill-desk/`}>回到 Skill Desk</a>
+                <a class="method-link secondary" href={`${base}ai/skill-desk/prd-skill/`}>查看 PRD Skill</a>
+                <a class="method-link tertiary" href={`${base}ai/skill-desk/competitive-analysis/`}>查看竞品分析</a>
+              </div>
+            )}
+          </div>
+          <div class="figure control-figure">
+            <div class="fig-label">{section.visualTitle}</div>
+            <div class={`visual-items visual-${section.id}`}>
+              {section.visualItems.map((item) => <span>{item}</span>)}
+            </div>
+          </div>
+        </div>
+      </section>
+    ))}
+  </main>
+
+  <nav class="timeline" id="tl" aria-label="Deck timeline">
+    {requirementDiscoveryTimeline.map(([id, label]) => (
+      <a href={`#${id}`} data-t={id}><span class="dot"></span><span class="lbl">{label}</span></a>
+    ))}
+  </nav>
+
+  <script is:inline>
+    const links = document.querySelectorAll('#tl a[data-t]');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          links.forEach(l => l.classList.toggle('active', l.dataset.t === e.target.id));
+        }
+      });
+    }, { root: document.getElementById('deck'), threshold: 0.55 });
+    document.querySelectorAll('main section').forEach(s => obs.observe(s));
+  </script>
+
+  <style>
+    .discovery-deck {
+      background:
+        linear-gradient(180deg, rgba(251,113,133,0.035), rgba(255,255,255,0) 48%),
+        radial-gradient(circle at 50% 30%, rgba(251,191,36,0.085), transparent 34%);
+    }
+    .hero-copy {
+      margin-top: 1.35rem;
+    }
+    .pipeline,
+    .visual-items,
+    .link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      align-items: center;
+      justify-content: center;
+    }
+    .pipeline {
+      margin-top: 1.8rem;
+      max-width: 920px;
+    }
+    .pipeline span,
+    .visual-items span {
+      color: var(--text);
+      border: 1px solid rgba(251,191,36,0.46);
+      background: rgba(251,191,36,0.1);
+      border-radius: 999px;
+      padding: 0.5rem 0.78rem;
+      font-size: 0.82rem;
+      line-height: 1.35;
+    }
+    .pipeline i {
+      color: var(--text-dim);
+      font-style: normal;
+    }
+    .method-layout {
+      display: grid;
+      grid-template-columns: minmax(300px, 470px) minmax(320px, 570px);
+      gap: 3rem;
+      align-items: center;
+      width: min(100%, 1080px);
+    }
+    .method-copy {
+      display: grid;
+      gap: 0.9rem;
+      min-width: 0;
+    }
+    .lens,
+    .fig-label {
+      color: #fbbf24;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+    .method-copy > p {
+      color: var(--text);
+      font-size: 1rem;
+      line-height: 1.78;
+    }
+    .method-copy ul {
+      display: grid;
+      gap: 0.52rem;
+      padding-left: 1.05rem;
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      line-height: 1.62;
+    }
+    .control-figure {
+      min-width: 0;
+      border-radius: 18px;
+    }
+    .visual-items {
+      margin-top: 1rem;
+    }
+    .visual-s2 span:nth-child(2),
+    .visual-s2 span:nth-child(3),
+    .visual-s3 span:nth-child(4),
+    .visual-s4 span:nth-child(3) {
+      border-color: rgba(251,113,133,0.5);
+      background: rgba(251,113,133,0.13);
+    }
+    .visual-s5 span:nth-child(2),
+    .visual-s6 span:nth-child(5),
+    .visual-s8 span:nth-child(2),
+    .visual-s9 span:nth-child(1) {
+      border-color: rgba(52,211,153,0.52);
+      background: rgba(52,211,153,0.12);
+    }
+    .visual-s7 span:nth-child(2),
+    .visual-s10 span:nth-child(2) {
+      border-color: rgba(34,211,238,0.52);
+      background: rgba(34,211,238,0.12);
+    }
+    .method-link {
+      display: inline-flex;
+      width: fit-content;
+      color: var(--text);
+      border: 1px solid rgba(251,191,36,0.48);
+      border-radius: 999px;
+      padding: 0.52rem 0.9rem;
+      background: rgba(251,191,36,0.1);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+    .method-link.secondary {
+      border-color: rgba(52,211,153,0.45);
+      background: rgba(52,211,153,0.1);
+    }
+    .method-link.tertiary {
+      border-color: rgba(34,211,238,0.45);
+      background: rgba(34,211,238,0.1);
+    }
+    .link-row {
+      justify-content: flex-start;
+    }
+    @media (max-width: 860px) {
+      .discovery-deck section {
+        padding-top: 5.2rem;
+        padding-bottom: 6.9rem;
+      }
+      .method-layout {
+        grid-template-columns: 1fr;
+        gap: 1.6rem;
+      }
+      .control-figure {
+        width: min(100%, 480px);
+      }
+      .pipeline,
+      .visual-items {
+        justify-content: flex-start;
+      }
+    }
+    @media (max-width: 520px) {
+      .control-figure {
+        padding: 1rem;
+      }
+      .pipeline span,
+      .visual-items span {
+        font-size: 0.72rem;
+        padding: 0.42rem 0.62rem;
+      }
+      .pipeline i {
+        display: none;
+      }
+    }
+  </style>
+</DeckLayout>

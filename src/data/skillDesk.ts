@@ -63,6 +63,17 @@ export interface CompetitiveAnalysisSection {
   visualItems: string[];
 }
 
+export interface RequirementDiscoverySection {
+  id: string;
+  label: string;
+  chapter: string;
+  heading: string;
+  insight: string;
+  points: string[];
+  visualTitle: string;
+  visualItems: string[];
+}
+
 export const deskTabs = ['全部', '阅读与沉淀', '复盘', 'PRD / Spec', '研究与分析', '产品化候选'];
 
 export const skillDeskItems: SkillDeskItem[] = [
@@ -93,6 +104,20 @@ export const skillDeskItems: SkillDeskItem[] = [
     productization: 'team-template',
     productizationLabel: '团队模板',
     href: '/ai/skill-desk/weekly-retro/',
+  },
+  {
+    slug: 'requirement-discovery',
+    name: 'requirement-discovery',
+    title: '需求头脑风暴',
+    problem: '需求还没想清楚时，AI 很容易直接深度追问到方案设计；这个 skill 用来在 PRD 前先刹车。',
+    category: 'PRD / Spec',
+    useCases: ['需求来源判断', '角色影响拆分', '证据缺口', 'V0 收敛'],
+    outputs: ['需求来源', '关键角色', '核心需求框架', 'Handoff 建议'],
+    maturity: 'stable',
+    maturityLabel: '稳定使用',
+    productization: 'team-template',
+    productizationLabel: '团队模板',
+    href: '/ai/skill-desk/requirement-discovery/',
   },
   {
     slug: 'prd-skill',
@@ -198,6 +223,19 @@ export const competitiveAnalysisTimeline = [
   ['s7', '事实'],
   ['s8', '路径'],
   ['s9', '动作'],
+  ['s10', '判断'],
+] as const;
+
+export const requirementDiscoveryTimeline = [
+  ['s1', '入口'],
+  ['s2', '失速'],
+  ['s3', '反思'],
+  ['s4', '档位'],
+  ['s5', '来源'],
+  ['s6', '角色'],
+  ['s7', '证据'],
+  ['s8', 'V0'],
+  ['s9', '交接'],
   ['s10', '判断'],
 ] as const;
 
@@ -595,5 +633,98 @@ export const competitiveAnalysisSections: CompetitiveAnalysisSection[] = [
     points: ['当前形态是产品负责人视角的竞品分析 workflow。', '团队复用潜力在于把竞品报告变成可评审的产品决策输入。', '它可以接住 requirement-discovery 的机会问题，也可以把结论交给 prd-skill 成文。'],
     visualTitle: '产品化判断',
     visualItems: ['外部观察', '机会判断', 'PRD 输入', '团队模板'],
+  },
+];
+
+export const requirementDiscoverySections: RequirementDiscoverySection[] = [
+  {
+    id: 's2',
+    label: '02 · 失速现场',
+    chapter: 'Failure Mode',
+    heading: '失速现场：需求还没想清楚，AI 已经开始设计方案',
+    insight: 'requirement-discovery 的起点不是“让 AI 多问几个问题”，而是处理一个常见失速：用户只带着模糊方向来，AI 却迅速进入深度追问、功能拆解、PRD 草稿和方案设计。',
+    points: ['AI 很擅长继续往下做，但需求不清时，越深入越可能深入错方向。', '看似专业的深度提问，会把用户带进还不该讨论的细节。', '真正要先做的是判断需求是否成立，而不是马上把方案做完整。'],
+    visualTitle: '失速链路',
+    visualItems: ['模糊想法', '深度追问', '功能拆解', '方案设计'],
+  },
+  {
+    id: 's3',
+    label: '03 · 关键反思',
+    chapter: 'Core Reflection',
+    heading: '关键反思：PRD 前阶段需要的是需求发现，不是方案共创',
+    insight: '这个 skill 的核心是刹车。它要求 agent 先判断自己处在 PRD 前阶段，先识别需求来源、角色、证据和 V0 边界，而不是急着证明自己会设计方案。',
+    points: ['需求发现阶段要先问背景压力和需求来源，不问功能优先级。', '如果用户还没有核心需求框架，就不要输出完整 PRD、完整原型或完整 V0 功能清单。', '这和 reading-dialogue 的产品共创档刹车相呼应：一个防阅读跑偏，一个防需求跑偏。'],
+    visualTitle: '先刹车',
+    visualItems: ['需求发现', '需求澄清', '方案设计', 'PRD 写作'],
+  },
+  {
+    id: 's4',
+    label: '04 · 档位识别',
+    chapter: 'Mode Detection',
+    heading: '档位识别：先确认现在到底处在哪个阶段',
+    insight: 'requirement-discovery 先把对话档位分清：需求发现、需求澄清、方案设计、PRD 写作。只有前一档足够清楚，才能进入后一档。',
+    points: ['需求发现：判断问题是否真实、来源是什么、谁受影响。', '需求澄清：把用户、场景、问题、影响和目标压成核心需求框架。', '方案设计和 PRD 写作必须等需求成形后再交给后续 skill。'],
+    visualTitle: '四档状态',
+    visualItems: ['发现', '澄清', '设计', '成文'],
+  },
+  {
+    id: 's5',
+    label: '05 · 需求来源',
+    chapter: 'Demand Source',
+    heading: '第一层判断：需求到底从哪里来',
+    insight: '它先判断需求来源：组织叙事、真实用户痛点、风险治理、技术包装，还是流程债。来源不同，后续验证方式和是否该做也不同。',
+    points: ['组织叙事容易把战略目标包装成功能需求。', '技术包装容易先选 AI，再反过来找场景。', '流程债和风险治理往往不是缺功能，而是责任、异常和兜底没有显性化。'],
+    visualTitle: '需求来源地图',
+    visualItems: ['组织叙事', '真实痛点', '风险治理', '技术包装', '流程债'],
+  },
+  {
+    id: 's6',
+    label: '06 · 角色影响',
+    chapter: 'Actor Chain',
+    heading: '第二层判断：谁提出、谁使用、谁承担后果',
+    insight: 'To B 和组织场景不能只问“用户是谁”。它要拆开决策者、买单者、操作者、日常用户和风险承担者，否则方案会默认所有人目标一致。',
+    points: ['提出需求的人不一定每天使用。', '日常用户觉得方便，不代表风险承担者接受。', '如果 AI 判断会影响责任归属，就必须先知道谁为误判、漏判、投诉和事故负责。'],
+    visualTitle: '角色链',
+    visualItems: ['推动者', '决策者', '操作者', '日常用户', '风险承担者'],
+  },
+  {
+    id: 's7',
+    label: '07 · 证据缺口',
+    chapter: 'Evidence Gaps',
+    heading: '第三层判断：哪些只是感觉，哪些必须先核实',
+    insight: '需求发现要把“感觉像需求”转成可验证事实：当前流程、数据证据、角色链路、替代方案、约束条件和成功指标。',
+    points: ['频次、耗时、损失、投诉、工单和人工成本比抽象痛点更能判断真假。', '现有替代方案能说明用户到底愿意为问题付出多少成本。', '证据不足时，下一步是调研或补材料，不是让 AI 补完方案。'],
+    visualTitle: '证据清单',
+    visualItems: ['流程', '数据', '角色', '替代方案', '约束', '指标'],
+  },
+  {
+    id: 's8',
+    label: '08 · V0 收敛',
+    chapter: 'V0 Scoping',
+    heading: '第四层判断：先验证什么，而不是一次做完整方案',
+    insight: '核心需求成形后，才进入 V0 收敛。它不是把所有想法做小，而是选择最能验证核心需求、风险可控、边界清楚的第一步。',
+    points: ['底座优先：先做人、身份、权限、认证接口和治理规则。', '场景试点优先：先选一个高频、高痛、可控场景打穿。', '风险治理优先：先处理损失、异常、追责、审计和兜底。'],
+    visualTitle: 'V0 三选项',
+    visualItems: ['底座优先', '场景试点', '风险治理', '试点边界'],
+  },
+  {
+    id: 's9',
+    label: '09 · Handoff',
+    chapter: 'Handoff',
+    heading: 'Handoff：需求成形后，再交给对应 skill',
+    insight: 'requirement-discovery 不负责把所有事情做完。它的收口是判断下一步该交给谁：PRD Skill、competitive-analysis、原型/spec，还是继续补事实。',
+    points: ['要写 PRD 时，再交给 prd-skill。', '需要外部对照时，再交给 competitive-analysis。', '仍缺证据时，先停在需求发现，不自动切到方案设计。'],
+    visualTitle: '交接路由',
+    visualItems: ['继续发现', '竞品分析', 'PRD Skill', '原型 / Spec', '写计划'],
+  },
+  {
+    id: 's10',
+    label: '10 · 收束',
+    chapter: 'From Idea To Demand',
+    heading: '最终价值：让 AI 先判断该不该设计',
+    insight: 'requirement-discovery 的价值不是让 AI 少做，而是让 AI 在正确阶段做正确的事。它把模糊想法压成可判断的需求，再决定是否进入竞品、PRD、原型或计划。',
+    points: ['当前形态是 PRD 前需求发现 workflow。', '团队复用潜力在于把“先别急着写方案”变成稳定协作协议。', '它和 competitive-analysis、prd-skill 形成完整链路：先判需求，再看竞品，再成文交付。'],
+    visualTitle: '产品化判断',
+    visualItems: ['模糊想法', '真需求判断', 'V0 边界', '后续交接'],
   },
 ];

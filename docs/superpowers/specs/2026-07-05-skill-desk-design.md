@@ -50,6 +50,14 @@ AI 栏目中原本还有一个未落页的 `reading-dialogue Skill` 卡片。它
 - `competitive-analysis` 的亮点必须露出：从当前产品问题出发、竞品选择、按行业 / 目的选择模块、当前事实必须实时调研或来自用户材料、按用户路径 / 业务链路横向拆解、输出偷师清单、反向避坑和 PRD 可用度。
 - `requirement-discovery` 后续可单独做详情页，主线聚焦“从模糊想法到真需求判断”，不在本页展开。
 
+2026-07-06 五次增量：
+
+- 第五个详情页做 `requirement-discovery`，中文卡片名为 `需求头脑风暴`，主线是“在方案设计前先刹车”。
+- 真实问题是：AI 太容易在用户连需求都没想清楚时直接进入深度追问、功能拆解、PRD 草稿和方案设计。
+- 本页不做上层 `opportunity-skill`，而是聚焦 PRD 前需求发现：档位识别、需求来源判断、角色影响拆分、证据缺口和 V0 收敛。
+- 它和 `reading-dialogue` 的产品共创档刹车互相呼应，但场景不同：`reading-dialogue` 防止阅读讨论滑进产品共创，`requirement-discovery` 防止需求未成立就滑进方案设计。
+- 它和 `competitive-analysis`、`prd-skill` 形成前后链路：先判需求是否成立，再看外部对照，最后进入 PRD 写作、冷启动审查或后续计划。
+
 ## 2. 定位
 
 页面总标题：
@@ -96,6 +104,7 @@ AI 栏目中原本还有一个未落页的 `reading-dialogue Skill` 卡片。它
 - `/ai/skill-desk/weekly-retro/`：第二个详情页，讲 AI 使用复盘如何从 digest 主动沉淀，演化成固定周复盘、多 agent 校验与收口链路。
 - `/ai/skill-desk/prd-skill/`：第三个详情页，讲 PRD 写作如何从模板代写进化为写作、审查和双 agent 分工。
 - `/ai/skill-desk/competitive-analysis/`：第四个详情页，讲竞品分析如何从资料汇编变成产品负责人视角的机会判断和 PRD 输入。
+- `/ai/skill-desk/requirement-discovery/`：第五个详情页，讲 PRD 前需求发现如何在方案设计前先刹车。
 
 AI 栏目卡片调整：
 
@@ -108,7 +117,7 @@ AI 栏目卡片调整：
 ```ts
 {
   title: 'Skill Desk',
-  hook: '把深度阅读、复盘、PRD、竞品分析等高频 AI workflow 设计成可复用 skill',
+  hook: '把深度阅读、复盘、需求发现、PRD、竞品分析等高频 AI workflow 设计成可复用 skill',
   tags: ['常用技能', '工作流', '可产品化'],
   href: `${base}ai/skill-desk/`,
 }
@@ -118,7 +127,7 @@ AI 栏目卡片调整：
 
 - `/ai/skill-desk/prd-skill/`（2026-07-06 增量详情页）
 - `/ai/skill-desk/competitive-analysis/`（2026-07-06 增量详情页）
-- `/ai/skill-desk/requirement-discovery/`
+- `/ai/skill-desk/requirement-discovery/`（2026-07-06 增量详情页）
 - `/ai/skill-desk/writing-plans/`
 
 ## 5. 首页设计
@@ -174,12 +183,13 @@ AI 栏目卡片调整：
 
 ### 5.3 第一版 Skill 卡片清单
 
-第一版首页展示 5 个 skill 方向，`reading-dialogue`、`weekly-retro`、`prd-skill` 和 `competitive-analysis` 已有详情页。其他卡片可以显示为 `planned` 或 `coming next`，避免承诺过多。
+第一版首页展示 6 个 skill 方向，`reading-dialogue`、`weekly-retro`、`requirement-discovery`、`prd-skill` 和 `competitive-analysis` 已有详情页；`digest` 是已吸收的方法组件，使用 absorbed card 指向 `weekly-retro` 相关段落。
 
 | Skill | 中文名 | 场景 | 成熟度 | 详情页 |
 | --- | --- | --- | --- | --- |
 | `reading-dialogue` | 深度阅读对话 | 阅读、划线、候选卡片、知识入库 | 稳定使用 | 有 |
 | `weekly-retro` / `methodology` | 周度复盘反思 | 周报后对话式复盘、系统候选草稿 | 迭代中 | 有 |
+| `requirement-discovery` | 需求头脑风暴 | PRD 前需求发现、真伪需求、V0 收敛 | 稳定使用 | 有 |
 | `prd-skill` | PRD Skill | PRD 写作、冷启动审查、双 agent 分工 | 稳定使用 | 有 |
 | `competitive-analysis` | 竞品分析 | 产品负责人视角竞品报告、偷师清单、PRD 输入 | 稳定使用 | 有 |
 | `digest` | Digest 方法组件 | 方法论抽取、候选拆分、入库裁决 | 已融入周报 | 非独立页，使用 absorbed card 指向 weekly-retro 相关段落 |

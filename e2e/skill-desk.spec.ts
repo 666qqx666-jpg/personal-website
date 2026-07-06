@@ -13,7 +13,7 @@ test('AI listing links to Skill Desk', async ({ page }) => {
 test('Skill Desk homepage shows skill cards and detail entries', async ({ page }) => {
   await page.goto('/personal-website/ai/skill-desk/');
   await expect(page.getByRole('heading', { name: 'Skill Desk' })).toBeVisible();
-  await expect(page.locator('.skill-card')).toHaveCount(5);
+  await expect(page.locator('.skill-card')).toHaveCount(6);
   await expect(page.locator('.desk-tabs')).toContainText('阅读与沉淀');
   await expect(page.locator('.desk-tabs')).toContainText('PRD / Spec');
   await expect(page.locator('.skill-card', { hasText: '深度阅读对话' })).toContainText('稳定使用');
@@ -24,6 +24,10 @@ test('Skill Desk homepage shows skill cards and detail entries', async ({ page }
   await expect(page.locator('.skill-card:not(.absorbed-card)', { hasText: '周度复盘反思' })).toHaveAttribute(
     'href',
     '/personal-website/ai/skill-desk/weekly-retro/'
+  );
+  await expect(page.locator('.skill-card', { hasText: '需求头脑风暴' })).toHaveAttribute(
+    'href',
+    '/personal-website/ai/skill-desk/requirement-discovery/'
   );
   await expect(page.locator('.skill-card', { hasText: 'PRD Skill' })).toHaveAttribute(
     'href',
@@ -193,6 +197,48 @@ test('competitive-analysis detail page exposes timeline labels and links', async
   );
 });
 
+test('requirement-discovery detail page explains demand discovery before solution design', async ({ page }) => {
+  await page.goto('/personal-website/ai/skill-desk/requirement-discovery/');
+  await expect(page.getByRole('heading', { name: 'requirement-discovery Skill：在方案设计前先刹车' })).toBeVisible();
+  await expect(page.locator('main#deck section')).toHaveCount(10);
+  await expect(page.locator('#s2')).toContainText('需求还没想清楚');
+  await expect(page.locator('#s2')).toContainText('AI 已经开始设计方案');
+  await expect(page.locator('#s3')).toContainText('需求发现，不是方案共创');
+  await expect(page.locator('#s4')).toContainText('需求发现');
+  await expect(page.locator('#s4')).toContainText('需求澄清');
+  await expect(page.locator('#s4')).toContainText('方案设计');
+  await expect(page.locator('#s4')).toContainText('PRD 写作');
+  await expect(page.locator('#s5')).toContainText('组织叙事');
+  await expect(page.locator('#s5')).toContainText('真实痛点');
+  await expect(page.locator('#s5')).toContainText('技术包装');
+  await expect(page.locator('#s6')).toContainText('风险承担者');
+  await expect(page.locator('#s7')).toContainText('证据缺口');
+  await expect(page.locator('#s8')).toContainText('V0 收敛');
+  await expect(page.locator('#s9')).toContainText('PRD Skill');
+  await expect(page.locator('#s9')).toContainText('competitive-analysis');
+});
+
+test('requirement-discovery detail page exposes timeline labels and links', async ({ page }) => {
+  await page.goto('/personal-website/ai/skill-desk/requirement-discovery/');
+  const timeline = page.locator('nav.timeline');
+  await expect(timeline).toBeVisible();
+  for (const label of ['入口', '失速', '反思', '档位', '来源', '角色', '证据', 'V0', '交接', '判断']) {
+    await expect(timeline).toContainText(label);
+  }
+  await expect(page.locator('#s10 a', { hasText: '回到 Skill Desk' })).toHaveAttribute(
+    'href',
+    '/personal-website/ai/skill-desk/'
+  );
+  await expect(page.locator('#s10 a', { hasText: '查看 PRD Skill' })).toHaveAttribute(
+    'href',
+    '/personal-website/ai/skill-desk/prd-skill/'
+  );
+  await expect(page.locator('#s10 a', { hasText: '查看竞品分析' })).toHaveAttribute(
+    'href',
+    '/personal-website/ai/skill-desk/competitive-analysis/'
+  );
+});
+
 test('Skill Desk and Zhi Shen Ding Nei decks cross-link', async ({ page }) => {
   await page.goto('/personal-website/ai/skill-desk/reading-dialogue/');
   await expect(page.locator('#s10 a', { hasText: '查看一次真实阅读产出的产品判断' })).toHaveAttribute(
@@ -214,6 +260,7 @@ test('Skill Desk pages have no horizontal overflow on desktop and mobile', async
     '/personal-website/ai/skill-desk/weekly-retro/',
     '/personal-website/ai/skill-desk/prd-skill/',
     '/personal-website/ai/skill-desk/competitive-analysis/',
+    '/personal-website/ai/skill-desk/requirement-discovery/',
   ]) {
     for (const viewport of [
       { width: 1280, height: 800 },
