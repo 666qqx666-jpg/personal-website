@@ -38,6 +38,17 @@ export interface WeeklyRetroSection {
   visualItems: string[];
 }
 
+export interface PrdSkillSection {
+  id: string;
+  label: string;
+  chapter: string;
+  heading: string;
+  insight: string;
+  points: string[];
+  visualTitle: string;
+  visualItems: string[];
+}
+
 export const deskTabs = ['全部', '阅读与沉淀', '复盘', 'PRD / Spec', '研究与分析', '产品化候选'];
 
 export const skillDeskItems: SkillDeskItem[] = [
@@ -70,30 +81,18 @@ export const skillDeskItems: SkillDeskItem[] = [
     href: '/ai/skill-desk/weekly-retro/',
   },
   {
-    slug: 'prd-writer',
-    name: 'prd-writer',
-    title: 'PRD 写作',
-    problem: '模糊需求需要先关闭用户、价值、边界和模糊词，再进入开发链路。',
+    slug: 'prd-skill',
+    name: 'prd-writer / prd-review',
+    title: 'PRD Skill',
+    problem: '最初想让 AI 代替写需求文档，后来发现真正要产品化的是“写作、审查、封口、交付”的完整链路。',
     category: 'PRD / Spec',
-    useCases: ['需求澄清', 'PRD 成稿', '模糊词扫描'],
-    outputs: ['PRD 草稿', '待确认清单', 'spec-readiness 信号'],
-    maturity: 'stable',
-    maturityLabel: '稳定使用',
-    productization: 'team-template',
-    productizationLabel: '团队模板',
-  },
-  {
-    slug: 'prd-review',
-    name: 'prd-review',
-    title: 'PRD 审查',
-    problem: '结构漂亮的 PRD 仍可能缺状态组合、失败路径、枚举关闭和单一真相。',
-    category: 'PRD / Spec',
-    useCases: ['spec-readiness', '边界条件', '状态组合', '验收矩阵'],
-    outputs: ['审查等级', 'Blocker 清单', '回填建议'],
+    useCases: ['PRD 写作', 'PRD 冷启动审查', '双 agent 协作', 'spec-readiness'],
+    outputs: ['PRD 正文', '关键决策记录', '审查报告', '封口清单'],
     maturity: 'stable',
     maturityLabel: '稳定使用',
     productization: 'enterprise-candidate',
     productizationLabel: '企业候选',
+    href: '/ai/skill-desk/prd-skill/',
   },
   {
     slug: 'competitive-analysis',
@@ -154,6 +153,19 @@ export const weeklyRetroTimeline = [
   ['s8', '周报'],
   ['s9', '收口'],
   ['s10', '变好'],
+] as const;
+
+export const prdSkillTimeline = [
+  ['s1', '入口'],
+  ['s2', '愿景'],
+  ['s3', '模板'],
+  ['s4', '返工'],
+  ['s5', '工作流'],
+  ['s6', '同框'],
+  ['s7', '拆分'],
+  ['s8', '双Agent'],
+  ['s9', '关卡'],
+  ['s10', '交付'],
 ] as const;
 
 export const weeklyRetroOriginalPrompt = `请帮我审查 5.25-5.31 在 Claude 的实际使用情况，并输出一份周度复盘报告。
@@ -354,5 +366,98 @@ export const weeklyRetroSections: WeeklyRetroSection[] = [
     points: ['当前形态是个人 AI 使用复盘 workflow。', '团队复用潜力在于把“怎么和 AI 协作”变成可讨论、可训练、可改进的 SOP。', '企业级潜力在于把 AI 使用证据、协作审查和组织方法库打通。'],
     visualTitle: '产品化判断',
     visualItems: ['个人复盘', '团队 SOP', 'AI 使用训练', '企业方法库'],
+  },
+];
+
+export const prdSkillSections: PrdSkillSection[] = [
+  {
+    id: 's2',
+    label: '02 · 起点愿景',
+    chapter: 'Original Ambition',
+    heading: '起点愿景：让 AI 代替写需求文档的活',
+    insight: 'prd-skill 最早的愿景很直接：把产品经理最耗时的 PRD 写作交给 AI，让它根据背景和模板产出一份像样的需求文档。',
+    points: ['最开始的目标不是做一套复杂流程，而是让 AI 接住“写 PRD”这件事。', '输入主要是需求背景、已有想法和一个 PRD 模板。', '期待输出是一份结构完整、可以继续评审的需求文档。'],
+    visualTitle: '最初期待',
+    visualItems: ['需求背景', 'PRD 模板', 'AI 代写', '文档初稿'],
+  },
+  {
+    id: 's3',
+    label: '03 · 模板阶段',
+    chapter: 'Template First',
+    heading: '第一版：给模板，让 AI 按结构写',
+    insight: '第一版方法是把模板交给 AI，让它照着章节补内容。这个阶段能解决“空白页恐惧”，但解决不了需求本身是否清楚。',
+    points: ['模板能保证章节齐全，却不能保证业务规则闭环。', 'AI 会把模糊背景写得很顺，但顺不等于可开发。', '很多待确认项会被包装成看似确定的正文。'],
+    visualTitle: '模板能做什么',
+    visualItems: ['章节完整', '表达顺畅', '结构统一', '语义未封口'],
+  },
+  {
+    id: 's4',
+    label: '04 · 返工问题',
+    chapter: 'Rewrite Loop',
+    heading: '问题暴露：PRD 写出来了，但要反反复复修改',
+    insight: '真正的低效不是 AI 不会写，而是它会把没问清的问题写成一份看似完整的文档，后面再被状态、枚举、边界和口径不断打回。',
+    points: ['用户、场景、边界不清时，AI 会默认补全。', '业务规则没有唯一真相时，交互、验收和功能点会互相漂移。', '模糊词没有关闭时，开发和测试仍然不知道该怎么落地。'],
+    visualTitle: '返工来源',
+    visualItems: ['角色不清', '范围漂移', '枚举未关', '口径打架'],
+  },
+  {
+    id: 's5',
+    label: '05 · 工作流化',
+    chapter: 'Workflow Mode',
+    heading: '工作流化：把 prd-write 和 prd-review 放进一条链',
+    insight: '下一阶段不再只让 AI 填模板，而是把写作和审查串成工作流：先写 PRD，再检查结构、业务规则、待确认项和 spec-readiness。',
+    points: ['prd-write 负责把需求组织成文档，而不是一次性定稿。', 'prd-review 负责找边界、状态、失败路径和验收风险。', '一条链路开始形成：写作、审查、修订、再交付。'],
+    visualTitle: '单工作流',
+    visualItems: ['写作', '审查', '修订', '交付'],
+  },
+  {
+    id: 's6',
+    label: '06 · 同框局限',
+    chapter: 'Same Chat Limit',
+    heading: '新问题：同一个对话框里审查，仍然会漏',
+    insight: '实际体验里，同一个对话框先写再审，审查者会继承写作者的假设。它知道刚才为什么这么写，于是更容易替文档解释，而不是站在冷启动评审视角挑问题。',
+    points: ['同一上下文会把口头解释当成已写入事实。', 'AI 容易默认“前面聊过”，但开发、测试和下一个 agent 并没有这些隐含背景。', '审查报告看起来有检查动作，但 spec-readiness 仍可能留下洞。'],
+    visualTitle: '同框偏差',
+    visualItems: ['继承假设', '默认理解', '替文档解释', '冷启动不足'],
+  },
+  {
+    id: 's7',
+    label: '07 · 双 Skill',
+    chapter: 'Role Split',
+    heading: '角色拆分：prd-writer 和 prd-review 抽成两个 skill',
+    insight: '后续把 PRD 写作和 PRD 审查拆成两个 skill。写作者负责组织材料、关闭模糊词、形成正文；审查者负责冷启动读取文档，按评审标准找风险。',
+    points: ['prd-writer 不再假装自己能完成独立审查。', 'prd-review 不继承写作对话里的隐含前提。', '两个 skill 的输入、输出和验收标准开始分开。'],
+    visualTitle: '角色边界',
+    visualItems: ['Writer 成稿', 'Review 冷审', '输入隔离', '标准分层'],
+  },
+  {
+    id: 's8',
+    label: '08 · 双 Agent',
+    chapter: 'Two Agents',
+    heading: '再进一步：不同 agent 充当不同角色',
+    insight: '当两个 skill 还不足以消除视角偏差时，就让不同 agent 扮演不同角色：一个负责生成和修订，一个负责冷启动审查，必要时再交叉确认。',
+    points: ['写作 agent 更关注材料组织、术语统一和正文完整。', '审查 agent 更关注状态组合、失败路径、枚举关闭和口径单一源。', '多 agent 的价值不是热闹，而是让 PRD 经得起不同上下文的读取。'],
+    visualTitle: '双 Agent 校验',
+    visualItems: ['写作角色', '审查角色', '冷启动读取', '交叉确认'],
+  },
+  {
+    id: 's9',
+    label: '09 · 强制关卡',
+    chapter: 'Quality Gates',
+    heading: '强制关卡：模糊词、唯一真相和 spec-readiness',
+    insight: 'prd-skill 的核心不是“写得像 PRD”，而是让文档过关：模糊词要关闭，业务规则要成为唯一真相，spec-readiness 不能被漂亮结构稀释。',
+    points: ['“等、相关、默认、按需、合理”这类词必须关闭或挂账。', '业务规则负责定义真相，交互设计和验收标准只能引用，不重复发明口径。', 'spec-readiness 只判断开发和测试能不能不靠作者解释继续推进。'],
+    visualTitle: '封口关卡',
+    visualItems: ['模糊词扫描', '业务规则唯一真相', '冷启动审查', 'spec-readiness'],
+  },
+  {
+    id: 's10',
+    label: '10 · 收束',
+    chapter: 'From Draft To Delivery',
+    heading: '最终价值：不是写得更快，而是交付更稳',
+    insight: 'prd-skill 的价值不是让 AI 写一篇漂亮文档，而是把“我有一个需求”推进成团队可以评审、开发可以拆、测试可以验、后续可以复盘的交付资产。',
+    points: ['当前形态是个人 PRD 生产与审查 workflow。', '团队复用潜力在于把需求写作、冷启动审查和 spec-readiness 变成 SOP。', '企业级潜力在于把 PRD、审查报告、决策记录和知识库沉淀打通。'],
+    visualTitle: '产品化判断',
+    visualItems: ['个人 workflow', '团队 SOP', '审查分工', '企业知识流'],
   },
 ];

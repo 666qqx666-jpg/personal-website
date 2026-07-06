@@ -1,0 +1,215 @@
+---
+import DeckLayout from '../../../layouts/DeckLayout.astro';
+import { prdSkillSections, prdSkillTimeline } from '../../../data/skillDesk';
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+<DeckLayout
+  title="prd-skill：从 AI 代写 PRD 到双角色工作流 — QQ星"
+  description="从给 AI 一个 PRD 模板，到拆成 prd-writer、prd-review 和双 agent 协作，prd-skill 用来把需求文档写作变成可审查的交付链路。"
+>
+  <main id="deck" class="skill-method-deck prd-deck">
+    <section id="s1">
+      <div class="chapter">Skill Desk · 方法子页</div>
+      <h1>prd-skill：从 AI 代写 PRD 到双角色工作流</h1>
+      <p class="sub hero-copy">它最早只是一个朴素愿望：让 AI 代替我写需求文档。后来才发现，真正需要 skill 化的不是“写”，而是写作、审查、封口和交付这一整条链。</p>
+      <div class="pipeline" aria-label="prd skill pipeline">
+        {['模板写作', '反复返工', '单工作流', '同框审查失真', '双 Skill 拆分', '双 Agent 校验'].map((item, index) => (
+          <>
+            <span>{item}</span>
+            {index < 5 && <i>-></i>}
+          </>
+        ))}
+      </div>
+      <div class="scroll-hint">↓ 进入 PRD 工作流演化</div>
+    </section>
+
+    {prdSkillSections.map((section) => (
+      <section id={section.id}>
+        <div class="chapter">{section.label}</div>
+        <h2>{section.heading}</h2>
+        <div class="method-layout">
+          <div class="method-copy">
+            <div class="lens">{section.chapter}</div>
+            <p>{section.insight}</p>
+            <ul>
+              {section.points.map((point) => <li>{point}</li>)}
+            </ul>
+            {section.id === 's10' && (
+              <div class="link-row">
+                <a class="method-link" href={`${base}ai/skill-desk/`}>回到 Skill Desk</a>
+                <a class="method-link secondary" href={`${base}ai/knowledge-harness/`}>查看知识 Harness</a>
+              </div>
+            )}
+          </div>
+          <div class="figure control-figure">
+            <div class="fig-label">{section.visualTitle}</div>
+            <div class={`visual-items visual-${section.id}`}>
+              {section.visualItems.map((item) => <span>{item}</span>)}
+            </div>
+          </div>
+        </div>
+      </section>
+    ))}
+  </main>
+
+  <nav class="timeline" id="tl" aria-label="Deck timeline">
+    {prdSkillTimeline.map(([id, label]) => (
+      <a href={`#${id}`} data-t={id}><span class="dot"></span><span class="lbl">{label}</span></a>
+    ))}
+  </nav>
+
+  <script is:inline>
+    const links = document.querySelectorAll('#tl a[data-t]');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          links.forEach(l => l.classList.toggle('active', l.dataset.t === e.target.id));
+        }
+      });
+    }, { root: document.getElementById('deck'), threshold: 0.55 });
+    document.querySelectorAll('main section').forEach(s => obs.observe(s));
+  </script>
+
+  <style>
+    .prd-deck {
+      background:
+        linear-gradient(180deg, rgba(245,158,11,0.035), rgba(255,255,255,0) 42%),
+        linear-gradient(135deg, rgba(79,140,255,0.05), rgba(52,211,153,0.035));
+    }
+    .hero-copy {
+      margin-top: 1.35rem;
+    }
+    .pipeline,
+    .visual-items,
+    .link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      align-items: center;
+      justify-content: center;
+    }
+    .pipeline {
+      margin-top: 1.8rem;
+      max-width: 900px;
+    }
+    .pipeline span,
+    .visual-items span {
+      color: var(--text);
+      border: 1px solid rgba(245,158,11,0.42);
+      background: rgba(245,158,11,0.1);
+      border-radius: 999px;
+      padding: 0.5rem 0.78rem;
+      font-size: 0.82rem;
+      line-height: 1.35;
+    }
+    .pipeline i {
+      color: var(--text-dim);
+      font-style: normal;
+    }
+    .method-layout {
+      display: grid;
+      grid-template-columns: minmax(300px, 470px) minmax(320px, 560px);
+      gap: 3rem;
+      align-items: center;
+      width: min(100%, 1060px);
+    }
+    .method-copy {
+      display: grid;
+      gap: 0.9rem;
+      min-width: 0;
+    }
+    .lens,
+    .fig-label {
+      color: #fbbf24;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+    .method-copy > p {
+      color: var(--text);
+      font-size: 1rem;
+      line-height: 1.78;
+    }
+    .method-copy ul {
+      display: grid;
+      gap: 0.52rem;
+      padding-left: 1.05rem;
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      line-height: 1.62;
+    }
+    .control-figure {
+      min-width: 0;
+      border-radius: 18px;
+    }
+    .visual-items {
+      margin-top: 1rem;
+    }
+    .visual-s4 span:nth-child(3),
+    .visual-s6 span:nth-child(1),
+    .visual-s9 span:nth-child(1) {
+      border-color: rgba(251,113,133,0.48);
+      background: rgba(251,113,133,0.13);
+    }
+    .visual-s7 span:nth-child(2),
+    .visual-s8 span:nth-child(3),
+    .visual-s9 span:nth-child(4) {
+      border-color: rgba(52,211,153,0.5);
+      background: rgba(52,211,153,0.12);
+    }
+    .visual-s10 span:nth-child(4) {
+      border-color: rgba(34,211,238,0.52);
+      background: rgba(34,211,238,0.12);
+    }
+    .method-link {
+      display: inline-flex;
+      width: fit-content;
+      color: var(--text);
+      border: 1px solid rgba(245,158,11,0.48);
+      border-radius: 999px;
+      padding: 0.52rem 0.9rem;
+      background: rgba(245,158,11,0.1);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+    .method-link.secondary {
+      border-color: rgba(52,211,153,0.45);
+      background: rgba(52,211,153,0.1);
+    }
+    .link-row {
+      justify-content: flex-start;
+    }
+    @media (max-width: 860px) {
+      .prd-deck section {
+        padding-top: 5.2rem;
+        padding-bottom: 6.9rem;
+      }
+      .method-layout {
+        grid-template-columns: 1fr;
+        gap: 1.6rem;
+      }
+      .control-figure {
+        width: min(100%, 480px);
+      }
+      .pipeline,
+      .visual-items {
+        justify-content: flex-start;
+      }
+    }
+    @media (max-width: 520px) {
+      .control-figure {
+        padding: 1rem;
+      }
+      .pipeline span,
+      .visual-items span {
+        font-size: 0.72rem;
+        padding: 0.42rem 0.62rem;
+      }
+      .pipeline i {
+        display: none;
+      }
+    }
+  </style>
+</DeckLayout>

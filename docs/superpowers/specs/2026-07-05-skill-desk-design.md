@@ -28,6 +28,13 @@ AI 栏目中原本还有一个未落页的 `reading-dialogue Skill` 卡片。它
 - `weekly-retro` 的 09 模块不能只说追问，要讲清复盘追问后的收口链路：更新系统线头、写回周报、生成能力层规则或正式知识卡，并维护索引。
 - 本页不把 `.agents/skills` 全量目录搬进 Skill Desk，只展示作者自己长期思考和真实迭代出来的 workflow skill。
 
+2026-07-06 二次增量：
+
+- 第三个详情页命名为 `prd-skill`，不拆成 `prd-writer` 和 `prd-review` 两个孤立页面。
+- `prd-skill` 的真实演化主线是：最初希望 AI 代替写需求文档 → 第一版只给模板让 AI 写 PRD → 发现需要反反复复修改 → 改成一条 prd-write + prd-review 工作流 → 同一对话框审查仍会继承写作假设 → 抽离成两个 skill → 进一步用两个 agent 扮演不同角色。
+- 本页重点不讲 PRD 模板，而讲 PRD 生产链如何关闭模糊词、业务规则唯一真相、冷启动审查和 `spec-readiness`。
+- Skill Desk 首页将 `prd-writer` 与 `prd-review` 合并为一张 `PRD Skill` 卡片，链接到 `/ai/skill-desk/prd-skill/`。
+
 ## 2. 定位
 
 页面总标题：
@@ -67,10 +74,12 @@ AI 栏目中原本还有一个未落页的 `reading-dialogue Skill` 卡片。它
 
 ## 4. 路由与信息架构
 
-第一版新增两个页面：
+第一版新增并持续扩展以下页面：
 
 - `/ai/skill-desk/`：Skill Desk 首页。
 - `/ai/skill-desk/reading-dialogue/`：旗舰子页，讲 `reading-dialogue Skill`。
+- `/ai/skill-desk/weekly-retro/`：第二个详情页，讲 AI 使用复盘如何从固定提示词变成多 agent 校验与收口链路。
+- `/ai/skill-desk/prd-skill/`：第三个详情页，讲 PRD 写作如何从模板代写进化为写作、审查和双 agent 分工。
 
 AI 栏目卡片调整：
 
@@ -91,9 +100,7 @@ AI 栏目卡片调整：
 
 已规划 / 可扩展子页：
 
-- `/ai/skill-desk/weekly-retro/`（2026-07-06 增量详情页）
-- `/ai/skill-desk/prd-writer/`
-- `/ai/skill-desk/prd-review/`
+- `/ai/skill-desk/prd-skill/`（2026-07-06 增量详情页）
 - `/ai/skill-desk/competitive-analysis/`
 - `/ai/skill-desk/digest/`
 - `/ai/skill-desk/writing-plans/`
@@ -151,14 +158,13 @@ AI 栏目卡片调整：
 
 ### 5.3 第一版 Skill 卡片清单
 
-第一版首页展示 6 个 skill，但只有 `reading-dialogue` 有详情页。其他卡片可以显示为 `planned` 或 `coming next`，避免承诺过多。
+第一版首页展示 5 个 skill 方向，`reading-dialogue`、`weekly-retro` 和 `prd-skill` 已有详情页。其他卡片可以显示为 `planned` 或 `coming next`，避免承诺过多。
 
 | Skill | 中文名 | 场景 | 成熟度 | 详情页 |
 | --- | --- | --- | --- | --- |
 | `reading-dialogue` | 深度阅读对话 | 阅读、划线、候选卡片、知识入库 | 稳定使用 | 有 |
 | `weekly-retro` / `methodology` | 周度复盘反思 | 周报后对话式复盘、系统候选草稿 | 迭代中 | 有 |
-| `prd-writer` | PRD 写作 | 模糊需求到需求文档 | 稳定使用 | 暂无 |
-| `prd-review` | PRD 审查 | spec-readiness、边界条件、状态组合 | 稳定使用 | 暂无 |
+| `prd-skill` | PRD Skill | PRD 写作、冷启动审查、双 agent 分工 | 稳定使用 | 有 |
 | `competitive-analysis` | 竞品分析 | 产品负责人视角竞品报告 | 稳定使用 | 暂无 |
 | `digest` | 对话沉淀 | 对话、材料、经验沉淀到三层知识库 | 迭代中 | 暂无 |
 
