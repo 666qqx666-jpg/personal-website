@@ -60,6 +60,27 @@ test('Skill Desk homepage shows skill cards and detail entries', async ({ page }
   await expect(page.locator('.harness-link')).toHaveAttribute('href', '/personal-website/ai/knowledge-harness/');
 });
 
+test('Skill Desk homepage and detail pages share the selected theme state', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('theme', 'light'));
+
+  await page.goto('/personal-website/ai/skill-desk/');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  const homeBg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+  expect(homeBg).toBe('rgb(247, 249, 253)');
+
+  await page.goto('/personal-website/ai/skill-desk/reading-dialogue/');
+  await expect(page.locator('html')).toHaveAttribute('data-deck-theme', 'site');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  const detailBg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
+  expect(detailBg).toBe('rgb(247, 249, 253)');
+
+  await page.locator('#deck-theme-toggle').click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(page.locator('#deck-theme-toggle')).toContainText('☀️');
+  const storedTheme = await page.evaluate(() => localStorage.getItem('theme'));
+  expect(storedTheme).toBe('dark');
+});
+
 test('Skill Desk homepage separates unvalidated skills into Lab', async ({ page }) => {
   await page.goto('/personal-website/ai/skill-desk/');
   await expect(page.locator('.skill-card')).toHaveCount(8);

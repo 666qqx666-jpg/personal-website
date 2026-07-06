@@ -1,27 +1,61 @@
 ---
-// deck 专用壳：固定深色 aurora，不接主站 Header/主题切换（spec 决策）
-interface Props { title: string; description?: string; }
-const { title, description = '' } = Astro.props;
+// deck 默认跟随主站主题；需要固定暗色时显式传 themeMode="fixed-dark"。
+interface Props { title: string; description?: string; themeMode?: 'fixed-dark' | 'site'; }
+const { title, description = '', themeMode = 'site' } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const syncSiteTheme = themeMode === 'site';
 ---
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-deck-theme={themeMode}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        if (root.dataset.deckTheme !== 'site') return;
+        const stored = localStorage.getItem('theme');
+        if (stored === 'dark' || stored === 'light') {
+          root.dataset.theme = stored;
+          return;
+        }
+        root.dataset.theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      })();
+    </script>
   </head>
-  <body>
+  <body class={syncSiteTheme ? 'deck-site-theme' : undefined}>
     <div class="aurora"></div>
     <a class="deck-back" href={base}>← QQ星</a>
+    {syncSiteTheme && <button id="deck-theme-toggle" class="deck-theme-toggle" aria-label="切换深浅色" title="切换深浅色">🌙</button>}
     <slot />
+    {syncSiteTheme && (
+      <script is:inline>
+        (() => {
+          const root = document.documentElement;
+          const btn = document.getElementById('deck-theme-toggle');
+          const sync = () => {
+            const dark = root.dataset.theme === 'dark';
+            if (btn) btn.textContent = dark ? '☀️' : '🌙';
+          };
+          sync();
+          btn?.addEventListener('click', () => {
+            const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+            root.dataset.theme = next;
+            localStorage.setItem('theme', next);
+            sync();
+          });
+        })();
+      </script>
+    )}
   </body>
 </html>
 
 <style is:global>
   :root {
+    color-scheme: dark;
     --bg: #070b14;
     --grid: rgba(120, 140, 200, 0.07);
     --text: #e8ecf5;
@@ -35,6 +69,36 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     --c-think: #60a5fa;
     --c-decide: #34d399;
     --grad: linear-gradient(100deg, #4f8cff 0%, #8b5cf6 50%, #22d3ee 100%);
+    --chrome-bg: rgba(10, 15, 28, 0.72);
+    --timeline-line: rgba(255, 255, 255, 0.15);
+    --dot-muted: rgba(255, 255, 255, 0.22);
+    --dot-future: rgba(255, 255, 255, 0.3);
+    --aurora-blue: rgba(79, 140, 255, 0.16);
+    --aurora-violet: rgba(139, 92, 246, 0.14);
+    --aurora-cyan: rgba(34, 211, 238, 0.1);
+  }
+  :root[data-deck-theme='site'][data-theme='light'] {
+    color-scheme: light;
+    --bg: #f7f9fd;
+    --grid: rgba(15, 23, 42, 0.055);
+    --text: #0f172a;
+    --text-dim: #5b677c;
+    --glass: rgba(255, 255, 255, 0.78);
+    --glass-border: rgba(15, 23, 42, 0.1);
+    --c-blue: #2563eb;
+    --c-violet: #7c3aed;
+    --c-cyan: #0891b2;
+    --c-problem: #e11d48;
+    --c-think: #2563eb;
+    --c-decide: #059669;
+    --grad: linear-gradient(100deg, #2563eb 0%, #7c3aed 48%, #0891b2 100%);
+    --chrome-bg: rgba(255, 255, 255, 0.78);
+    --timeline-line: rgba(15, 23, 42, 0.14);
+    --dot-muted: rgba(15, 23, 42, 0.24);
+    --dot-future: rgba(15, 23, 42, 0.34);
+    --aurora-blue: rgba(37, 99, 235, 0.13);
+    --aurora-violet: rgba(124, 58, 237, 0.1);
+    --aurora-cyan: rgba(8, 145, 178, 0.09);
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
@@ -47,18 +111,25 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
   .deck-back {
     position: fixed; top: 1.1rem; left: 1.2rem; z-index: 20;
     color: var(--text-dim); text-decoration: none; font-size: 0.85rem;
-    background: rgba(10, 15, 28, 0.72); border: 1px solid var(--glass-border);
+    background: var(--chrome-bg); border: 1px solid var(--glass-border);
     border-radius: 999px; padding: 0.45rem 0.95rem; backdrop-filter: blur(16px);
     transition: color 0.25s;
   }
   .deck-back:hover { color: var(--text); }
+  .deck-theme-toggle {
+    position: fixed; top: 1.1rem; right: 1.2rem; z-index: 20;
+    width: 38px; height: 38px; border-radius: 999px;
+    border: 1px solid var(--glass-border); background: var(--chrome-bg);
+    color: var(--text); cursor: pointer; backdrop-filter: blur(16px);
+    font-size: 16px; line-height: 1;
+  }
   /* ===== aurora 背景 ===== */
   .aurora {
     position: fixed; inset: 0; z-index: 0; pointer-events: none;
     background:
-      radial-gradient(600px 400px at 15% 20%, rgba(79, 140, 255, 0.16), transparent 65%),
-      radial-gradient(700px 500px at 85% 15%, rgba(139, 92, 246, 0.14), transparent 65%),
-      radial-gradient(800px 600px at 50% 95%, rgba(34, 211, 238, 0.10), transparent 65%);
+      radial-gradient(600px 400px at 15% 20%, var(--aurora-blue), transparent 65%),
+      radial-gradient(700px 500px at 85% 15%, var(--aurora-violet), transparent 65%),
+      radial-gradient(800px 600px at 50% 95%, var(--aurora-cyan), transparent 65%);
   }
   .aurora::after {
     content: ""; position: absolute; inset: 0;
@@ -125,12 +196,19 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     padding: 1.6rem; backdrop-filter: blur(14px); box-shadow: 0 18px 50px rgba(0,0,0,0.35);
   }
   .figure svg { width: 100%; height: auto; display: block; }
+  :root[data-deck-theme='site'][data-theme='light'] svg text[fill="#e8ecf5"],
+  :root[data-deck-theme='site'][data-theme='light'] svg text[fill="#dbeafe"] {
+    fill: var(--text);
+  }
+  :root[data-deck-theme='site'][data-theme='light'] svg text[fill="#9aa5bd"] {
+    fill: var(--text-dim);
+  }
   .figcap { text-align: center; color: var(--text-dim); font-size: 0.8rem; margin-top: 0.8rem; }
   /* ===== 底部时间轴导航 ===== */
   nav.timeline {
     position: fixed; left: 50%; bottom: 1.1rem; transform: translateX(-50%);
     z-index: 10; display: flex; align-items: center; gap: 0;
-    background: rgba(10, 15, 28, 0.72); border: 1px solid var(--glass-border);
+    background: var(--chrome-bg); border: 1px solid var(--glass-border);
     border-radius: 999px; padding: 0.55rem 1.1rem; backdrop-filter: blur(16px);
   }
   nav.timeline a {
@@ -140,15 +218,15 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
   }
   nav.timeline a .dot {
     width: 9px; height: 9px; border-radius: 50%;
-    background: rgba(255,255,255,0.22); transition: all 0.25s;
+    background: var(--dot-muted); transition: all 0.25s;
   }
   nav.timeline a:not(:last-child)::after {
     content: ""; position: absolute; right: -0.35rem; top: 4px;
-    width: 0.7rem; height: 1px; background: rgba(255,255,255,0.15);
+    width: 0.7rem; height: 1px; background: var(--timeline-line);
   }
   nav.timeline a.active { color: var(--text); }
   nav.timeline a.active .dot { background: var(--grad); box-shadow: 0 0 10px rgba(139, 92, 246, 0.9); transform: scale(1.35); }
-  nav.timeline a.future .dot { background: transparent; border: 1px dashed rgba(255,255,255,0.3); }
+  nav.timeline a.future .dot { background: transparent; border: 1px dashed var(--dot-future); }
   /* ===== 数字板 ===== */
   .stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; max-width: 900px; width: 100%; }
   .stat {

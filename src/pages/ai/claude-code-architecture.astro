@@ -287,7 +287,7 @@ output = TOOL_HANDLERS[block.name](**block.input)</code></pre>
       gap: 0;
     }
     .method-deck code {
-      color: #dbeafe;
+      color: var(--c-blue);
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
     }
     .hero-sub {
@@ -357,6 +357,7 @@ output = TOOL_HANDLERS[block.name](**block.input)</code></pre>
       max-width: 100%;
     }
     .method-deck pre code {
+      color: inherit;
       white-space: pre;
     }
     .flow-row {
