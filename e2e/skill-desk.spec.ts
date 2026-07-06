@@ -21,6 +21,10 @@ test('Skill Desk homepage shows six skill cards and the flagship entry', async (
     'href',
     '/personal-website/ai/skill-desk/reading-dialogue/'
   );
+  await expect(page.locator('.skill-card', { hasText: '周度复盘反思' })).toHaveAttribute(
+    'href',
+    '/personal-website/ai/skill-desk/weekly-retro/'
+  );
   await expect(page.locator('.product-lane')).toContainText('GitHub 开源项目');
   await expect(page.locator('.harness-link')).toHaveAttribute('href', '/personal-website/ai/knowledge-harness/');
 });
@@ -46,6 +50,65 @@ test('reading-dialogue flagship exposes timeline labels', async ({ page }) => {
   }
 });
 
+test('weekly-retro detail page explains how AI usage gets better', async ({ page }) => {
+  await page.goto('/personal-website/ai/skill-desk/weekly-retro/');
+  await expect(page.getByRole('heading', { name: 'weekly-retro Skill：让 AI 使用方式持续变好' })).toBeVisible();
+  await expect(page.locator('main#deck section')).toHaveCount(10);
+  await expect(page.locator('#s3')).toContainText('固定提示词');
+  await expect(page.locator('#s3 .copy-prompt')).toContainText('复制原始提示词');
+  await expect(page.locator('#s3 .copy-prompt')).toHaveAttribute('data-prompt', /请帮我审查 5\.25-5\.31/);
+  await expect(page.locator('#s4')).toContainText('低效不只在 AI');
+  await expect(page.locator('#s6')).toContainText('单 agent 的局限');
+  await expect(page.locator('#s7')).toContainText('多 agent 插曲');
+  await expect(page.locator('#s9')).toContainText('线头更新');
+  await expect(page.locator('#s9')).toContainText('能力层规则');
+  await expect(page.locator('#s9')).toContainText('正式知识卡');
+  await expect(page.locator('#s9')).toContainText('索引维护');
+  await expect(page.locator('#s10')).toContainText('AI 使用方式持续变好');
+});
+
+test('weekly-retro detail page exposes timeline labels', async ({ page }) => {
+  await page.goto('/personal-website/ai/skill-desk/weekly-retro/');
+  const timeline = page.locator('nav.timeline');
+  await expect(timeline).toBeVisible();
+  for (const label of ['入口', '起点', '提示词', '发现', 'Skill化', '单Agent', '多Agent', '周报', '收口', '变好']) {
+    await expect(timeline).toContainText(label);
+  }
+});
+
+test('weekly-retro original prompt can be copied', async ({ page }) => {
+  await page.addInitScript(() => {
+    let copied = '';
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: {
+        writeText: async (text: string) => {
+          copied = text;
+        },
+        readText: async () => copied,
+      },
+    });
+  });
+  await page.goto('/personal-website/ai/skill-desk/weekly-retro/#s3');
+  await page.locator('#s3 .copy-prompt').click();
+  await expect(page.locator('#s3 .copy-status')).toContainText('已复制');
+  const clipboard = await page.evaluate(() => navigator.clipboard.readText());
+  expect(clipboard).toContain('请帮我审查 5.25-5.31');
+  expect(clipboard).toContain('我的 Claude 使用优化建议');
+});
+
+test('weekly-retro detail page links back to Skill Desk and Knowledge Harness', async ({ page }) => {
+  await page.goto('/personal-website/ai/skill-desk/weekly-retro/');
+  await expect(page.locator('#s10 a', { hasText: '回到 Skill Desk' })).toHaveAttribute(
+    'href',
+    '/personal-website/ai/skill-desk/'
+  );
+  await expect(page.locator('#s10 a', { hasText: '查看知识 Harness' })).toHaveAttribute(
+    'href',
+    '/personal-website/ai/knowledge-harness/'
+  );
+});
+
 test('Skill Desk and Zhi Shen Ding Nei decks cross-link', async ({ page }) => {
   await page.goto('/personal-website/ai/skill-desk/reading-dialogue/');
   await expect(page.locator('#s10 a', { hasText: '查看一次真实阅读产出的产品判断' })).toHaveAttribute(
@@ -61,7 +124,11 @@ test('Skill Desk and Zhi Shen Ding Nei decks cross-link', async ({ page }) => {
 });
 
 test('Skill Desk pages have no horizontal overflow on desktop and mobile', async ({ page }) => {
-  for (const route of ['/personal-website/ai/skill-desk/', '/personal-website/ai/skill-desk/reading-dialogue/']) {
+  for (const route of [
+    '/personal-website/ai/skill-desk/',
+    '/personal-website/ai/skill-desk/reading-dialogue/',
+    '/personal-website/ai/skill-desk/weekly-retro/',
+  ]) {
     for (const viewport of [
       { width: 1280, height: 800 },
       { width: 390, height: 844 },

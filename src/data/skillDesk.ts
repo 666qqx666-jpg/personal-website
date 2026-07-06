@@ -27,6 +27,17 @@ export interface ReadingDialogueSection {
   visualItems: string[];
 }
 
+export interface WeeklyRetroSection {
+  id: string;
+  label: string;
+  chapter: string;
+  heading: string;
+  insight: string;
+  points: string[];
+  visualTitle: string;
+  visualItems: string[];
+}
+
 export const deskTabs = ['全部', '阅读与沉淀', '复盘', 'PRD / Spec', '研究与分析', '产品化候选'];
 
 export const skillDeskItems: SkillDeskItem[] = [
@@ -48,14 +59,15 @@ export const skillDeskItems: SkillDeskItem[] = [
     slug: 'weekly-retro',
     name: 'methodology / weekly-retro',
     title: '周度复盘反思',
-    problem: '静态周报离人太远，需要报告后自动进入一题一题的反思对话。',
+    problem: 'AI 要变得好用，不能只看它产出了什么，还要复盘我如何提问、拆解任务和定义目标。',
     category: '复盘',
-    useCases: ['周报后反思', '系统候选草稿', '复盘补充区'],
-    outputs: ['反思入口', '普通小结', '系统候选', '写回补充区'],
+    useCases: ['AI 使用复盘', '提示词审查', '任务拆解反思', '系统候选草稿'],
+    outputs: ['周度复盘报告', '协作问题清单', '反思入口', '系统候选'],
     maturity: 'iterating',
     maturityLabel: '迭代中',
     productization: 'team-template',
     productizationLabel: '团队模板',
+    href: '/ai/skill-desk/weekly-retro/',
   },
   {
     slug: 'prd-writer',
@@ -130,6 +142,34 @@ export const readingTimeline = [
   ['s9', '门禁'],
   ['s10', '资产'],
 ] as const;
+
+export const weeklyRetroTimeline = [
+  ['s1', '入口'],
+  ['s2', '起点'],
+  ['s3', '提示词'],
+  ['s4', '发现'],
+  ['s5', 'Skill化'],
+  ['s6', '单Agent'],
+  ['s7', '多Agent'],
+  ['s8', '周报'],
+  ['s9', '收口'],
+  ['s10', '变好'],
+] as const;
+
+export const weeklyRetroOriginalPrompt = `请帮我审查 5.25-5.31 在 Claude 的实际使用情况，并输出一份周度复盘报告。
+
+分析范围：
+1. 检查这一周 Claude 产生的缓存文件、会话记录、技能目录和项目产物。
+2. 统计这一周的总使用时长，并按主要项目估算投入时间和精力分布。
+3. 按项目梳理我做过的事情、产出的文件、以及中间是否有重复劳动或低效步骤。
+4. 审查几个主要项目中的用户提示词、对话推进过程和任务拆解方式，指出哪里提问不清楚、约束不完整、目标定义不准确。
+5. 总结我这一周使用 Claude 时最常见的思维问题和协作问题，并给出可执行的优化建议。
+
+输出要求：
+1. 先给总览：总时长、主要项目、缓存和产物概况。
+2. 再按项目分别分析：做了什么、花了多久、哪里效率低、提示词哪里可以改。
+3. 最后给一个“我的 Claude 使用优化建议”，重点讲我的提问方式、任务拆解习惯、目标定义方式和思维逻辑如何提升。
+4. 如果时间统计无法做到精确，请明确说明你的估算口径。`;
 
 export const readingDialogueSections: ReadingDialogueSection[] = [
   {
@@ -221,5 +261,98 @@ export const readingDialogueSections: ReadingDialogueSection[] = [
     points: ['当前形态是个人深度阅读 workflow。', '团队复用潜力高，适合读书会、行业研究和产品复盘。', '开源潜力中高，可抽象成 Markdown-first pipeline、CLI、模板和裁决表。'],
     visualTitle: '产品化判断',
     visualItems: ['个人 workflow', '团队模板', '开源潜力', '企业级潜力'],
+  },
+];
+
+export const weeklyRetroSections: WeeklyRetroSection[] = [
+  {
+    id: 's2',
+    label: '02 · 起点',
+    chapter: 'Original Question',
+    heading: '起点：我想知道，怎么让 AI 真的变得好用',
+    insight: '最早的问题不是“帮我总结工作”，而是“帮我审查我这一周是怎么使用 Claude 的”。这已经把焦点从 AI 产出，转到了人与 AI 的协作方式。',
+    points: ['我关心的不是 Claude 是否能生成内容，而是它有没有帮我更高效地推进事情。', '复盘对象包括缓存、会话记录、技能目录、项目产物和真实投入。', '核心目标是发现我的提问方式、任务拆解和目标定义哪里出了问题。'],
+    visualTitle: '问题转向',
+    visualItems: ['AI 产出', '我的提问', '任务拆解', '目标定义'],
+  },
+  {
+    id: 's3',
+    label: '03 · 固定提示词',
+    chapter: 'Fixed Prompt',
+    heading: '固定提示词：从会话、缓存和产物里找问题',
+    insight: '第一版就是一段很长的固定 prompt：审查 5.25-5.31 的 Claude 使用情况，统计使用时长，按项目梳理产物、重复劳动和低效步骤。',
+    points: ['分析范围明确到缓存文件、会话记录、技能目录和项目产物。', '输出要按项目说明做了什么、花了多久、哪里效率低。', '最后必须给出“我的 Claude 使用优化建议”，重点看提问、拆解、目标定义和思维逻辑。'],
+    visualTitle: '固定审查维度',
+    visualItems: ['缓存', '会话', '产物', '时间', '提示词'],
+  },
+  {
+    id: 's4',
+    label: '04 · 第一层发现',
+    chapter: 'First Finding',
+    heading: '第一层发现：低效不只在 AI，也在我的协作方式',
+    insight: '固定 prompt 的价值在于，它逼我承认一个事实：AI 不好用，有时不是模型不行，而是我的问题定义、约束表达和任务拆分不够清楚。',
+    points: ['有些重复劳动来自任务目标没有一开始说清。', '有些返工来自约束不完整，AI 只能边做边猜。', '有些“AI 不懂我”，其实是我没有给出验收口径。'],
+    visualTitle: '协作问题',
+    visualItems: ['提问不清', '约束缺失', '目标漂移', '验收不明'],
+  },
+  {
+    id: 's5',
+    label: '05 · Skill 化',
+    chapter: 'Skillization',
+    heading: 'Skill 化：把一次性复盘变成稳定流程',
+    insight: '固定 prompt 有用，但它每次都要复制、调整和重新解释。下一步就是把它收进 methodology / retro，让复盘变成稳定触发的 skill。',
+    points: ['周报不再只靠手写 prompt，而是有固定的证据收集、项目分析和优化建议结构。', '报告开始沉淀为每周记录，成为后续方法论变化的原始材料。', '复盘对象从“这周做了什么”扩展到“这周我是怎么和 AI 协作的”。'],
+    visualTitle: '从 prompt 到 skill',
+    visualItems: ['固定提示词', '流程封装', '周报记录', '方法候选'],
+  },
+  {
+    id: 's6',
+    label: '06 · 单 Agent 局限',
+    chapter: 'Single Agent Limit',
+    heading: '单 agent 的局限：让一个 AI 审查全部，会有视角偏差',
+    insight: '当复盘从 prompt 变成 skill 后，新的问题出现了：如果只让一个 agent 审查所有东西，它会把自己的可见范围、偏好和盲区带进最终报告。',
+    points: ['Claude 更容易解释自己看得到的会话，却看不到 Codex 的工具调用细节。', 'Codex 更擅长落盘证据和命令验证，却可能低估对话过程中的意图变化。', '单一审计者会让报告看起来完整，但不一定可信。'],
+    visualTitle: '单视角偏差',
+    visualItems: ['可见范围', '工具偏好', '证据盲区', '解释偏差'],
+  },
+  {
+    id: 's7',
+    label: '07 · 多 Agent 插曲',
+    chapter: 'Multi-Agent Check',
+    heading: '多 agent 插曲：Claude / Codex 自评、互审、裁判综合',
+    insight: '于是中间出现了一个小插曲：复盘不再交给单个 agent，而是让 Claude 和 Codex 分别自评，再互相审查，最后由裁判综合。',
+    points: ['Claude 只复盘 Claude 证据，Codex 只复盘 Codex 证据。', '交叉审查专门挑对方的覆盖不足、重复计数和证据边界。', '裁判综合不重新发散，只基于证据、自评和互审做判断。'],
+    visualTitle: '视角校验',
+    visualItems: ['Claude 自评', 'Codex 自评', '互相挑错', '裁判综合'],
+  },
+  {
+    id: 's8',
+    label: '08 · 新的问题',
+    chapter: 'New Problem',
+    heading: '新的问题：报告更完整了，但人还没真正反思',
+    insight: '多 agent 让报告更扎实，但也让报告更像审计材料。信息变多以后，用户仍然可能只看结论，不进入真正的自我修正。',
+    points: ['完整报告解决了事实可信度，却没有自动解决反思发生。', '系统问题、普通感受、方法变化混在一起，仍然需要分流。', '如果没有收口机制，复盘又会变成一份“很完整但离我很远”的文档。'],
+    visualTitle: '完整但未发生',
+    visualItems: ['证据更强', '报告更长', '反思未发生', '候选混杂'],
+  },
+  {
+    id: 's9',
+    label: '09 · 复盘后干什么',
+    chapter: 'After Retro',
+    heading: '复盘后干什么：线头更新、卡片生成和索引维护',
+    insight: '追问不是终点。真正的收口发生在追问之后：把普通反思写回周报，把系统问题更新到线头看板，把可复用经验变成能力层规则或正式知识卡，并补上索引。',
+    points: ['普通反思写回周报补充区，保留当周上下文和用户原话。', '系统问题先进入候选草稿或线头看板，写清再触发条件和当前状态。', '确认可复用后，再生成能力层规则或正式知识域卡片，并同步 README、材料索引、拆卡索引或裁决记录。'],
+    visualTitle: '复盘后收口链',
+    visualItems: ['反思写回', '线头更新', '能力层规则', '正式知识卡', '索引维护'],
+  },
+  {
+    id: 's10',
+    label: '10 · 收束',
+    chapter: 'Make AI Better',
+    heading: '最终价值：让 AI 使用方式持续变好',
+    insight: 'weekly-retro 的价值不是替我写周报，而是持续审查我如何使用 AI：问题是否清楚、目标是否准确、约束是否完整、任务拆解是否合理。',
+    points: ['当前形态是个人 AI 使用复盘 workflow。', '团队复用潜力在于把“怎么和 AI 协作”变成可讨论、可训练、可改进的 SOP。', '企业级潜力在于把 AI 使用证据、协作审查和组织方法库打通。'],
+    visualTitle: '产品化判断',
+    visualItems: ['个人复盘', '团队 SOP', 'AI 使用训练', '企业方法库'],
   },
 ];

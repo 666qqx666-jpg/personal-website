@@ -19,6 +19,15 @@ AI 栏目中原本还有一个未落页的 `reading-dialogue Skill` 卡片。它
 - 现有 shared skill：`/Users/qqx/.agents/skills/reading-dialogue/SKILL.md`。
 - Obsidian 规则：知识卡片入库闸门、三层知识库、正式知识域按需加载、系统线头看板。
 
+2026-07-06 增量：
+
+- 第二个详情页按“总框架一起定，内容页一个个打磨”的节奏推进。
+- `weekly-retro / methodology` 进入 Skill Desk 子页，主线是“如何让 AI 使用方式持续变好”。
+- 叙事必须保留真实演化：固定提示词审查 Claude 使用情况 → 整合成 methodology / retro skill → 发现单 agent 复盘有视角偏差 → 引入 Claude / Codex 自评、互审、裁判综合 → 再进入收口和一题一题追问。
+- `weekly-retro` 的 03 固定提示词模块需要提供一键复制原始提示词，保留从 prompt 长成 skill 的真实起点。
+- `weekly-retro` 的 09 模块不能只说追问，要讲清复盘追问后的收口链路：更新系统线头、写回周报、生成能力层规则或正式知识卡，并维护索引。
+- 本页不把 `.agents/skills` 全量目录搬进 Skill Desk，只展示作者自己长期思考和真实迭代出来的 workflow skill。
+
 ## 2. 定位
 
 页面总标题：
@@ -80,9 +89,9 @@ AI 栏目卡片调整：
 }
 ```
 
-未来可扩展子页：
+已规划 / 可扩展子页：
 
-- `/ai/skill-desk/weekly-retro/`
+- `/ai/skill-desk/weekly-retro/`（2026-07-06 增量详情页）
 - `/ai/skill-desk/prd-writer/`
 - `/ai/skill-desk/prd-review/`
 - `/ai/skill-desk/competitive-analysis/`
@@ -147,7 +156,7 @@ AI 栏目卡片调整：
 | Skill | 中文名 | 场景 | 成熟度 | 详情页 |
 | --- | --- | --- | --- | --- |
 | `reading-dialogue` | 深度阅读对话 | 阅读、划线、候选卡片、知识入库 | 稳定使用 | 有 |
-| `weekly-retro` / `methodology` | 周度复盘反思 | 周报后对话式复盘、系统候选草稿 | 迭代中 | 暂无 |
+| `weekly-retro` / `methodology` | 周度复盘反思 | 周报后对话式复盘、系统候选草稿 | 迭代中 | 有 |
 | `prd-writer` | PRD 写作 | 模糊需求到需求文档 | 稳定使用 | 暂无 |
 | `prd-review` | PRD 审查 | spec-readiness、边界条件、状态组合 | 稳定使用 | 暂无 |
 | `competitive-analysis` | 竞品分析 | 产品负责人视角竞品报告 | 稳定使用 | 暂无 |

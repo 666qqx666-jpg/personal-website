@@ -1,0 +1,265 @@
+---
+import DeckLayout from '../../../layouts/DeckLayout.astro';
+import { weeklyRetroOriginalPrompt, weeklyRetroSections, weeklyRetroTimeline } from '../../../data/skillDesk';
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+<DeckLayout
+  title="weekly-retro Skill：让 AI 使用方式持续变好 — QQ星"
+  description="从固定提示词到 skill 化，再到多 agent 校验和收口追问，weekly-retro 用来复盘我如何使用 AI。"
+>
+  <main id="deck" class="skill-method-deck retro-deck">
+    <section id="s1">
+      <div class="chapter">Skill Desk · 方法子页</div>
+      <h1>weekly-retro Skill：让 AI 使用方式持续变好</h1>
+      <p class="sub hero-copy">它最早不是一个周报工具，而是一段追问：我这一周到底是怎么使用 AI 的，哪里提问不清、拆解不稳、目标定义不准。</p>
+      <div class="pipeline" aria-label="weekly retro pipeline">
+        {['固定提示词', 'Skill 化', '单 Agent 局限', '多 Agent 校验', '收口追问', '持续变好'].map((item, index) => (
+          <>
+            <span>{item}</span>
+            {index < 5 && <i>-></i>}
+          </>
+        ))}
+      </div>
+      <div class="scroll-hint">↓ 进入复盘实验</div>
+    </section>
+
+    {weeklyRetroSections.map((section) => (
+      <section id={section.id}>
+        <div class="chapter">{section.label}</div>
+        <h2>{section.heading}</h2>
+        <div class="method-layout">
+          <div class="method-copy">
+            <div class="lens">{section.chapter}</div>
+            <p>{section.insight}</p>
+            <ul>
+              {section.points.map((point) => <li>{point}</li>)}
+            </ul>
+            {section.id === 's3' && (
+              <div class="prompt-actions">
+                <button class="copy-prompt" type="button" data-prompt={weeklyRetroOriginalPrompt}>
+                  复制原始提示词
+                </button>
+                <span class="copy-status" aria-live="polite"></span>
+              </div>
+            )}
+            {section.id === 's10' && (
+              <div class="link-row">
+                <a class="method-link" href={`${base}ai/skill-desk/`}>回到 Skill Desk</a>
+                <a class="method-link secondary" href={`${base}ai/knowledge-harness/`}>查看知识 Harness</a>
+              </div>
+            )}
+          </div>
+          <div class="figure control-figure">
+            <div class="fig-label">{section.visualTitle}</div>
+            <div class={`visual-items visual-${section.id}`}>
+              {section.visualItems.map((item) => <span>{item}</span>)}
+            </div>
+          </div>
+        </div>
+      </section>
+    ))}
+  </main>
+
+  <nav class="timeline" id="tl" aria-label="Deck timeline">
+    {weeklyRetroTimeline.map(([id, label]) => (
+      <a href={`#${id}`} data-t={id}><span class="dot"></span><span class="lbl">{label}</span></a>
+    ))}
+  </nav>
+
+  <script is:inline>
+    const links = document.querySelectorAll('#tl a[data-t]');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          links.forEach(l => l.classList.toggle('active', l.dataset.t === e.target.id));
+        }
+      });
+    }, { root: document.getElementById('deck'), threshold: 0.55 });
+    document.querySelectorAll('main section').forEach(s => obs.observe(s));
+
+    const copyButton = document.querySelector('.copy-prompt');
+    const copyStatus = document.querySelector('.copy-status');
+    copyButton?.addEventListener('click', async () => {
+      const prompt = copyButton.dataset.prompt || '';
+      try {
+        await navigator.clipboard.writeText(prompt);
+        copyStatus.textContent = '已复制';
+      } catch {
+        copyStatus.textContent = '复制失败，请手动复制';
+      }
+      setTimeout(() => {
+        copyStatus.textContent = '';
+      }, 1800);
+    });
+  </script>
+
+  <style>
+    .retro-deck {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.018), rgba(255,255,255,0)),
+        radial-gradient(circle at 52% 32%, rgba(52,211,153,0.08), transparent 34%);
+    }
+    .hero-copy {
+      margin-top: 1.35rem;
+    }
+    .pipeline,
+    .visual-items,
+    .link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      align-items: center;
+      justify-content: center;
+    }
+    .pipeline {
+      margin-top: 1.8rem;
+      max-width: 860px;
+    }
+    .pipeline span,
+    .visual-items span {
+      color: var(--text);
+      border: 1px solid rgba(52,211,153,0.38);
+      background: rgba(52,211,153,0.1);
+      border-radius: 999px;
+      padding: 0.5rem 0.78rem;
+      font-size: 0.82rem;
+      line-height: 1.35;
+    }
+    .pipeline i {
+      color: var(--text-dim);
+      font-style: normal;
+    }
+    .method-layout {
+      display: grid;
+      grid-template-columns: minmax(300px, 460px) minmax(320px, 560px);
+      gap: 3rem;
+      align-items: center;
+      width: min(100%, 1040px);
+    }
+    .method-copy {
+      display: grid;
+      gap: 0.9rem;
+      min-width: 0;
+    }
+    .lens,
+    .fig-label {
+      color: var(--c-decide);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+    .method-copy > p {
+      color: var(--text);
+      font-size: 1rem;
+      line-height: 1.78;
+    }
+    .method-copy ul {
+      display: grid;
+      gap: 0.52rem;
+      padding-left: 1.05rem;
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      line-height: 1.62;
+    }
+    .control-figure {
+      min-width: 0;
+    }
+    .visual-items {
+      margin-top: 1rem;
+    }
+    .visual-s4 span:nth-child(2),
+    .visual-s5 span:nth-child(3),
+    .visual-s7 span:nth-child(3),
+    .visual-s9 span:nth-child(2) {
+      border-color: rgba(251,191,36,0.48);
+      background: rgba(251,191,36,0.12);
+    }
+    .visual-s4 span:nth-child(4),
+    .visual-s9 span:nth-child(5) {
+      border-color: rgba(251,113,133,0.45);
+      background: rgba(251,113,133,0.12);
+    }
+    .method-link {
+      display: inline-flex;
+      width: fit-content;
+      color: var(--text);
+      border: 1px solid rgba(52,211,153,0.45);
+      border-radius: 999px;
+      padding: 0.52rem 0.9rem;
+      background: rgba(52,211,153,0.1);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+    .prompt-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      align-items: center;
+      margin-top: 0.2rem;
+    }
+    .copy-prompt {
+      color: var(--text);
+      border: 1px solid rgba(52,211,153,0.5);
+      border-radius: 999px;
+      padding: 0.55rem 0.9rem;
+      background:
+        linear-gradient(135deg, rgba(52,211,153,0.18), rgba(34,211,238,0.1)),
+        rgba(255,255,255,0.045);
+      font: inherit;
+      font-size: 0.86rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .copy-prompt:hover {
+      border-color: rgba(34,211,238,0.66);
+      background:
+        linear-gradient(135deg, rgba(52,211,153,0.24), rgba(34,211,238,0.16)),
+        rgba(255,255,255,0.06);
+    }
+    .copy-status {
+      color: var(--c-decide);
+      font-size: 0.82rem;
+      font-weight: 700;
+      min-width: 3.2rem;
+    }
+    .method-link.secondary {
+      border-color: rgba(34,211,238,0.45);
+      background: rgba(34,211,238,0.1);
+    }
+    .link-row {
+      justify-content: flex-start;
+    }
+    @media (max-width: 860px) {
+      .retro-deck section {
+        padding-top: 5.2rem;
+        padding-bottom: 6.9rem;
+      }
+      .method-layout {
+        grid-template-columns: 1fr;
+        gap: 1.6rem;
+      }
+      .control-figure {
+        width: min(100%, 480px);
+      }
+      .pipeline,
+      .visual-items {
+        justify-content: flex-start;
+      }
+    }
+    @media (max-width: 520px) {
+      .control-figure {
+        padding: 1rem;
+      }
+      .pipeline span,
+      .visual-items span {
+        font-size: 0.72rem;
+        padding: 0.42rem 0.62rem;
+      }
+      .pipeline i {
+        display: none;
+      }
+    }
+  </style>
+</DeckLayout>
