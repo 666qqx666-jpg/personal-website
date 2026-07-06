@@ -29,6 +29,11 @@ test('Skill Desk homepage shows skill cards and detail entries', async ({ page }
     'href',
     '/personal-website/ai/skill-desk/prd-skill/'
   );
+  await expect(page.locator('.skill-card', { hasText: 'Digest 方法组件' })).toContainText('已融入周报');
+  await expect(page.locator('.skill-card', { hasText: 'Digest 方法组件' })).toHaveAttribute(
+    'href',
+    '/personal-website/ai/skill-desk/weekly-retro/#s3'
+  );
   await expect(page.locator('.product-lane')).toContainText('GitHub 开源项目');
   await expect(page.locator('.harness-link')).toHaveAttribute('href', '/personal-website/ai/knowledge-harness/');
 });
@@ -57,25 +62,29 @@ test('reading-dialogue flagship exposes timeline labels', async ({ page }) => {
 test('weekly-retro detail page explains how AI usage gets better', async ({ page }) => {
   await page.goto('/personal-website/ai/skill-desk/weekly-retro/');
   await expect(page.getByRole('heading', { name: 'weekly-retro Skill：让 AI 使用方式持续变好' })).toBeVisible();
-  await expect(page.locator('main#deck section')).toHaveCount(10);
-  await expect(page.locator('#s3')).toContainText('固定提示词');
-  await expect(page.locator('#s3 .copy-prompt')).toContainText('复制原始提示词');
-  await expect(page.locator('#s3 .copy-prompt')).toHaveAttribute('data-prompt', /请帮我审查 5\.25-5\.31/);
-  await expect(page.locator('#s4')).toContainText('低效不只在 AI');
-  await expect(page.locator('#s6')).toContainText('单 agent 的局限');
-  await expect(page.locator('#s7')).toContainText('多 agent 插曲');
-  await expect(page.locator('#s9')).toContainText('线头更新');
-  await expect(page.locator('#s9')).toContainText('能力层规则');
-  await expect(page.locator('#s9')).toContainText('正式知识卡');
-  await expect(page.locator('#s9')).toContainText('索引维护');
-  await expect(page.locator('#s10')).toContainText('AI 使用方式持续变好');
+  await expect(page.locator('main#deck section')).toHaveCount(11);
+  await expect(page.locator('#s3')).toContainText('早期 digest');
+  await expect(page.locator('#s3')).toContainText('主动沉淀对话里的知识点');
+  await expect(page.locator('#s3')).toContainText('主动触发');
+  await expect(page.locator('#s4')).toContainText('固定提示词');
+  await expect(page.locator('#s4 .copy-prompt')).toContainText('复制原始提示词');
+  await expect(page.locator('#s4 .copy-prompt')).toHaveAttribute('data-prompt', /请帮我审查 5\.25-5\.31/);
+  await expect(page.locator('#s5')).toContainText('低效不只在 AI');
+  await expect(page.locator('#s7')).toContainText('单 agent 的局限');
+  await expect(page.locator('#s8')).toContainText('多 agent 插曲');
+  await expect(page.locator('#s9')).toContainText('digest 的方法在这里重新出现');
+  await expect(page.locator('#s10')).toContainText('线头更新');
+  await expect(page.locator('#s10')).toContainText('能力层规则');
+  await expect(page.locator('#s10')).toContainText('正式知识卡');
+  await expect(page.locator('#s10')).toContainText('索引维护');
+  await expect(page.locator('#s11')).toContainText('AI 使用方式持续变好');
 });
 
 test('weekly-retro detail page exposes timeline labels', async ({ page }) => {
   await page.goto('/personal-website/ai/skill-desk/weekly-retro/');
   const timeline = page.locator('nav.timeline');
   await expect(timeline).toBeVisible();
-  for (const label of ['入口', '起点', '提示词', '发现', 'Skill化', '单Agent', '多Agent', '周报', '收口', '变好']) {
+  for (const label of ['入口', '起点', 'Digest', '提示词', '发现', 'Skill化', '单Agent', '多Agent', '周报', '收口', '变好']) {
     await expect(timeline).toContainText(label);
   }
 });
@@ -93,9 +102,9 @@ test('weekly-retro original prompt can be copied', async ({ page }) => {
       },
     });
   });
-  await page.goto('/personal-website/ai/skill-desk/weekly-retro/#s3');
-  await page.locator('#s3 .copy-prompt').click();
-  await expect(page.locator('#s3 .copy-status')).toContainText('已复制');
+  await page.goto('/personal-website/ai/skill-desk/weekly-retro/#s4');
+  await page.locator('#s4 .copy-prompt').click();
+  await expect(page.locator('#s4 .copy-status')).toContainText('已复制');
   const clipboard = await page.evaluate(() => navigator.clipboard.readText());
   expect(clipboard).toContain('请帮我审查 5.25-5.31');
   expect(clipboard).toContain('我的 Claude 使用优化建议');
@@ -103,11 +112,11 @@ test('weekly-retro original prompt can be copied', async ({ page }) => {
 
 test('weekly-retro detail page links back to Skill Desk and Knowledge Harness', async ({ page }) => {
   await page.goto('/personal-website/ai/skill-desk/weekly-retro/');
-  await expect(page.locator('#s10 a', { hasText: '回到 Skill Desk' })).toHaveAttribute(
+  await expect(page.locator('#s11 a', { hasText: '回到 Skill Desk' })).toHaveAttribute(
     'href',
     '/personal-website/ai/skill-desk/'
   );
-  await expect(page.locator('#s10 a', { hasText: '查看知识 Harness' })).toHaveAttribute(
+  await expect(page.locator('#s11 a', { hasText: '查看知识 Harness' })).toHaveAttribute(
     'href',
     '/personal-website/ai/knowledge-harness/'
   );

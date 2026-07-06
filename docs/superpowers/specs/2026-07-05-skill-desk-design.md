@@ -23,8 +23,8 @@ AI 栏目中原本还有一个未落页的 `reading-dialogue Skill` 卡片。它
 
 - 第二个详情页按“总框架一起定，内容页一个个打磨”的节奏推进。
 - `weekly-retro / methodology` 进入 Skill Desk 子页，主线是“如何让 AI 使用方式持续变好”。
-- 叙事必须保留真实演化：固定提示词审查 Claude 使用情况 → 整合成 methodology / retro skill → 发现单 agent 复盘有视角偏差 → 引入 Claude / Codex 自评、互审、裁判综合 → 再进入收口和一题一题追问。
-- `weekly-retro` 的 03 固定提示词模块需要提供一键复制原始提示词，保留从 prompt 长成 skill 的真实起点。
+- 叙事必须保留真实演化：先用 digest 主动沉淀对话里的知识点和方法论 → 发现主动触发不稳定 → 改成固定提示词审查 Claude 使用情况 → 整合成 methodology / retro skill → 发现单 agent 复盘有视角偏差 → 引入 Claude / Codex 自评、互审、裁判综合 → 再进入收口和一题一题追问。
+- `weekly-retro` 的 04 固定提示词模块需要提供一键复制原始提示词，保留从 prompt 长成 skill 的真实起点。
 - `weekly-retro` 的 09 模块不能只说追问，要讲清复盘追问后的收口链路：更新系统线头、写回周报、生成能力层规则或正式知识卡，并维护索引。
 - 本页不把 `.agents/skills` 全量目录搬进 Skill Desk，只展示作者自己长期思考和真实迭代出来的 workflow skill。
 
@@ -34,6 +34,13 @@ AI 栏目中原本还有一个未落页的 `reading-dialogue Skill` 卡片。它
 - `prd-skill` 的真实演化主线是：最初希望 AI 代替写需求文档 → 第一版只给模板让 AI 写 PRD → 发现需要反反复复修改 → 改成一条 prd-write + prd-review 工作流 → 同一对话框审查仍会继承写作假设 → 抽离成两个 skill → 进一步用两个 agent 扮演不同角色。
 - 本页重点不讲 PRD 模板，而讲 PRD 生产链如何关闭模糊词、业务规则唯一真相、冷启动审查和 `spec-readiness`。
 - Skill Desk 首页将 `prd-writer` 与 `prd-review` 合并为一张 `PRD Skill` 卡片，链接到 `/ai/skill-desk/prd-skill/`。
+
+2026-07-06 三次增量：
+
+- `digest` 不单独做完整详情页，原因是它现在已不是高频独立 skill，而是被 `weekly-retro` 吸收的方法组件。
+- `digest` 的真实演化主线是：最早想主动判断哪些对话需要总结沉淀、抽离知识点并写入知识库；后来发现它太依赖用户主动触发；再后来由周期性的周总结替代触发入口，但复用了 digest 中“抽离方法论、拆候选、判断入库去向”的能力。
+- 在 `weekly-retro` 中新增一屏 `早期 digest：主动沉淀对话里的知识点`，位置放在“起点”之后、“固定提示词”之前，让 digest 成为 weekly-retro 的前身而不是后置补充。
+- Skill Desk 首页保留 `Digest 方法组件` 卡片，状态标记为 `已融入周报`，链接到 `/ai/skill-desk/weekly-retro/#s3`。
 
 ## 2. 定位
 
@@ -78,7 +85,7 @@ AI 栏目中原本还有一个未落页的 `reading-dialogue Skill` 卡片。它
 
 - `/ai/skill-desk/`：Skill Desk 首页。
 - `/ai/skill-desk/reading-dialogue/`：旗舰子页，讲 `reading-dialogue Skill`。
-- `/ai/skill-desk/weekly-retro/`：第二个详情页，讲 AI 使用复盘如何从固定提示词变成多 agent 校验与收口链路。
+- `/ai/skill-desk/weekly-retro/`：第二个详情页，讲 AI 使用复盘如何从 digest 主动沉淀，演化成固定周复盘、多 agent 校验与收口链路。
 - `/ai/skill-desk/prd-skill/`：第三个详情页，讲 PRD 写作如何从模板代写进化为写作、审查和双 agent 分工。
 
 AI 栏目卡片调整：
@@ -102,7 +109,6 @@ AI 栏目卡片调整：
 
 - `/ai/skill-desk/prd-skill/`（2026-07-06 增量详情页）
 - `/ai/skill-desk/competitive-analysis/`
-- `/ai/skill-desk/digest/`
 - `/ai/skill-desk/writing-plans/`
 
 ## 5. 首页设计
@@ -166,7 +172,7 @@ AI 栏目卡片调整：
 | `weekly-retro` / `methodology` | 周度复盘反思 | 周报后对话式复盘、系统候选草稿 | 迭代中 | 有 |
 | `prd-skill` | PRD Skill | PRD 写作、冷启动审查、双 agent 分工 | 稳定使用 | 有 |
 | `competitive-analysis` | 竞品分析 | 产品负责人视角竞品报告 | 稳定使用 | 暂无 |
-| `digest` | 对话沉淀 | 对话、材料、经验沉淀到三层知识库 | 迭代中 | 暂无 |
+| `digest` | Digest 方法组件 | 方法论抽取、候选拆分、入库裁决 | 已融入周报 | 指向 weekly-retro 相关段落 |
 
 ### 5.4 首页卡片字段
 

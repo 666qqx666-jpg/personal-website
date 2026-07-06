@@ -6,18 +6,18 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 ---
 <DeckLayout
   title="weekly-retro Skill：让 AI 使用方式持续变好 — QQ星"
-  description="从固定提示词到 skill 化，再到多 agent 校验和收口追问，weekly-retro 用来复盘我如何使用 AI。"
+  description="从 digest 主动沉淀，到固定周复盘提示词，再到多 agent 校验和收口追问，weekly-retro 用来复盘我如何使用 AI。"
 >
   <main id="deck" class="skill-method-deck retro-deck">
     <section id="s1">
       <div class="chapter">Skill Desk · 方法子页</div>
       <h1>weekly-retro Skill：让 AI 使用方式持续变好</h1>
-      <p class="sub hero-copy">它最早不是一个周报工具，而是一段追问：我这一周到底是怎么使用 AI 的，哪里提问不清、拆解不稳、目标定义不准。</p>
+      <p class="sub hero-copy">它最早不是一个周报工具，而是从 digest 主动沉淀开始：先想把对话里的知识点留下来，后来发现主动触发不够稳定，才优化成周期性的 AI 使用复盘。</p>
       <div class="pipeline" aria-label="weekly retro pipeline">
-        {['固定提示词', 'Skill 化', '单 Agent 局限', '多 Agent 校验', '收口追问', '持续变好'].map((item, index) => (
+        {['Digest 主动沉淀', '周复盘提示词', 'Skill 化', '单 Agent 局限', '多 Agent 校验', '收口追问', '持续变好'].map((item, index) => (
           <>
             <span>{item}</span>
-            {index < 5 && <i>-></i>}
+            {index < 6 && <i>-></i>}
           </>
         ))}
       </div>
@@ -35,7 +35,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
             <ul>
               {section.points.map((point) => <li>{point}</li>)}
             </ul>
-            {section.id === 's3' && (
+            {section.id === 's4' && (
               <div class="prompt-actions">
                 <button class="copy-prompt" type="button" data-prompt={weeklyRetroOriginalPrompt}>
                   复制原始提示词
@@ -43,7 +43,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
                 <span class="copy-status" aria-live="polite"></span>
               </div>
             )}
-            {section.id === 's10' && (
+            {section.id === 's11' && (
               <div class="link-row">
                 <a class="method-link" href={`${base}ai/skill-desk/`}>回到 Skill Desk</a>
                 <a class="method-link secondary" href={`${base}ai/knowledge-harness/`}>查看知识 Harness</a>
@@ -169,17 +169,24 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     .visual-items {
       margin-top: 1rem;
     }
-    .visual-s4 span:nth-child(2),
-    .visual-s5 span:nth-child(3),
-    .visual-s7 span:nth-child(3),
-    .visual-s9 span:nth-child(2) {
+    .visual-s3 span:nth-child(1),
+    .visual-s5 span:nth-child(2),
+    .visual-s6 span:nth-child(3),
+    .visual-s8 span:nth-child(3),
+    .visual-s10 span:nth-child(2) {
       border-color: rgba(251,191,36,0.48);
       background: rgba(251,191,36,0.12);
     }
-    .visual-s4 span:nth-child(4),
-    .visual-s9 span:nth-child(5) {
+    .visual-s5 span:nth-child(4),
+    .visual-s10 span:nth-child(5) {
       border-color: rgba(251,113,133,0.45);
       background: rgba(251,113,133,0.12);
+    }
+    .visual-s3 span:nth-child(3),
+    .visual-s3 span:nth-child(4),
+    .visual-s9 span:nth-child(4) {
+      border-color: rgba(34,211,238,0.5);
+      background: rgba(34,211,238,0.12);
     }
     .method-link {
       display: inline-flex;
