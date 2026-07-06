@@ -21,7 +21,7 @@ test('Skill Desk homepage shows skill cards and detail entries', async ({ page }
     'href',
     '/personal-website/ai/skill-desk/reading-dialogue/'
   );
-  await expect(page.locator('.skill-card', { hasText: '周度复盘反思' })).toHaveAttribute(
+  await expect(page.locator('.skill-card:not(.absorbed-card)', { hasText: '周度复盘反思' })).toHaveAttribute(
     'href',
     '/personal-website/ai/skill-desk/weekly-retro/'
   );
@@ -29,8 +29,16 @@ test('Skill Desk homepage shows skill cards and detail entries', async ({ page }
     'href',
     '/personal-website/ai/skill-desk/prd-skill/'
   );
-  await expect(page.locator('.skill-card', { hasText: 'Digest 方法组件' })).toContainText('已融入周报');
-  await expect(page.locator('.skill-card', { hasText: 'Digest 方法组件' })).toHaveAttribute(
+  await expect(page.locator('.skill-card', { hasText: '竞品分析' })).toHaveAttribute(
+    'href',
+    '/personal-website/ai/skill-desk/competitive-analysis/'
+  );
+  const digestCard = page.locator('.skill-card.absorbed-card', { hasText: 'Digest 方法组件' });
+  await expect(digestCard).toBeVisible();
+  await expect(digestCard).toContainText('已融入周度复盘反思');
+  await expect(digestCard).toContainText('不是独立 Skill Desk');
+  await expect(digestCard).toContainText('已融入周报');
+  await expect(digestCard).toHaveAttribute(
     'href',
     '/personal-website/ai/skill-desk/weekly-retro/#s3'
   );
@@ -153,6 +161,38 @@ test('prd-skill detail page exposes timeline labels and links', async ({ page })
   );
 });
 
+test('competitive-analysis detail page explains PM-oriented competitive analysis', async ({ page }) => {
+  await page.goto('/personal-website/ai/skill-desk/competitive-analysis/');
+  await expect(page.getByRole('heading', { name: 'competitive-analysis Skill：从竞品资料到产品判断' })).toBeVisible();
+  await expect(page.locator('main#deck section')).toHaveCount(10);
+  await expect(page.locator('#s2')).toContainText('资料汇编');
+  await expect(page.locator('#s3')).toContainText('堆功能、堆截图、堆表格');
+  await expect(page.locator('#s4')).toContainText('产品负责人视角');
+  await expect(page.locator('#s6')).toContainText('模块选择');
+  await expect(page.locator('#s7')).toContainText('当前竞品事实必须重新调研');
+  await expect(page.locator('#s8')).toContainText('按用户路径和业务链路拆');
+  await expect(page.locator('#s9')).toContainText('偷师清单');
+  await expect(page.locator('#s9')).toContainText('反向避坑');
+  await expect(page.locator('#s9')).toContainText('PRD 可用度');
+});
+
+test('competitive-analysis detail page exposes timeline labels and links', async ({ page }) => {
+  await page.goto('/personal-website/ai/skill-desk/competitive-analysis/');
+  const timeline = page.locator('nav.timeline');
+  await expect(timeline).toBeVisible();
+  for (const label of ['入口', '起点', '误区', '视角', '输入', '模块', '事实', '路径', '动作', '判断']) {
+    await expect(timeline).toContainText(label);
+  }
+  await expect(page.locator('#s10 a', { hasText: '回到 Skill Desk' })).toHaveAttribute(
+    'href',
+    '/personal-website/ai/skill-desk/'
+  );
+  await expect(page.locator('#s10 a', { hasText: '查看 PRD Skill' })).toHaveAttribute(
+    'href',
+    '/personal-website/ai/skill-desk/prd-skill/'
+  );
+});
+
 test('Skill Desk and Zhi Shen Ding Nei decks cross-link', async ({ page }) => {
   await page.goto('/personal-website/ai/skill-desk/reading-dialogue/');
   await expect(page.locator('#s10 a', { hasText: '查看一次真实阅读产出的产品判断' })).toHaveAttribute(
@@ -173,6 +213,7 @@ test('Skill Desk pages have no horizontal overflow on desktop and mobile', async
     '/personal-website/ai/skill-desk/reading-dialogue/',
     '/personal-website/ai/skill-desk/weekly-retro/',
     '/personal-website/ai/skill-desk/prd-skill/',
+    '/personal-website/ai/skill-desk/competitive-analysis/',
   ]) {
     for (const viewport of [
       { width: 1280, height: 800 },

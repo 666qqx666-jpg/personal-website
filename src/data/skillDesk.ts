@@ -14,6 +14,9 @@ export interface SkillDeskItem {
   productization: Productization;
   productizationLabel: string;
   href?: string;
+  variant?: 'absorbed';
+  absorbedLabel?: string;
+  absorbedNote?: string;
 }
 
 export interface ReadingDialogueSection {
@@ -39,6 +42,17 @@ export interface WeeklyRetroSection {
 }
 
 export interface PrdSkillSection {
+  id: string;
+  label: string;
+  chapter: string;
+  heading: string;
+  insight: string;
+  points: string[];
+  visualTitle: string;
+  visualItems: string[];
+}
+
+export interface CompetitiveAnalysisSection {
   id: string;
   label: string;
   chapter: string;
@@ -98,28 +112,32 @@ export const skillDeskItems: SkillDeskItem[] = [
     slug: 'competitive-analysis',
     name: 'competitive-analysis',
     title: '竞品分析',
-    problem: '竞品报告不能只堆功能，需要从产品负责人视角判断机会和取舍。',
+    problem: '竞品分析不能退化成资料汇编，而要回答看谁、看什么、学什么、避开什么，以及哪些能进 PRD。',
     category: '研究与分析',
-    useCases: ['竞品选择', '差异化机会', '报告结构'],
-    outputs: ['竞品报告', '机会判断', '需求转化建议'],
+    useCases: ['竞品选择', '模块选择', '偷师清单', 'PRD 输入'],
+    outputs: ['竞品报告', '关键差异', '反向避坑', 'PRD 可用度'],
     maturity: 'stable',
     maturityLabel: '稳定使用',
     productization: 'team-template',
     productizationLabel: '团队模板',
+    href: '/ai/skill-desk/competitive-analysis/',
   },
   {
     slug: 'digest',
     name: 'digest',
     title: 'Digest 方法组件',
-    problem: '它曾经负责主动沉淀对话，但后来被周总结吸收为方法论抽取和入库裁决能力。',
+    problem: '它不再作为独立 Skill Desk 展示；已经融入「周度复盘反思」，成为方法论抽取、候选拆分和入库裁决的内置环节。',
     category: '阅读与沉淀',
     useCases: ['方法论抽取', '候选拆分', '入库裁决', '周总结收口'],
     outputs: ['候选知识点', '方法论片段', '入库去向', '索引维护'],
     maturity: 'iterating',
-    maturityLabel: '已融入周报',
+    maturityLabel: '方法组件',
     productization: 'personal',
-    productizationLabel: '方法组件',
+    productizationLabel: '已融入周报',
     href: '/ai/skill-desk/weekly-retro/#s3',
+    variant: 'absorbed',
+    absorbedLabel: '已融入周度复盘反思',
+    absorbedNote: '不是独立 Skill Desk；点击查看它如何成为 weekly-retro 的前置能力。',
   },
 ];
 
@@ -168,6 +186,19 @@ export const prdSkillTimeline = [
   ['s8', '双Agent'],
   ['s9', '关卡'],
   ['s10', '交付'],
+] as const;
+
+export const competitiveAnalysisTimeline = [
+  ['s1', '入口'],
+  ['s2', '起点'],
+  ['s3', '误区'],
+  ['s4', '视角'],
+  ['s5', '输入'],
+  ['s6', '模块'],
+  ['s7', '事实'],
+  ['s8', '路径'],
+  ['s9', '动作'],
+  ['s10', '判断'],
 ] as const;
 
 export const weeklyRetroOriginalPrompt = `请帮我审查 5.25-5.31 在 Claude 的实际使用情况，并输出一份周度复盘报告。
@@ -471,5 +502,98 @@ export const prdSkillSections: PrdSkillSection[] = [
     points: ['当前形态是个人 PRD 生产与审查 workflow。', '团队复用潜力在于把需求写作、冷启动审查和 spec-readiness 变成 SOP。', '企业级潜力在于把 PRD、审查报告、决策记录和知识库沉淀打通。'],
     visualTitle: '产品化判断',
     visualItems: ['个人 workflow', '团队 SOP', '审查分工', '企业知识流'],
+  },
+];
+
+export const competitiveAnalysisSections: CompetitiveAnalysisSection[] = [
+  {
+    id: 's2',
+    label: '02 · 起点',
+    chapter: 'Original Need',
+    heading: '起点：我不是想要一份资料汇编',
+    insight: 'competitive-analysis 最早要解决的不是“让 AI 搜集竞品资料”，而是让竞品分析服务当前产品判断：该看谁、看什么、学什么、避开什么。',
+    points: ['竞品分析如果没有当前产品问题，就很容易变成公司百科和功能清单。', '真正有用的是知道竞品观察如何影响我们的功能取舍、路径设计和 PRD 输入。', '这页要展示的是竞品分析 skill 的产品负责人视角，而不是普通调研报告。'],
+    visualTitle: '分析目标',
+    visualItems: ['看谁', '看什么', '学什么', '避开什么', '进 PRD'],
+  },
+  {
+    id: 's3',
+    label: '03 · 常见误区',
+    chapter: 'Failure Mode',
+    heading: '常见误区：AI 很容易堆功能、堆截图、堆表格',
+    insight: 'AI 生成竞品报告时最容易看起来很完整：品牌介绍、功能对比、页面截图、优缺点点评都齐了，但看完仍然不知道当前产品下一步该怎么做。',
+    points: ['逐个竞品平均复述，会掩盖真正关键的差异。', '只做 UI 点评，会忽略用户路径和业务链路。', '只有“启示”但没有动作等级，后续无法进入 PRD 或验证计划。'],
+    visualTitle: '资料汇编陷阱',
+    visualItems: ['公司介绍', '功能清单', 'UI 点评', '启示空泛'],
+  },
+  {
+    id: 's4',
+    label: '04 · 产品负责人视角',
+    chapter: 'PM Lens',
+    heading: '关键反思：竞品分析要从当前产品问题出发',
+    insight: '产品负责人视角不会先问“竞品有哪些”，而是先问“我现在要做哪个产品决策”。竞品只是证据来源，不是报告主角。',
+    points: ['先写清本次分析服务的产品问题、决策用途和边界。', '竞品选择要包含直接竞品、强标杆、替代方案或标杆参考。', '竞品数量以 3-5 个为宜，宁可少而深。'],
+    visualTitle: 'PM 视角三问',
+    visualItems: ['当前问题', '决策用途', '分析边界', '竞品角色'],
+  },
+  {
+    id: 's5',
+    label: '05 · 输入收口',
+    chapter: 'Input Framing',
+    heading: '输入收口：目标产品、行业、目的和竞品列表',
+    insight: '这个 skill 的第一步不是直接写报告，而是解析目标产品、行业领域、分析目的、指定竞品和已有材料；如果竞品列表缺失，先推荐候选并说明理由。',
+    points: ['分析目的会影响输出结构：PRD 输入、机会判断、定价、功能、汇报并不一样。', '竞品选择要写明“为什么看它”和“本次重点看什么”。', '启动前需要让用户确认竞品、模块和分析目的。'],
+    visualTitle: '启动参数',
+    visualItems: ['目标产品', '行业领域', '分析目的', '竞品列表', '已有材料'],
+  },
+  {
+    id: 's6',
+    label: '06 · 模块选择',
+    chapter: 'Module Picker',
+    heading: '模块选择：不同产品不能套同一份报告模板',
+    insight: 'competitive-analysis 的亮点之一是按行业和目的选择分析模块。C 端、B 端 SaaS、开发者工具、平台型产品、PRD 输入，都不应该套同一个报告结构。',
+    points: ['C 端产品可看五要素、核心指标、视觉设计和用户路径。', 'B 端 SaaS 更适合定价策略、流程与权限、模式拆解。', 'PRD 输入要重点看功能深潜、偷师清单和 PRD 可用度。'],
+    visualTitle: '可插拔模块',
+    visualItems: ['模式拆解', '五要素', '核心指标', '定价策略', '技术架构', '生态平台'],
+  },
+  {
+    id: 's7',
+    label: '07 · 事实边界',
+    chapter: 'Evidence Boundary',
+    heading: '事实边界：当前竞品事实必须重新调研',
+    insight: '正式知识域只提供分析框架和历史方法，不提供当前市场事实。竞品价格、功能状态、市场动作和页面变化必须来自实时调研或用户材料。',
+    points: ['历史框架可以帮助分析，但不能替代当前事实。', '价格、套餐、功能入口、上线状态这类信息必须重新查证。', '如果事实不完整，报告要标注证据缺口，而不是用推测补齐。'],
+    visualTitle: '证据分层',
+    visualItems: ['框架来自知识库', '事实来自调研', '材料来自用户', '缺口要标注'],
+  },
+  {
+    id: 's8',
+    label: '08 · 横向路径',
+    chapter: 'Path Comparison',
+    heading: '横向路径：按用户路径和业务链路拆，不按竞品逐个讲',
+    insight: 'PM 视角的主干是横向拆解：进入、理解、查找、决策、转化、履约、复购。每个环节比较竞品差异，再形成产品判断。',
+    points: ['不要写成竞品 A、竞品 B、竞品 C 的平均介绍。', '每个路径环节都要回答用户问题、我们现状、竞品做法、关键差异和产品判断。', '横向结构能直接服务页面结构、流程优化和需求拆分。'],
+    visualTitle: '路径拆解',
+    visualItems: ['进入', '理解', '查找', '决策', '转化', '履约', '复购'],
+  },
+  {
+    id: 's9',
+    label: '09 · 产品动作',
+    chapter: 'Action Output',
+    heading: '产品动作：偷师清单、反向避坑和 PRD 可用度',
+    insight: '每个关键观察都必须落到动作等级：可直接写需求、需验证、需技术评估、暂不做，或者反向避坑。否则竞品分析只是“看过了”。',
+    points: ['偷师清单说明机会点、来源竞品、用户价值、业务价值和下一步。', '反向避坑说明竞品做了但我们为什么不能照抄。', 'PRD 可用度把外部观察转成需求候选、验证问题或暂不做决策。'],
+    visualTitle: '动作等级',
+    visualItems: ['直接偷师', '需验证', '需技术评估', '暂不做', '反向避坑'],
+  },
+  {
+    id: 's10',
+    label: '10 · 收束',
+    chapter: 'From Research To Decision',
+    heading: '最终价值：从竞品资料到产品判断',
+    insight: 'competitive-analysis 的价值不是生成一份厚报告，而是把外部观察转成当前产品能使用的判断：哪些能学、哪些不能抄、哪些进入 PRD、哪些继续验证。',
+    points: ['当前形态是产品负责人视角的竞品分析 workflow。', '团队复用潜力在于把竞品报告变成可评审的产品决策输入。', '它可以接住 requirement-discovery 的机会问题，也可以把结论交给 prd-skill 成文。'],
+    visualTitle: '产品化判断',
+    visualItems: ['外部观察', '机会判断', 'PRD 输入', '团队模板'],
   },
 ];

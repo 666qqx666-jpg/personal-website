@@ -33,11 +33,15 @@ const hrefFor = (href?: string) => href ? `${base}${href.replace(/^\//, '')}` : 
       <div id="all" class="desk-grid">
         {skillDeskItems.map((item, index) => {
           const href = hrefFor(item.href);
+          const isAbsorbed = item.variant === 'absorbed';
+          const cardClass = `skill-card reveal ${href ? 'flagship-card' : ''} ${isAbsorbed ? 'absorbed-card' : ''}`;
           return href ? (
-            <a class="skill-card reveal flagship-card" data-delay={String((index % 3) + 1)} href={href}>
+            <a class={cardClass} data-delay={String((index % 3) + 1)} href={href}>
               <span class="card-kicker">{item.category}</span>
+              {isAbsorbed && <span class="absorbed-ribbon">{item.absorbedLabel}</span>}
               <h2>{item.title}</h2>
               <p>{item.problem}</p>
+              {isAbsorbed && <div class="absorbed-note">{item.absorbedNote}</div>}
               <div class="meta-row">
                 <span>{item.maturityLabel}</span>
                 <span>{item.productizationLabel}</span>
@@ -45,10 +49,12 @@ const hrefFor = (href?: string) => href ? `${base}${href.replace(/^\//, '')}` : 
               <div class="chip-row">{item.outputs.map((output) => <b>{output}</b>)}</div>
             </a>
           ) : (
-            <article class="skill-card reveal" data-delay={String((index % 3) + 1)}>
+            <article class={cardClass} data-delay={String((index % 3) + 1)}>
               <span class="card-kicker">{item.category}</span>
+              {isAbsorbed && <span class="absorbed-ribbon">{item.absorbedLabel}</span>}
               <h2>{item.title}</h2>
               <p>{item.problem}</p>
+              {isAbsorbed && <div class="absorbed-note">{item.absorbedNote}</div>}
               <div class="meta-row">
                 <span>{item.maturityLabel}</span>
                 <span>{item.productizationLabel}</span>
@@ -234,6 +240,41 @@ const hrefFor = (href?: string) => href ? `${base}${href.replace(/^\//, '')}` : 
       background:
         linear-gradient(135deg, rgba(34, 211, 238, 0.16), rgba(139, 92, 246, 0.12)),
         var(--surface);
+    }
+    .absorbed-card {
+      border-color: rgba(251, 191, 36, 0.62);
+      border-style: dashed;
+      background:
+        linear-gradient(135deg, rgba(251, 191, 36, 0.17), rgba(52, 211, 153, 0.08)),
+        rgba(15, 22, 38, 0.88);
+    }
+    .absorbed-card .card-kicker {
+      color: #fbbf24;
+    }
+    a.absorbed-card:hover {
+      border-color: rgba(251, 191, 36, 0.88);
+      box-shadow: 0 22px 58px rgba(251, 191, 36, 0.16);
+    }
+    .absorbed-ribbon {
+      display: inline-flex;
+      width: fit-content;
+      border: 1px solid rgba(251, 191, 36, 0.58);
+      border-radius: 999px;
+      padding: 5px 10px;
+      color: #f8e7b2;
+      background: rgba(251, 191, 36, 0.16);
+      font-size: 0.78rem;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+    .absorbed-note {
+      border-left: 3px solid rgba(251, 191, 36, 0.72);
+      border-radius: 6px;
+      padding: 9px 10px;
+      color: #dce4f2;
+      background: rgba(251, 191, 36, 0.08);
+      font-size: 0.86rem;
+      line-height: 1.55;
     }
     .skill-card h2 {
       font-size: 1.12rem;

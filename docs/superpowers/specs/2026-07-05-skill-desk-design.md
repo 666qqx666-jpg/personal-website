@@ -41,6 +41,14 @@ AI 栏目中原本还有一个未落页的 `reading-dialogue Skill` 卡片。它
 - `digest` 的真实演化主线是：最早想主动判断哪些对话需要总结沉淀、抽离知识点并写入知识库；后来发现它太依赖用户主动触发；再后来由周期性的周总结替代触发入口，但复用了 digest 中“抽离方法论、拆候选、判断入库去向”的能力。
 - 在 `weekly-retro` 中新增一屏 `早期 digest：主动沉淀对话里的知识点`，位置放在“起点”之后、“固定提示词”之前，让 digest 成为 weekly-retro 的前身而不是后置补充。
 - Skill Desk 首页保留 `Digest 方法组件` 卡片，状态标记为 `已融入周报`，链接到 `/ai/skill-desk/weekly-retro/#s3`。
+- `Digest 方法组件` 必须和普通独立 Skill Desk 卡片视觉区分：使用已吸收组件样式，明确写出 `已融入周度复盘反思` 和 `不是独立 Skill Desk`，避免用户误以为它还有独立详情页。
+
+2026-07-06 四次增量：
+
+- 不把 `competitive-analysis` 和 `requirement-discovery` 合并成单个 `opportunity-skill`，避免吞掉两个 skill 各自亮点。
+- 第四个详情页做 `competitive-analysis`，主线是“从竞品资料到产品判断”。
+- `competitive-analysis` 的亮点必须露出：从当前产品问题出发、竞品选择、按行业 / 目的选择模块、当前事实必须实时调研或来自用户材料、按用户路径 / 业务链路横向拆解、输出偷师清单、反向避坑和 PRD 可用度。
+- `requirement-discovery` 后续可单独做详情页，主线聚焦“从模糊想法到真需求判断”，不在本页展开。
 
 ## 2. 定位
 
@@ -87,6 +95,7 @@ AI 栏目中原本还有一个未落页的 `reading-dialogue Skill` 卡片。它
 - `/ai/skill-desk/reading-dialogue/`：旗舰子页，讲 `reading-dialogue Skill`。
 - `/ai/skill-desk/weekly-retro/`：第二个详情页，讲 AI 使用复盘如何从 digest 主动沉淀，演化成固定周复盘、多 agent 校验与收口链路。
 - `/ai/skill-desk/prd-skill/`：第三个详情页，讲 PRD 写作如何从模板代写进化为写作、审查和双 agent 分工。
+- `/ai/skill-desk/competitive-analysis/`：第四个详情页，讲竞品分析如何从资料汇编变成产品负责人视角的机会判断和 PRD 输入。
 
 AI 栏目卡片调整：
 
@@ -108,7 +117,8 @@ AI 栏目卡片调整：
 已规划 / 可扩展子页：
 
 - `/ai/skill-desk/prd-skill/`（2026-07-06 增量详情页）
-- `/ai/skill-desk/competitive-analysis/`
+- `/ai/skill-desk/competitive-analysis/`（2026-07-06 增量详情页）
+- `/ai/skill-desk/requirement-discovery/`
 - `/ai/skill-desk/writing-plans/`
 
 ## 5. 首页设计
@@ -164,15 +174,15 @@ AI 栏目卡片调整：
 
 ### 5.3 第一版 Skill 卡片清单
 
-第一版首页展示 5 个 skill 方向，`reading-dialogue`、`weekly-retro` 和 `prd-skill` 已有详情页。其他卡片可以显示为 `planned` 或 `coming next`，避免承诺过多。
+第一版首页展示 5 个 skill 方向，`reading-dialogue`、`weekly-retro`、`prd-skill` 和 `competitive-analysis` 已有详情页。其他卡片可以显示为 `planned` 或 `coming next`，避免承诺过多。
 
 | Skill | 中文名 | 场景 | 成熟度 | 详情页 |
 | --- | --- | --- | --- | --- |
 | `reading-dialogue` | 深度阅读对话 | 阅读、划线、候选卡片、知识入库 | 稳定使用 | 有 |
 | `weekly-retro` / `methodology` | 周度复盘反思 | 周报后对话式复盘、系统候选草稿 | 迭代中 | 有 |
 | `prd-skill` | PRD Skill | PRD 写作、冷启动审查、双 agent 分工 | 稳定使用 | 有 |
-| `competitive-analysis` | 竞品分析 | 产品负责人视角竞品报告 | 稳定使用 | 暂无 |
-| `digest` | Digest 方法组件 | 方法论抽取、候选拆分、入库裁决 | 已融入周报 | 指向 weekly-retro 相关段落 |
+| `competitive-analysis` | 竞品分析 | 产品负责人视角竞品报告、偷师清单、PRD 输入 | 稳定使用 | 有 |
+| `digest` | Digest 方法组件 | 方法论抽取、候选拆分、入库裁决 | 已融入周报 | 非独立页，使用 absorbed card 指向 weekly-retro 相关段落 |
 
 ### 5.4 首页卡片字段
 
