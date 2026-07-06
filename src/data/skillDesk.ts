@@ -19,6 +19,17 @@ export interface SkillDeskItem {
   absorbedNote?: string;
 }
 
+export interface SkillLabItem {
+  slug: string;
+  name: string;
+  title: string;
+  category: string;
+  statusLabel: string;
+  summary: string;
+  validationTrigger: string;
+  signals: string[];
+}
+
 export interface ReadingDialogueSection {
   id: string;
   label: string;
@@ -74,7 +85,18 @@ export interface RequirementDiscoverySection {
   visualItems: string[];
 }
 
-export const deskTabs = ['全部', '阅读与沉淀', '复盘', 'PRD / Spec', '研究与分析', '产品化候选'];
+export interface QuotationSection {
+  id: string;
+  label: string;
+  chapter: string;
+  heading: string;
+  insight: string;
+  points: string[];
+  visualTitle: string;
+  visualItems: string[];
+}
+
+export const deskTabs = ['全部', '阅读与沉淀', '复盘', 'PRD / Spec', '研究与分析', '交付与报价', '产品化候选'];
 
 export const skillDeskItems: SkillDeskItem[] = [
   {
@@ -148,6 +170,20 @@ export const skillDeskItems: SkillDeskItem[] = [
     href: '/ai/skill-desk/competitive-analysis/',
   },
   {
+    slug: 'quotation',
+    name: 'quotation',
+    title: '报价书生成',
+    problem: '报价书不是把需求细拆成人天，而是把需求边界、交付风险和客户能理解的模块粒度组织成可沟通报价。',
+    category: '交付与报价',
+    useCases: ['需求提取', '工时估算', '客户可读模块', '飞书报价单'],
+    outputs: ['报价预览', '模块拆分', '角色工时', '飞书报价书'],
+    maturity: 'stable',
+    maturityLabel: '稳定使用',
+    productization: 'team-template',
+    productizationLabel: '团队模板',
+    href: '/ai/skill-desk/quotation/',
+  },
+  {
     slug: 'digest',
     name: 'digest',
     title: 'Digest 方法组件',
@@ -163,6 +199,19 @@ export const skillDeskItems: SkillDeskItem[] = [
     variant: 'absorbed',
     absorbedLabel: '已融入周度复盘反思',
     absorbedNote: '不是独立 Skill Desk；点击查看它如何成为 weekly-retro 的前置能力。',
+  },
+];
+
+export const skillLabItems: SkillLabItem[] = [
+  {
+    slug: 'prototype-design-workflow',
+    name: 'prototype-design-workflow',
+    title: '原型设计工作流',
+    category: 'Lab / 待验证 skill',
+    statusLabel: '待实战验证',
+    summary: '已从过往原型经验中抽象出模式判断与门禁，但尚未经过完整真实项目打磨；暂不单独做详情页。',
+    validationTrigger: '下一次基于 PRD、旧页面、截图或竞品参考做原型时，记录实际偏差、返工点和新增规则，再决定是否升级为 Skill Desk。',
+    signals: ['模式判断', '三表门禁', '真实页面基线', '等待项目验证'],
   },
 ];
 
@@ -210,7 +259,8 @@ export const prdSkillTimeline = [
   ['s7', '拆分'],
   ['s8', '双Agent'],
   ['s9', '关卡'],
-  ['s10', '交付'],
+  ['s10', '门禁'],
+  ['s11', '交付'],
 ] as const;
 
 export const competitiveAnalysisTimeline = [
@@ -237,6 +287,19 @@ export const requirementDiscoveryTimeline = [
   ['s8', 'V0'],
   ['s9', '交接'],
   ['s10', '判断'],
+] as const;
+
+export const quotationTimeline = [
+  ['s1', '入口'],
+  ['s2', '愿景'],
+  ['s3', '细拆'],
+  ['s4', '事故'],
+  ['s5', '反思'],
+  ['s6', '边界'],
+  ['s7', '模块'],
+  ['s8', '估工'],
+  ['s9', '飞书'],
+  ['s10', '共识'],
 ] as const;
 
 export const weeklyRetroOriginalPrompt = `请帮我审查 5.25-5.31 在 Claude 的实际使用情况，并输出一份周度复盘报告。
@@ -533,13 +596,23 @@ export const prdSkillSections: PrdSkillSection[] = [
   },
   {
     id: 's10',
-    label: '10 · 收束',
+    label: '10 · 实现门禁',
+    chapter: 'Plan Gate',
+    heading: '实现门禁：没过审，就不进入 writing-plans',
+    insight: 'writing-plans 不是这个 Skill Desk 的独立主角，而是 prd-skill 拆分后的实现护栏：如果 prd-review 发现 Blocker，就不能把未封口的 spec 强行拆成实施计划。',
+    points: ['prd-review 输出的不只是建议，而是能否进入执行的信号。', '有 Blocker 时，下一步是回到 PRD / spec 补规则、边界、验收和状态组合，不是继续拆任务。', 'writing-plans 的价值在这里被限定为实现门禁：防止漂亮文档里的洞被带进开发阶段。'],
+    visualTitle: '执行前挡板',
+    visualItems: ['prd-review', 'Blocker', '补 spec', 'writing-plans', '实施计划'],
+  },
+  {
+    id: 's11',
+    label: '11 · 收束',
     chapter: 'From Draft To Delivery',
     heading: '最终价值：不是写得更快，而是交付更稳',
     insight: 'prd-skill 的价值不是让 AI 写一篇漂亮文档，而是把“我有一个需求”推进成团队可以评审、开发可以拆、测试可以验、后续可以复盘的交付资产。',
-    points: ['当前形态是个人 PRD 生产与审查 workflow。', '团队复用潜力在于把需求写作、冷启动审查和 spec-readiness 变成 SOP。', '企业级潜力在于把 PRD、审查报告、决策记录和知识库沉淀打通。'],
+    points: ['当前形态是个人 PRD 生产与审查 workflow。', '团队复用潜力在于把需求写作、冷启动审查、spec-readiness 和实现门禁变成 SOP。', '企业级潜力在于把 PRD、审查报告、决策记录、实施计划和知识库沉淀打通。'],
     visualTitle: '产品化判断',
-    visualItems: ['个人 workflow', '团队 SOP', '审查分工', '企业知识流'],
+    visualItems: ['个人 workflow', '团队 SOP', '审查分工', '计划门禁', '企业知识流'],
   },
 ];
 
@@ -726,5 +799,98 @@ export const requirementDiscoverySections: RequirementDiscoverySection[] = [
     points: ['当前形态是 PRD 前需求发现 workflow。', '团队复用潜力在于把“先别急着写方案”变成稳定协作协议。', '它和 competitive-analysis、prd-skill 形成完整链路：先判需求，再看竞品，再成文交付。'],
     visualTitle: '产品化判断',
     visualItems: ['模糊想法', '真需求判断', 'V0 边界', '后续交接'],
+  },
+];
+
+export const quotationSections: QuotationSection[] = [
+  {
+    id: 's2',
+    label: '02 · 起点愿景',
+    chapter: 'Original Ambition',
+    heading: '起点愿景：让 AI 代替报价书制作',
+    insight: 'quotation 最早想接住的是一件很实用的事：从当前对话或需求材料里提取客户、项目、模块和功能点，自动估算工时，再生成一份标准飞书报价书。',
+    points: ['输入不是一份干净表格，而是一段需求讨论、一个 PRD 或一组功能想法。', '输出要包含模块、功能、产品 / UI / 前端 / 后端 / 测试工时，以及总价。', '最初的期待是减少手工复制模板、填单元格、算公式和调样式的重复劳动。'],
+    visualTitle: '最初自动化',
+    visualItems: ['需求对话', '功能提取', '角色工时', '飞书报价书'],
+  },
+  {
+    id: 's3',
+    label: '03 · 第一版',
+    chapter: 'First Version',
+    heading: '第一版：AI 很自然会按研发任务细拆',
+    insight: '第一版的问题不在于不会估工，而在于它太像研发拆任务：功能拆得越细，看起来越专业，但客户读起来越像工程清单。',
+    points: ['AI 会把接口、页面、状态、联调、测试拆成很多小项。', '细颗粒度方便研发排期，却不一定适合作为客户报价。', '报价书如果充满内部任务语言，就很难解释“客户买到的能力是什么”。'],
+    visualTitle: '细拆惯性',
+    visualItems: ['接口项', '页面项', '联调项', '测试项', '客户困惑'],
+  },
+  {
+    id: 's4',
+    label: '04 · 事故现场',
+    chapter: 'Failure Case',
+    heading: '事故现场：充电桩报价拆得太细',
+    insight: '真实转折发生在充电桩交易闭环项目。第一版报价按研发口径细拆，你指出“模块拆分不对”，希望一个模块下 3-5 个功能，用客户能理解的粗粒度表达。',
+    points: ['项目本身已经收口为独立交易闭环，而不是找桩平台或设备运维平台。', '第一版报价把研发拆解暴露给客户，模块感不强。', '调整后变成少数几个大模块，每个模块下保留 3-5 个可沟通功能点。'],
+    visualTitle: '真实修正',
+    visualItems: ['交易闭环', '拆得太细', '客户可读', '5 个大模块'],
+  },
+  {
+    id: 's5',
+    label: '05 · 关键反思',
+    chapter: 'Core Reflection',
+    heading: '关键反思：报价是客户沟通，不是研发排期',
+    insight: '报价书的第一读者不是开发团队，而是客户和商务决策者。它需要让对方看懂范围、价值和价格，而不是展示我们内部会如何施工。',
+    points: ['研发拆解追求可执行，客户报价追求可理解。', '报价模块应该围绕客户购买的能力，而不是工程实现步骤。', '真正的专业不是拆得越细越好，而是知道什么时候要合并表达。'],
+    visualTitle: '两种口径',
+    visualItems: ['研发任务', '客户报价', '可执行', '可沟通'],
+  },
+  {
+    id: 's6',
+    label: '06 · 报价门禁',
+    chapter: 'Boundary Gate',
+    heading: '报价前先封需求边界和交付风险',
+    insight: 'quotation 不应该在需求还散的时候直接给金额。它要先确认范围、一期边界、交付方式、联调成本、验收风险和隐藏工作量，否则报价会显得快，但后面一定会返工。',
+    points: ['需求边界没封口时，先回到需求发现或 PRD，而不是马上出价。', '涉及支付、履约、退款、对账、权限和外部系统时，必须把隐藏工作量显性化。', '如果出现上线、联调、数据迁移、验收或延期风险，要引入项目复盘口径校准。'],
+    visualTitle: '报价前检查',
+    visualItems: ['范围', '一期边界', '联调', '验收', '风险'],
+  },
+  {
+    id: 's7',
+    label: '07 · 模块重组',
+    chapter: 'Module Framing',
+    heading: '模块重组：从细功能变成客户可读模块',
+    insight: '后来的稳定做法是先把细功能聚合成客户能识别的大模块，再在每个模块下保留少量功能点。这样报价书既不空泛，也不会变成研发排期表。',
+    points: ['模块数量要克制，让客户一眼看出项目由哪几块组成。', '每个模块下保留 3-5 个功能点，说明能力范围和交付边界。', '模块名称尽量使用业务语言，而不是接口、表、字段或内部实现名。'],
+    visualTitle: '报价结构',
+    visualItems: ['大模块', '3-5 功能点', '业务语言', '边界清楚'],
+  },
+  {
+    id: 's8',
+    label: '08 · 工时估算',
+    chapter: 'Effort Model',
+    heading: '工时估算：把隐藏工作量摊到角色上',
+    insight: '估工不只是给每个功能套一个人天。quotation 会按产品、UI、前端、后端、测试拆角色，同时让联调、异常、对账、验收和数据处理这类隐性成本浮出水面。',
+    points: ['简单查询、中等联调、复杂模块和数据迁移要用不同估算基线。', '产品和测试不是尾巴，复杂业务里的需求澄清、验收设计和联调验证都要计入。', '估工预览先给用户确认，允许调整、打折或重新组织模块后再生成正式表格。'],
+    visualTitle: '五角色估工',
+    visualItems: ['产品', 'UI', '前端', '后端', '测试', '隐性成本'],
+  },
+  {
+    id: 's9',
+    label: '09 · 飞书交付',
+    chapter: 'Sheet Delivery',
+    heading: '飞书交付：先预览确认，再生成报价书',
+    insight: '正式生成不是第一步，而是最后一步。先用 Markdown 预览确认模块、功能、工时和金额，再复制飞书模板、写入数据、合并同模块单元格、处理公式、列宽和样式。',
+    points: ['预览阶段解决内容问题，飞书阶段解决格式和交付问题。', '同模块功能要合并模块列，让客户按模块阅读而不是逐行扫任务。', '表格生成后返回链接和摘要：模块数、总工时、合计金额和优惠价。'],
+    visualTitle: '交付链路',
+    visualItems: ['报价预览', '用户确认', '模板复制', '合并单元格', '链接摘要'],
+  },
+  {
+    id: 's10',
+    label: '10 · 收束',
+    chapter: 'From Quote To Consensus',
+    heading: '最终价值：报价书变成需求共识工具',
+    insight: 'quotation 的价值不是省下几分钟填表，而是把模糊需求压成客户能理解、团队能交付、金额能解释的报价结构。',
+    points: ['当前形态是个人报价生成 workflow。', '团队复用潜力在于统一售前、产品、研发和商务之间的报价口径。', '产品化方向可以是团队报价 SOP、项目交付估算助手或飞书报价生成器。'],
+    visualTitle: '产品化判断',
+    visualItems: ['客户共识', '交付估算', '团队 SOP', '飞书生成器'],
   },
 ];

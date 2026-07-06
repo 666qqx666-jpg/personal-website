@@ -58,6 +58,27 @@ AI 栏目中原本还有一个未落页的 `reading-dialogue Skill` 卡片。它
 - 它和 `reading-dialogue` 的产品共创档刹车互相呼应，但场景不同：`reading-dialogue` 防止阅读讨论滑进产品共创，`requirement-discovery` 防止需求未成立就滑进方案设计。
 - 它和 `competitive-analysis`、`prd-skill` 形成前后链路：先判需求是否成立，再看外部对照，最后进入 PRD 写作、冷启动审查或后续计划。
 
+2026-07-06 六次增量：
+
+- `writing-plans` 不单独做 Skill Desk，因为它不是独立长出来的 workflow，而是 `prd-skill` 拆分 `prd-writer / prd-review` 后形成的实现门禁。
+- `prd-skill` 新增一屏 `实现门禁：没过审，就不进入 writing-plans`，说明 `prd-review` 发现 Blocker 时不能把未封口 spec 强行拆成实施计划。
+- 这块内容只服务 PRD Skill 的交付链路：`prd-review` 给出是否能进入执行的信号，`writing-plans` 在 Blocker 存在时拒绝拆计划，避免问题被带进开发阶段。
+
+2026-07-06 七次增量：
+
+- `prototype-design-workflow` 先不做正式 Skill Desk，因为它虽然已被抽象成 skill，但尚未经过一次完整真实项目使用、暴露问题和二次调整。
+- 首页新增 `Skill Lab / 待实战验证` 区块，专门承接这种“已有模式，但还缺真实项目打磨”的候选 skill。
+- `原型设计工作流` 进入 Lab，状态标记为 `待实战验证`；不进入正式 skill 卡片统计，不提供详情页链接。
+- 升级条件是：下一次基于 PRD、旧页面、截图或竞品参考做原型时，记录实际偏差、返工点和新增规则，再决定是否升级为正式 Skill Desk。
+
+2026-07-06 八次增量：
+
+- 第六个详情页做 `quotation`，中文卡片名为 `报价书生成`，主线是“把需求拆成客户看得懂的报价”。
+- `quotation` 的真实演化是：最初希望 AI 从需求对话里提取功能、估算工时并生成飞书报价书；在充电桩交易闭环项目里，第一版按研发任务拆得太细，被用户指出模块拆分不对；后续调整为客户可读的粗粒度模块报价。
+- 本页重点不讲飞书表格 API 或内部模板配置，而讲报价口径：报价书不是研发排期表，而是客户沟通文件。
+- 稳定规则是：先确认需求边界、一期范围、联调 / 验收 / 交付风险，再把细功能归并为少量大模块，每个模块下保留 3-5 个客户能理解的功能点，最后再生成飞书报价单。
+- 它与前面的 skill 链路关系是：`requirement-discovery` 判断需求是否成立，`prd-skill` 让需求变成可交付文档，`quotation` 把需求边界和交付工作量转成客户可确认的报价共识。
+
 ## 2. 定位
 
 页面总标题：
@@ -105,6 +126,7 @@ AI 栏目中原本还有一个未落页的 `reading-dialogue Skill` 卡片。它
 - `/ai/skill-desk/prd-skill/`：第三个详情页，讲 PRD 写作如何从模板代写进化为写作、审查和双 agent 分工。
 - `/ai/skill-desk/competitive-analysis/`：第四个详情页，讲竞品分析如何从资料汇编变成产品负责人视角的机会判断和 PRD 输入。
 - `/ai/skill-desk/requirement-discovery/`：第五个详情页，讲 PRD 前需求发现如何在方案设计前先刹车。
+- `/ai/skill-desk/quotation/`：第六个详情页，讲报价书如何从自动估工变成客户可读的报价共识。
 
 AI 栏目卡片调整：
 
@@ -117,7 +139,7 @@ AI 栏目卡片调整：
 ```ts
 {
   title: 'Skill Desk',
-  hook: '把深度阅读、复盘、需求发现、PRD、竞品分析等高频 AI workflow 设计成可复用 skill',
+  hook: '把深度阅读、复盘、需求发现、PRD、竞品分析、报价等高频 AI workflow 设计成可复用 skill',
   tags: ['常用技能', '工作流', '可产品化'],
   href: `${base}ai/skill-desk/`,
 }
@@ -128,7 +150,7 @@ AI 栏目卡片调整：
 - `/ai/skill-desk/prd-skill/`（2026-07-06 增量详情页）
 - `/ai/skill-desk/competitive-analysis/`（2026-07-06 增量详情页）
 - `/ai/skill-desk/requirement-discovery/`（2026-07-06 增量详情页）
-- `/ai/skill-desk/writing-plans/`
+- `/ai/skill-desk/quotation/`（2026-07-06 增量详情页）
 
 ## 5. 首页设计
 
@@ -171,10 +193,13 @@ AI 栏目卡片调整：
    - 输出物标签
    - 产品化潜力标签
 
-4. 当前旗舰区域  
+4. Skill Lab / 待实战验证  
+   用于展示已经抽象出模式、但尚未经过真实项目打磨的候选 skill。Lab 项不进入正式 skill 卡片统计，不做详情页，必须写清验证触发条件。
+
+5. 当前旗舰区域  
    首页第一版需要突出 `reading-dialogue Skill`，因为它已有完整真实案例、失控复盘和优化链路。
 
-5. 产品化候选区  
+6. 产品化候选区  
    展示哪些 skill 未来可能变成：
    - GitHub 开源项目
    - 团队内部 SOP
@@ -183,7 +208,9 @@ AI 栏目卡片调整：
 
 ### 5.3 第一版 Skill 卡片清单
 
-第一版首页展示 6 个 skill 方向，`reading-dialogue`、`weekly-retro`、`requirement-discovery`、`prd-skill` 和 `competitive-analysis` 已有详情页；`digest` 是已吸收的方法组件，使用 absorbed card 指向 `weekly-retro` 相关段落。
+第一版首页展示 7 个 skill 方向，`reading-dialogue`、`weekly-retro`、`requirement-discovery`、`prd-skill`、`competitive-analysis` 和 `quotation` 已有详情页；`digest` 是已吸收的方法组件，使用 absorbed card 指向 `weekly-retro` 相关段落。
+
+Lab 区块额外展示 `prototype-design-workflow / 原型设计工作流`，但它不是第 7 张正式卡片。它只作为待实战验证候选，等真实项目跑完并沉淀出问题与调整后，再决定是否升级。
 
 | Skill | 中文名 | 场景 | 成熟度 | 详情页 |
 | --- | --- | --- | --- | --- |
@@ -192,9 +219,16 @@ AI 栏目卡片调整：
 | `requirement-discovery` | 需求头脑风暴 | PRD 前需求发现、真伪需求、V0 收敛 | 稳定使用 | 有 |
 | `prd-skill` | PRD Skill | PRD 写作、冷启动审查、双 agent 分工 | 稳定使用 | 有 |
 | `competitive-analysis` | 竞品分析 | 产品负责人视角竞品报告、偷师清单、PRD 输入 | 稳定使用 | 有 |
+| `quotation` | 报价书生成 | 客户可读模块、角色工时、飞书报价书 | 稳定使用 | 有 |
 | `digest` | Digest 方法组件 | 方法论抽取、候选拆分、入库裁决 | 已融入周报 | 非独立页，使用 absorbed card 指向 weekly-retro 相关段落 |
 
-### 5.4 首页卡片字段
+### 5.4 Skill Lab 清单
+
+| Skill | 中文名 | 状态 | 说明 | 升级触发 |
+| --- | --- | --- | --- | --- |
+| `prototype-design-workflow` | 原型设计工作流 | 待实战验证 | 已从过往原型经验中抽象出模式判断与门禁，但尚未经过完整真实项目打磨 | 下一次基于 PRD、旧页面、截图或竞品参考做原型时，记录实际偏差、返工点和新增规则 |
+
+### 5.5 首页卡片字段
 
 每个 skill 使用统一数据结构，便于后续扩展。
 
@@ -433,6 +467,7 @@ type SkillDeskItem = {
 - 不把《置身钉内》作为旗舰子页主角。
 - 不重新解释整个三层知识库架构。
 - 不在页面里展示内部路径过多，除非用于说明机制。
+- 不把尚未经过真实项目验证的 skill 做成正式详情页；这类内容先进入 Skill Lab。
 
 ## 11. 实现边界
 
@@ -443,7 +478,7 @@ type SkillDeskItem = {
 3. 更新 `/ai/` 列表页，把原 `reading-dialogue Skill` 占位改为 `Skill Desk`。
 4. 给新增页面加 Playwright 覆盖：
    - AI 列表能进入 Skill Desk。
-   - Skill Desk 首页展示 6 个 skill 卡片。
+   - Skill Desk 首页展示 7 个 skill 卡片。
    - `reading-dialogue` 卡片能进入旗舰子页。
    - 旗舰子页有 10 个 section。
    - 页面包含三档模式、追问刹车、候选池、入库门禁、产品化判断。

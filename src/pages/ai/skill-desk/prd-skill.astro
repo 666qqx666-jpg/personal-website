@@ -14,10 +14,10 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
       <h1>prd-skill：从 AI 代写 PRD 到双角色工作流</h1>
       <p class="sub hero-copy">它最早只是一个朴素愿望：让 AI 代替我写需求文档。后来才发现，真正需要 skill 化的不是“写”，而是写作、审查、封口和交付这一整条链。</p>
       <div class="pipeline" aria-label="prd skill pipeline">
-        {['模板写作', '反复返工', '单工作流', '同框审查失真', '双 Skill 拆分', '双 Agent 校验'].map((item, index) => (
+        {['模板写作', '反复返工', '单工作流', '同框审查失真', '双 Skill 拆分', '双 Agent 校验', '实现门禁'].map((item, index) => (
           <>
             <span>{item}</span>
-            {index < 5 && <i>-></i>}
+            {index < 6 && <i>-></i>}
           </>
         ))}
       </div>
@@ -35,7 +35,7 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
             <ul>
               {section.points.map((point) => <li>{point}</li>)}
             </ul>
-            {section.id === 's10' && (
+            {section.id === 's11' && (
               <div class="link-row">
                 <a class="method-link" href={`${base}ai/skill-desk/`}>回到 Skill Desk</a>
                 <a class="method-link secondary" href={`${base}ai/knowledge-harness/`}>查看知识 Harness</a>
@@ -149,17 +149,19 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
     }
     .visual-s4 span:nth-child(3),
     .visual-s6 span:nth-child(1),
-    .visual-s9 span:nth-child(1) {
+    .visual-s9 span:nth-child(1),
+    .visual-s10 span:nth-child(2) {
       border-color: rgba(251,113,133,0.48);
       background: rgba(251,113,133,0.13);
     }
     .visual-s7 span:nth-child(2),
     .visual-s8 span:nth-child(3),
-    .visual-s9 span:nth-child(4) {
+    .visual-s9 span:nth-child(4),
+    .visual-s10 span:nth-child(4) {
       border-color: rgba(52,211,153,0.5);
       background: rgba(52,211,153,0.12);
     }
-    .visual-s10 span:nth-child(4) {
+    .visual-s11 span:nth-child(5) {
       border-color: rgba(34,211,238,0.52);
       background: rgba(34,211,238,0.12);
     }

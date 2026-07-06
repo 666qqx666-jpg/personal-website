@@ -13,9 +13,10 @@ test('AI listing links to Skill Desk', async ({ page }) => {
 test('Skill Desk homepage shows skill cards and detail entries', async ({ page }) => {
   await page.goto('/personal-website/ai/skill-desk/');
   await expect(page.getByRole('heading', { name: 'Skill Desk' })).toBeVisible();
-  await expect(page.locator('.skill-card')).toHaveCount(6);
+  await expect(page.locator('.skill-card')).toHaveCount(7);
   await expect(page.locator('.desk-tabs')).toContainText('阅读与沉淀');
   await expect(page.locator('.desk-tabs')).toContainText('PRD / Spec');
+  await expect(page.locator('.desk-tabs')).toContainText('交付与报价');
   await expect(page.locator('.skill-card', { hasText: '深度阅读对话' })).toContainText('稳定使用');
   await expect(page.locator('.skill-card', { hasText: '深度阅读对话' })).toHaveAttribute(
     'href',
@@ -37,6 +38,10 @@ test('Skill Desk homepage shows skill cards and detail entries', async ({ page }
     'href',
     '/personal-website/ai/skill-desk/competitive-analysis/'
   );
+  await expect(page.locator('.skill-card', { hasText: '报价书生成' })).toHaveAttribute(
+    'href',
+    '/personal-website/ai/skill-desk/quotation/'
+  );
   const digestCard = page.locator('.skill-card.absorbed-card', { hasText: 'Digest 方法组件' });
   await expect(digestCard).toBeVisible();
   await expect(digestCard).toContainText('已融入周度复盘反思');
@@ -48,6 +53,19 @@ test('Skill Desk homepage shows skill cards and detail entries', async ({ page }
   );
   await expect(page.locator('.product-lane')).toContainText('GitHub 开源项目');
   await expect(page.locator('.harness-link')).toHaveAttribute('href', '/personal-website/ai/knowledge-harness/');
+});
+
+test('Skill Desk homepage separates unvalidated skills into Lab', async ({ page }) => {
+  await page.goto('/personal-website/ai/skill-desk/');
+  await expect(page.locator('.skill-card')).toHaveCount(7);
+  const lab = page.locator('.skill-lab');
+  await expect(lab).toBeVisible();
+  await expect(lab).toContainText('Skill Lab');
+  await expect(lab).toContainText('待实战验证');
+  await expect(lab).toContainText('原型设计工作流');
+  await expect(lab).toContainText('暂不单独做详情页');
+  await expect(lab).toContainText('下一次基于 PRD、旧页面、截图或竞品参考做原型');
+  await expect(lab.locator('a')).toHaveCount(0);
 });
 
 test('reading-dialogue flagship has ten sections and core controls', async ({ page }) => {
@@ -137,7 +155,7 @@ test('weekly-retro detail page links back to Skill Desk and Knowledge Harness', 
 test('prd-skill detail page explains the PRD workflow evolution', async ({ page }) => {
   await page.goto('/personal-website/ai/skill-desk/prd-skill/');
   await expect(page.getByRole('heading', { name: 'prd-skill：从 AI 代写 PRD 到双角色工作流' })).toBeVisible();
-  await expect(page.locator('main#deck section')).toHaveCount(10);
+  await expect(page.locator('main#deck section')).toHaveCount(11);
   await expect(page.locator('#s2')).toContainText('让 AI 代替写需求文档');
   await expect(page.locator('#s3')).toContainText('给模板');
   await expect(page.locator('#s4')).toContainText('反反复复修改');
@@ -145,21 +163,24 @@ test('prd-skill detail page explains the PRD workflow evolution', async ({ page 
   await expect(page.locator('#s7')).toContainText('prd-writer 和 prd-review');
   await expect(page.locator('#s8')).toContainText('不同 agent');
   await expect(page.locator('#s9')).toContainText('spec-readiness');
-  await expect(page.locator('#s10')).toContainText('交付更稳');
+  await expect(page.locator('#s10')).toContainText('实现门禁：没过审，就不进入 writing-plans');
+  await expect(page.locator('#s10')).toContainText('Blocker');
+  await expect(page.locator('#s10')).toContainText('实现门禁');
+  await expect(page.locator('#s11')).toContainText('交付更稳');
 });
 
 test('prd-skill detail page exposes timeline labels and links', async ({ page }) => {
   await page.goto('/personal-website/ai/skill-desk/prd-skill/');
   const timeline = page.locator('nav.timeline');
   await expect(timeline).toBeVisible();
-  for (const label of ['入口', '愿景', '模板', '返工', '工作流', '同框', '拆分', '双Agent', '关卡', '交付']) {
+  for (const label of ['入口', '愿景', '模板', '返工', '工作流', '同框', '拆分', '双Agent', '关卡', '门禁', '交付']) {
     await expect(timeline).toContainText(label);
   }
-  await expect(page.locator('#s10 a', { hasText: '回到 Skill Desk' })).toHaveAttribute(
+  await expect(page.locator('#s11 a', { hasText: '回到 Skill Desk' })).toHaveAttribute(
     'href',
     '/personal-website/ai/skill-desk/'
   );
-  await expect(page.locator('#s10 a', { hasText: '查看知识 Harness' })).toHaveAttribute(
+  await expect(page.locator('#s11 a', { hasText: '查看知识 Harness' })).toHaveAttribute(
     'href',
     '/personal-website/ai/knowledge-harness/'
   );
@@ -239,6 +260,44 @@ test('requirement-discovery detail page exposes timeline labels and links', asyn
   );
 });
 
+test('quotation detail page explains customer-readable quote generation', async ({ page }) => {
+  await page.goto('/personal-website/ai/skill-desk/quotation/');
+  await expect(page.getByRole('heading', { name: 'quotation Skill：把需求拆成客户看得懂的报价' })).toBeVisible();
+  await expect(page.locator('main#deck section')).toHaveCount(10);
+  await expect(page.locator('#s2')).toContainText('让 AI 代替报价书制作');
+  await expect(page.locator('#s3')).toContainText('研发任务细拆');
+  await expect(page.locator('#s4')).toContainText('充电桩报价拆得太细');
+  await expect(page.locator('#s4')).toContainText('3-5 个功能');
+  await expect(page.locator('#s4')).toContainText('5 个大模块');
+  await expect(page.locator('#s5')).toContainText('报价是客户沟通，不是研发排期');
+  await expect(page.locator('#s6')).toContainText('需求边界');
+  await expect(page.locator('#s7')).toContainText('客户可读模块');
+  await expect(page.locator('#s8')).toContainText('产品、UI、前端、后端、测试');
+  await expect(page.locator('#s9')).toContainText('先预览确认，再生成报价书');
+  await expect(page.locator('#s10')).toContainText('需求共识工具');
+});
+
+test('quotation detail page exposes timeline labels and links', async ({ page }) => {
+  await page.goto('/personal-website/ai/skill-desk/quotation/');
+  const timeline = page.locator('nav.timeline');
+  await expect(timeline).toBeVisible();
+  for (const label of ['入口', '愿景', '细拆', '事故', '反思', '边界', '模块', '估工', '飞书', '共识']) {
+    await expect(timeline).toContainText(label);
+  }
+  await expect(page.locator('#s10 a', { hasText: '回到 Skill Desk' })).toHaveAttribute(
+    'href',
+    '/personal-website/ai/skill-desk/'
+  );
+  await expect(page.locator('#s10 a', { hasText: '查看需求头脑风暴' })).toHaveAttribute(
+    'href',
+    '/personal-website/ai/skill-desk/requirement-discovery/'
+  );
+  await expect(page.locator('#s10 a', { hasText: '查看 PRD Skill' })).toHaveAttribute(
+    'href',
+    '/personal-website/ai/skill-desk/prd-skill/'
+  );
+});
+
 test('Skill Desk and Zhi Shen Ding Nei decks cross-link', async ({ page }) => {
   await page.goto('/personal-website/ai/skill-desk/reading-dialogue/');
   await expect(page.locator('#s10 a', { hasText: '查看一次真实阅读产出的产品判断' })).toHaveAttribute(
@@ -261,6 +320,7 @@ test('Skill Desk pages have no horizontal overflow on desktop and mobile', async
     '/personal-website/ai/skill-desk/prd-skill/',
     '/personal-website/ai/skill-desk/competitive-analysis/',
     '/personal-website/ai/skill-desk/requirement-discovery/',
+    '/personal-website/ai/skill-desk/quotation/',
   ]) {
     for (const viewport of [
       { width: 1280, height: 800 },

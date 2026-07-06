@@ -1,0 +1,282 @@
+---
+import DeckLayout from '../../../layouts/DeckLayout.astro';
+import { quotationSections, quotationTimeline } from '../../../data/skillDesk';
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+<DeckLayout
+  title="quotation Skill：把需求拆成客户看得懂的报价 — QQ星"
+  description="从 AI 自动生成报价书，到发现报价不是研发拆任务，而是客户可读模块、交付风险、角色工时和飞书报价单的完整链路。"
+>
+  <main id="deck" class="skill-method-deck quotation-deck">
+    <section id="s1">
+      <div class="chapter">Skill Desk · 方法子页</div>
+      <h1>quotation Skill：把需求拆成客户看得懂的报价</h1>
+      <p class="sub hero-copy">它解决的不是“怎么把功能点换成人天”，而是把需求边界、交付风险和客户能理解的模块粒度组织成一份可以沟通、可以确认、可以交付的报价书。</p>
+      <div class="pipeline" aria-label="quotation pipeline">
+        {['需求材料', '边界检查', '模块重组', '五角色估工', '报价预览', '飞书生成', '客户共识'].map((item, index) => (
+          <>
+            <span>{item}</span>
+            {index < 6 && <i>-></i>}
+          </>
+        ))}
+      </div>
+      <div class="quote-sheet" aria-label="quotation preview">
+        <div class="sheet-title">报价书不是研发排期表</div>
+        <div class="sheet-grid">
+          <span>模块</span><span>客户可读功能</span><span>工时</span><span>费用</span>
+          <b>交易闭环</b><b>预充值 / 结算 / 退款</b><b>84</b><b>¥184,800</b>
+          <b>后台对账</b><b>订单 / 异常 / 下载</b><b>52</b><b>¥114,400</b>
+        </div>
+      </div>
+      <div class="scroll-hint">↓ 进入报价书生成工作流</div>
+    </section>
+
+    {quotationSections.map((section) => (
+      <section id={section.id}>
+        <div class="chapter">{section.label}</div>
+        <h2>{section.heading}</h2>
+        <div class="method-layout">
+          <div class="method-copy">
+            <div class="lens">{section.chapter}</div>
+            <p>{section.insight}</p>
+            <ul>
+              {section.points.map((point) => <li>{point}</li>)}
+            </ul>
+            {section.id === 's10' && (
+              <div class="link-row">
+                <a class="method-link" href={`${base}ai/skill-desk/`}>回到 Skill Desk</a>
+                <a class="method-link secondary" href={`${base}ai/skill-desk/requirement-discovery/`}>查看需求头脑风暴</a>
+                <a class="method-link tertiary" href={`${base}ai/skill-desk/prd-skill/`}>查看 PRD Skill</a>
+              </div>
+            )}
+          </div>
+          <div class="figure control-figure">
+            <div class="fig-label">{section.visualTitle}</div>
+            <div class={`visual-items visual-${section.id}`}>
+              {section.visualItems.map((item) => <span>{item}</span>)}
+            </div>
+          </div>
+        </div>
+      </section>
+    ))}
+  </main>
+
+  <nav class="timeline" id="tl" aria-label="Deck timeline">
+    {quotationTimeline.map(([id, label]) => (
+      <a href={`#${id}`} data-t={id}><span class="dot"></span><span class="lbl">{label}</span></a>
+    ))}
+  </nav>
+
+  <script is:inline>
+    const links = document.querySelectorAll('#tl a[data-t]');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          links.forEach(l => l.classList.toggle('active', l.dataset.t === e.target.id));
+        }
+      });
+    }, { root: document.getElementById('deck'), threshold: 0.55 });
+    document.querySelectorAll('main section').forEach(s => obs.observe(s));
+  </script>
+
+  <style>
+    .quotation-deck {
+      background:
+        linear-gradient(180deg, rgba(52,211,153,0.035), rgba(255,255,255,0) 46%),
+        radial-gradient(circle at 50% 30%, rgba(251,191,36,0.08), transparent 34%);
+    }
+    .hero-copy {
+      margin-top: 1.35rem;
+    }
+    .pipeline,
+    .visual-items,
+    .link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      align-items: center;
+      justify-content: center;
+    }
+    .pipeline {
+      margin-top: 1.8rem;
+      max-width: 940px;
+    }
+    .pipeline span,
+    .visual-items span {
+      color: var(--text);
+      border: 1px solid rgba(52,211,153,0.45);
+      background: rgba(52,211,153,0.1);
+      border-radius: 999px;
+      padding: 0.5rem 0.78rem;
+      font-size: 0.82rem;
+      line-height: 1.35;
+    }
+    .pipeline i {
+      color: var(--text-dim);
+      font-style: normal;
+    }
+    .quote-sheet {
+      width: min(100%, 720px);
+      margin-top: 1.5rem;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.035)),
+        rgba(10,16,32,0.82);
+      box-shadow: 0 20px 46px rgba(0,0,0,0.28);
+      overflow: hidden;
+    }
+    .sheet-title {
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      color: #f8e7b2;
+      font-size: 0.86rem;
+      font-weight: 800;
+    }
+    .sheet-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 1.7fr 0.65fr 0.85fr;
+      min-width: 0;
+    }
+    .sheet-grid span,
+    .sheet-grid b {
+      min-width: 0;
+      border-right: 1px solid rgba(255,255,255,0.08);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      padding: 0.64rem 0.72rem;
+      color: var(--text);
+      font-size: 0.78rem;
+      line-height: 1.35;
+    }
+    .sheet-grid span {
+      color: #9ee7c6;
+      background: rgba(52,211,153,0.085);
+      font-weight: 800;
+    }
+    .sheet-grid b {
+      font-weight: 650;
+    }
+    .method-layout {
+      display: grid;
+      grid-template-columns: minmax(300px, 470px) minmax(320px, 570px);
+      gap: 3rem;
+      align-items: center;
+      width: min(100%, 1080px);
+    }
+    .method-copy {
+      display: grid;
+      gap: 0.9rem;
+      min-width: 0;
+    }
+    .lens,
+    .fig-label {
+      color: #34d399;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+    .method-copy > p {
+      color: var(--text);
+      font-size: 1rem;
+      line-height: 1.78;
+    }
+    .method-copy ul {
+      display: grid;
+      gap: 0.52rem;
+      padding-left: 1.05rem;
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      line-height: 1.62;
+    }
+    .control-figure {
+      min-width: 0;
+      border-radius: 18px;
+    }
+    .visual-items {
+      margin-top: 1rem;
+    }
+    .visual-s3 span:nth-child(5),
+    .visual-s4 span:nth-child(2),
+    .visual-s5 span:nth-child(1) {
+      border-color: rgba(251,113,133,0.5);
+      background: rgba(251,113,133,0.13);
+    }
+    .visual-s4 span:nth-child(4),
+    .visual-s7 span:nth-child(2),
+    .visual-s10 span:nth-child(1) {
+      border-color: rgba(251,191,36,0.52);
+      background: rgba(251,191,36,0.12);
+    }
+    .visual-s6 span:nth-child(5),
+    .visual-s8 span:nth-child(6),
+    .visual-s9 span:nth-child(5) {
+      border-color: rgba(34,211,238,0.5);
+      background: rgba(34,211,238,0.12);
+    }
+    .method-link {
+      display: inline-flex;
+      width: fit-content;
+      color: var(--text);
+      border: 1px solid rgba(52,211,153,0.48);
+      border-radius: 999px;
+      padding: 0.52rem 0.9rem;
+      background: rgba(52,211,153,0.1);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+    .method-link.secondary {
+      border-color: rgba(251,191,36,0.45);
+      background: rgba(251,191,36,0.1);
+    }
+    .method-link.tertiary {
+      border-color: rgba(34,211,238,0.45);
+      background: rgba(34,211,238,0.1);
+    }
+    .link-row {
+      justify-content: flex-start;
+    }
+    @media (max-width: 860px) {
+      .quotation-deck section {
+        padding-top: 5.2rem;
+        padding-bottom: 6.9rem;
+      }
+      .method-layout {
+        grid-template-columns: 1fr;
+        gap: 1.6rem;
+      }
+      .control-figure {
+        width: min(100%, 480px);
+      }
+      .pipeline,
+      .visual-items {
+        justify-content: flex-start;
+      }
+    }
+    @media (max-width: 560px) {
+      .quote-sheet {
+        border-radius: 10px;
+      }
+      .sheet-grid {
+        grid-template-columns: 1fr 1.35fr 0.58fr 0.78fr;
+      }
+      .sheet-grid span,
+      .sheet-grid b {
+        padding: 0.48rem 0.46rem;
+        font-size: 0.64rem;
+      }
+      .control-figure {
+        padding: 1rem;
+      }
+      .pipeline span,
+      .visual-items span {
+        font-size: 0.72rem;
+        padding: 0.42rem 0.62rem;
+      }
+      .pipeline i {
+        display: none;
+      }
+    }
+  </style>
+</DeckLayout>
