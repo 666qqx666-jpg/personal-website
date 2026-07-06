@@ -213,6 +213,16 @@ export const skillLabItems: SkillLabItem[] = [
     validationTrigger: '下一次基于 PRD、旧页面、截图或竞品参考做原型时，记录实际偏差、返工点和新增规则，再决定是否升级为 Skill Desk。',
     signals: ['模式判断', '三表门禁', '真实页面基线', '等待项目验证'],
   },
+  {
+    slug: 'multi-agent-collaboration',
+    name: 'multi-agent-collaboration',
+    title: '多 Agent 协作协议',
+    category: 'Lab / 待验证 skill',
+    statusLabel: '待实战验证',
+    summary: '已抽象出 Mode Gate、手动任务包和 Judge 裁决模板，但还需要真实 PRD 写审或双观点分析样例验证协作成本与裁决质量。',
+    validationTrigger: '下一次需要 Claude / Codex 分工写审 PRD、或让两个 agent 分别给产品与技术观点时，记录任务包是否减少来回复制、审查是否更冷启动、Judge 是否能稳定裁决。',
+    signals: ['Mode Gate', '手动任务包', 'Judge 裁决', '等待样例验证'],
+  },
 ];
 
 export const productLanes = [

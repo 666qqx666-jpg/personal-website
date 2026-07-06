@@ -79,6 +79,13 @@ AI 栏目中原本还有一个未落页的 `reading-dialogue Skill` 卡片。它
 - 稳定规则是：先确认需求边界、一期范围、联调 / 验收 / 交付风险，再把细功能归并为少量大模块，每个模块下保留 3-5 个客户能理解的功能点，最后再生成飞书报价单。
 - 它与前面的 skill 链路关系是：`requirement-discovery` 判断需求是否成立，`prd-skill` 让需求变成可交付文档，`quotation` 把需求边界和交付工作量转成客户可确认的报价共识。
 
+2026-07-06 九次增量：
+
+- `multi-agent-collaboration` 和 `prototype-design-workflow` 同样先进入 `Skill Lab / 待实战验证`，不做正式详情页。
+- 原因是它已经抽象出 Mode Gate、手动任务包和 Judge 裁决模板，也完成了静态验证，但还缺少真实 PRD 写审或双观点分析项目中的使用反馈。
+- 首页 Lab 增加 `多 Agent 协作协议`，升级触发条件是下一次需要 Claude / Codex 分工写审 PRD，或让两个 agent 分别给产品与技术观点时，记录任务包是否减少复制成本、审查是否更冷启动、Judge 是否能稳定裁决。
+- 它不进入正式 skill 卡片统计，不提供详情页链接，避免把“已创建的协议生成器”误表达成“已稳定产品化的协作 workflow”。
+
 ## 2. 定位
 
 页面总标题：
@@ -210,7 +217,7 @@ AI 栏目卡片调整：
 
 第一版首页展示 7 个 skill 方向，`reading-dialogue`、`weekly-retro`、`requirement-discovery`、`prd-skill`、`competitive-analysis` 和 `quotation` 已有详情页；`digest` 是已吸收的方法组件，使用 absorbed card 指向 `weekly-retro` 相关段落。
 
-Lab 区块额外展示 `prototype-design-workflow / 原型设计工作流`，但它不是第 7 张正式卡片。它只作为待实战验证候选，等真实项目跑完并沉淀出问题与调整后，再决定是否升级。
+Lab 区块额外展示 `prototype-design-workflow / 原型设计工作流` 和 `multi-agent-collaboration / 多 Agent 协作协议`，但它们不是正式卡片。它们只作为待实战验证候选，等真实项目跑完并沉淀出问题与调整后，再决定是否升级。
 
 | Skill | 中文名 | 场景 | 成熟度 | 详情页 |
 | --- | --- | --- | --- | --- |
@@ -227,6 +234,7 @@ Lab 区块额外展示 `prototype-design-workflow / 原型设计工作流`，但
 | Skill | 中文名 | 状态 | 说明 | 升级触发 |
 | --- | --- | --- | --- | --- |
 | `prototype-design-workflow` | 原型设计工作流 | 待实战验证 | 已从过往原型经验中抽象出模式判断与门禁，但尚未经过完整真实项目打磨 | 下一次基于 PRD、旧页面、截图或竞品参考做原型时，记录实际偏差、返工点和新增规则 |
+| `multi-agent-collaboration` | 多 Agent 协作协议 | 待实战验证 | 已抽象出 Mode Gate、手动任务包和 Judge 裁决模板，但还需要真实协作样例验证协作成本与裁决质量 | 下一次 PRD 写审协作或双观点分析时，记录任务包、冷启动审查和 Judge 裁决是否真正稳定 |
 
 ### 5.5 首页卡片字段
 

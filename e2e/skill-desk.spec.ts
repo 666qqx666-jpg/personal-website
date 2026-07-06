@@ -62,9 +62,14 @@ test('Skill Desk homepage separates unvalidated skills into Lab', async ({ page 
   await expect(lab).toBeVisible();
   await expect(lab).toContainText('Skill Lab');
   await expect(lab).toContainText('待实战验证');
+  await expect(lab.locator('.lab-item')).toHaveCount(2);
   await expect(lab).toContainText('原型设计工作流');
   await expect(lab).toContainText('暂不单独做详情页');
   await expect(lab).toContainText('下一次基于 PRD、旧页面、截图或竞品参考做原型');
+  await expect(lab).toContainText('多 Agent 协作协议');
+  await expect(lab).toContainText('Mode Gate');
+  await expect(lab).toContainText('Judge 裁决');
+  await expect(lab).toContainText('PRD 写审');
   await expect(lab.locator('a')).toHaveCount(0);
 });
 
