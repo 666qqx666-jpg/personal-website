@@ -86,6 +86,14 @@ AI 栏目中原本还有一个未落页的 `reading-dialogue Skill` 卡片。它
 - 首页 Lab 增加 `多 Agent 协作协议`，升级触发条件是下一次需要 Claude / Codex 分工写审 PRD，或让两个 agent 分别给产品与技术观点时，记录任务包是否减少复制成本、审查是否更冷启动、Judge 是否能稳定裁决。
 - 它不进入正式 skill 卡片统计，不提供详情页链接，避免把“已创建的协议生成器”误表达成“已稳定产品化的协作 workflow”。
 
+2026-07-06 十次增量：
+
+- 第七个详情页做 `memory-loader`，中文卡片名为 `记忆控制层`，主线是“给 AI 记忆加控制层”。
+- 本页不是单纯讲上下文管理，而是讲 Personal Knowledge Harness 衍生出的控制层 skill：当 skill 越多、沉淀越勤、知识卡越多时，真正重要的不是让 AI 记得更多，而是让它知道此刻该读什么。
+- 真实演化主线是：最开始把所有知识和上下文都写进 skill → skill 变多后做隐藏 skill / skill-loader，按需加载能力入口 → 发现 Claude、Codex、OpenClaw 的 skill 目录分裂，改成共享 skill 真值源 → 知识库迭代后同一领域卡片越来越多，引入 README / 00 索引路由机制 → 最后形成 `memory-loader / knowledge-context-pack`，输出最小充分 context-pack。
+- 本页要和 `Personal Knowledge Harness` 区分：Harness 讲系统架构，`memory-loader` 讲架构里的控制动作。
+- 本页要把 `knowledge-context-pack` 作为 `memory-loader` 的核心输出形态，而不是另起一个并列详情页。
+
 ## 2. 定位
 
 页面总标题：
@@ -134,6 +142,7 @@ AI 栏目中原本还有一个未落页的 `reading-dialogue Skill` 卡片。它
 - `/ai/skill-desk/competitive-analysis/`：第四个详情页，讲竞品分析如何从资料汇编变成产品负责人视角的机会判断和 PRD 输入。
 - `/ai/skill-desk/requirement-discovery/`：第五个详情页，讲 PRD 前需求发现如何在方案设计前先刹车。
 - `/ai/skill-desk/quotation/`：第六个详情页，讲报价书如何从自动估工变成客户可读的报价共识。
+- `/ai/skill-desk/memory-loader/`：第七个详情页，讲记忆控制层如何从 skill 知识内嵌、隐藏 loader、共享 skill、索引机制演化成 context-pack。
 
 AI 栏目卡片调整：
 
@@ -146,7 +155,7 @@ AI 栏目卡片调整：
 ```ts
 {
   title: 'Skill Desk',
-  hook: '把深度阅读、复盘、需求发现、PRD、竞品分析、报价等高频 AI workflow 设计成可复用 skill',
+  hook: '把深度阅读、复盘、需求发现、PRD、竞品分析、报价、记忆控制等高频 AI workflow 设计成可复用 skill',
   tags: ['常用技能', '工作流', '可产品化'],
   href: `${base}ai/skill-desk/`,
 }
@@ -158,6 +167,7 @@ AI 栏目卡片调整：
 - `/ai/skill-desk/competitive-analysis/`（2026-07-06 增量详情页）
 - `/ai/skill-desk/requirement-discovery/`（2026-07-06 增量详情页）
 - `/ai/skill-desk/quotation/`（2026-07-06 增量详情页）
+- `/ai/skill-desk/memory-loader/`（2026-07-06 增量详情页）
 
 ## 5. 首页设计
 
@@ -189,6 +199,8 @@ AI 栏目卡片调整：
    - `复盘`
    - `PRD / Spec`
    - `研究与分析`
+   - `交付与报价`
+   - `记忆控制`
    - `产品化候选`
 
 3. Skill 卡片网格  
@@ -215,7 +227,7 @@ AI 栏目卡片调整：
 
 ### 5.3 第一版 Skill 卡片清单
 
-第一版首页展示 7 个 skill 方向，`reading-dialogue`、`weekly-retro`、`requirement-discovery`、`prd-skill`、`competitive-analysis` 和 `quotation` 已有详情页；`digest` 是已吸收的方法组件，使用 absorbed card 指向 `weekly-retro` 相关段落。
+第一版首页展示 8 个 skill 方向，`reading-dialogue`、`weekly-retro`、`requirement-discovery`、`prd-skill`、`competitive-analysis`、`quotation` 和 `memory-loader` 已有详情页；`digest` 是已吸收的方法组件，使用 absorbed card 指向 `weekly-retro` 相关段落。
 
 Lab 区块额外展示 `prototype-design-workflow / 原型设计工作流` 和 `multi-agent-collaboration / 多 Agent 协作协议`，但它们不是正式卡片。它们只作为待实战验证候选，等真实项目跑完并沉淀出问题与调整后，再决定是否升级。
 
@@ -227,6 +239,7 @@ Lab 区块额外展示 `prototype-design-workflow / 原型设计工作流` 和 `
 | `prd-skill` | PRD Skill | PRD 写作、冷启动审查、双 agent 分工 | 稳定使用 | 有 |
 | `competitive-analysis` | 竞品分析 | 产品负责人视角竞品报告、偷师清单、PRD 输入 | 稳定使用 | 有 |
 | `quotation` | 报价书生成 | 客户可读模块、角色工时、飞书报价书 | 稳定使用 | 有 |
+| `memory-loader` | 记忆控制层 | 按需加载 skill、共享记忆入口、索引路由、上下文包 | 稳定使用 | 有 |
 | `digest` | Digest 方法组件 | 方法论抽取、候选拆分、入库裁决 | 已融入周报 | 非独立页，使用 absorbed card 指向 weekly-retro 相关段落 |
 
 ### 5.4 Skill Lab 清单
@@ -486,7 +499,7 @@ type SkillDeskItem = {
 3. 更新 `/ai/` 列表页，把原 `reading-dialogue Skill` 占位改为 `Skill Desk`。
 4. 给新增页面加 Playwright 覆盖：
    - AI 列表能进入 Skill Desk。
-   - Skill Desk 首页展示 7 个 skill 卡片。
+   - Skill Desk 首页展示 8 个 skill 卡片。
    - `reading-dialogue` 卡片能进入旗舰子页。
    - 旗舰子页有 10 个 section。
    - 页面包含三档模式、追问刹车、候选池、入库门禁、产品化判断。

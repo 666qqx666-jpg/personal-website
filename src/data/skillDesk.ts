@@ -96,7 +96,18 @@ export interface QuotationSection {
   visualItems: string[];
 }
 
-export const deskTabs = ['全部', '阅读与沉淀', '复盘', 'PRD / Spec', '研究与分析', '交付与报价', '产品化候选'];
+export interface MemoryLoaderSection {
+  id: string;
+  label: string;
+  chapter: string;
+  heading: string;
+  insight: string;
+  points: string[];
+  visualTitle: string;
+  visualItems: string[];
+}
+
+export const deskTabs = ['全部', '阅读与沉淀', '复盘', 'PRD / Spec', '研究与分析', '交付与报价', '记忆控制', '产品化候选'];
 
 export const skillDeskItems: SkillDeskItem[] = [
   {
@@ -182,6 +193,20 @@ export const skillDeskItems: SkillDeskItem[] = [
     productization: 'team-template',
     productizationLabel: '团队模板',
     href: '/ai/skill-desk/quotation/',
+  },
+  {
+    slug: 'memory-loader',
+    name: 'memory-loader / knowledge-context-pack',
+    title: '记忆控制层',
+    problem: '当 skill、知识卡和 agent 都变多以后，真正重要的不是让 AI 记得更多，而是让它知道此刻该读什么。',
+    category: '记忆控制',
+    useCases: ['按需加载 skill', '共享记忆入口', '索引路由', '上下文包'],
+    outputs: ['context-pack', '加载理由', '未加载说明', '风险提示'],
+    maturity: 'stable',
+    maturityLabel: '稳定使用',
+    productization: 'enterprise-candidate',
+    productizationLabel: '企业候选',
+    href: '/ai/skill-desk/memory-loader/',
   },
   {
     slug: 'digest',
@@ -310,6 +335,19 @@ export const quotationTimeline = [
   ['s8', '估工'],
   ['s9', '飞书'],
   ['s10', '共识'],
+] as const;
+
+export const memoryLoaderTimeline = [
+  ['s1', '入口'],
+  ['s2', '塞入'],
+  ['s3', '爆炸'],
+  ['s4', '隐藏'],
+  ['s5', '共享'],
+  ['s6', '卡片'],
+  ['s7', '索引'],
+  ['s8', '包'],
+  ['s9', '关系'],
+  ['s10', '控制'],
 ] as const;
 
 export const weeklyRetroOriginalPrompt = `请帮我审查 5.25-5.31 在 Claude 的实际使用情况，并输出一份周度复盘报告。
@@ -902,5 +940,98 @@ export const quotationSections: QuotationSection[] = [
     points: ['当前形态是个人报价生成 workflow。', '团队复用潜力在于统一售前、产品、研发和商务之间的报价口径。', '产品化方向可以是团队报价 SOP、项目交付估算助手或飞书报价生成器。'],
     visualTitle: '产品化判断',
     visualItems: ['客户共识', '交付估算', '团队 SOP', '飞书生成器'],
+  },
+];
+
+export const memoryLoaderSections: MemoryLoaderSection[] = [
+  {
+    id: 's2',
+    label: '02 · 原始做法',
+    chapter: 'Knowledge In Skill',
+    heading: '第一阶段：所有知识和上下文都塞进 skill',
+    insight: '最开始为了让 AI 更懂任务，最直接的办法是把背景、规则、模板和经验都写进 skill。它短期有效，但长期会把 skill 变成难维护的知识容器。',
+    points: ['skill 既要负责触发和执行，又要携带大量知识。', '经验越沉淀，单个 skill 越重，修改成本越高。', '知识被写死在执行入口里，不利于长期治理和跨场景复用。'],
+    visualTitle: '早期结构',
+    visualItems: ['SKILL.md', '规则', '模板', '案例', '上下文'],
+  },
+  {
+    id: 's3',
+    label: '03 · 新问题',
+    chapter: 'Context Explosion',
+    heading: '新问题：skill 越多，沉淀越勤，上下文越爆炸',
+    insight: 'Personal Knowledge Harness 解决了记忆分散，但也带来新的控制问题：当 skill、知识卡和原文材料都在增长时，AI 如果一股脑读取，反而会被上下文淹没。',
+    points: ['上下文不是越多越好，弱相关材料会稀释当前任务主线。', '旧经验如果没有边界，容易把已经过期的口径带进新任务。', '记忆系统必须有控制层，否则“沉淀越勤”会变成“召回越乱”。'],
+    visualTitle: '增长压力',
+    visualItems: ['skill 增长', '卡片增长', '原文增长', '上下文污染'],
+  },
+  {
+    id: 's4',
+    label: '04 · 隐藏 Skill',
+    chapter: 'Hidden Loader',
+    heading: '第一道控制：隐藏 skill，按需加载能力入口',
+    insight: '当 skill 变多后，第一件事不是让所有 skill 常驻，而是做一个隐藏的 loader：只有用户点名或任务匹配时，才去真实目录里发现和加载对应 skill。',
+    points: ['活跃 skill 清单不再被当成本机完整能力清单。', '低频 skill 按需发现，避免每次对话都带上全部说明。', '这一步先控制的是“能力入口”，不是知识卡片。'],
+    visualTitle: '入口分流',
+    visualItems: ['用户意图', 'skill-loader', '真实路径', '按需加载'],
+  },
+  {
+    id: 's5',
+    label: '05 · 共享插曲',
+    chapter: 'Shared Skills',
+    heading: '中间插曲：各 agent 的 skill 目录不能各自为政',
+    insight: '隐藏 skill 解决了按需加载，但你又发现 Claude、Codex、OpenClaw 各自有 skill 目录，同一套自建能力没法稳定共享。于是共享 skill 目录成为第二层控制。',
+    points: ['自研高频 skill 的真值源收敛到共享目录。', '各 agent 入口通过共享源暴露，避免同名 skill 多处漂移。', '这一步解决的是“能力是否一致”，不是“知识该读多少”。'],
+    visualTitle: '三端入口',
+    visualItems: ['Claude', 'Codex', 'OpenClaw', '.agents/skills'],
+  },
+  {
+    id: 's6',
+    label: '06 · 知识库膨胀',
+    chapter: 'Card Growth',
+    heading: '第三个问题：同一领域有很多卡，但任务不需要全部读',
+    insight: 'skill 共享后，知识开始进入 Obsidian 三层体系。比如产品文档领域会沉淀模板、审查经验、spec-readiness、门禁规则，但一次 PRD 任务并不需要把所有卡片都塞进上下文。',
+    points: ['领域变清楚，不代表每次都全量加载这个领域。', '同一任务域下也要区分当前问题类型、阶段和证据需求。', '知识卡片要服务任务判断，而不是证明知识库很完整。'],
+    visualTitle: '领域内选择',
+    visualItems: ['需求文档', 'PRD 模板', '审查经验', '门禁规则', '只取少量'],
+  },
+  {
+    id: 's7',
+    label: '07 · 索引机制',
+    chapter: 'Index As Router',
+    heading: '引入索引：README 和 00 索引不是目录，而是路由器',
+    insight: '下一步是把索引机制做成控制层：先判断任务属于哪个领域，再按问题类型选择少量卡片。索引不再只是列文件，而是告诉 agent 何时加载什么、不要加载什么。',
+    points: ['根 README 负责领域选择，任务域 README 负责问题路由。', '索引要写加载条件，而不是堆“当前有哪些卡”。', '当索引变成目录时，就会重新制造上下文爆炸。'],
+    visualTitle: '路由层级',
+    visualItems: ['根入口', '领域', '任务域', '问题类型', '候选卡'],
+  },
+  {
+    id: 's8',
+    label: '08 · Context Pack',
+    chapter: 'Context Pack',
+    heading: '最终形成：memory-loader 输出最小充分上下文包',
+    insight: 'memory-loader / knowledge-context-pack 的价值不是替代 PRD、竞品、报价或复盘，而是在这些产出型 skill 前面先生成最小充分上下文包。',
+    points: ['先解析当前任务，再决定主域、辅助域和候选上下文。', '最终只加载 2-5 张正式卡、1-3 条能力层规则和少量必要原文证据。', '同时说明未加载什么和原因，让“不读”也成为可审查的决策。'],
+    visualTitle: '输出合同',
+    visualItems: ['当前任务', '路由依据', '最终加载', '未加载', '风险'],
+  },
+  {
+    id: 's9',
+    label: '09 · 与其他 Skill',
+    chapter: 'Control Before Output',
+    heading: '和其他 skill 的关系：它在产出前先控制记忆',
+    insight: '这个 skill 不直接写 PRD、不做竞品、不出报价、不做阅读追问。它站在这些工作流前面，帮它们决定该带哪些知识进入任务。',
+    points: ['prd-skill 需要它加载需求文档规则，而不是全量产品知识。', 'competitive-analysis 需要它区分分析框架和实时事实。', 'weekly-retro 和 reading-dialogue 需要它控制沉淀、候选和入库门禁。'],
+    visualTitle: '前置控制',
+    visualItems: ['PRD', '竞品', '报价', '复盘', '阅读'],
+  },
+  {
+    id: 's10',
+    label: '10 · 收束',
+    chapter: 'Memory Control Layer',
+    heading: '最终价值：给 AI 记忆加控制层',
+    insight: 'memory-loader 的价值不是让 AI 记住更多，而是让 AI 在正确时间读取正确记忆。它把 Personal Knowledge Harness 从“有很多知识”推进到“知识能被稳定调用”。',
+    points: ['当前形态是个人 AI 记忆控制 workflow。', '团队复用潜力在于把知识库、skill 和多 agent 入口变成可治理的加载协议。', '产品化方向可以是组织级 AI 记忆路由器、上下文包生成器或知识库召回控制台。'],
+    visualTitle: '产品化判断',
+    visualItems: ['记忆路由', '上下文预算', '多 agent 共用', '组织控制台'],
   },
 ];

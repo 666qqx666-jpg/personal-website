@@ -13,10 +13,11 @@ test('AI listing links to Skill Desk', async ({ page }) => {
 test('Skill Desk homepage shows skill cards and detail entries', async ({ page }) => {
   await page.goto('/personal-website/ai/skill-desk/');
   await expect(page.getByRole('heading', { name: 'Skill Desk' })).toBeVisible();
-  await expect(page.locator('.skill-card')).toHaveCount(7);
+  await expect(page.locator('.skill-card')).toHaveCount(8);
   await expect(page.locator('.desk-tabs')).toContainText('阅读与沉淀');
   await expect(page.locator('.desk-tabs')).toContainText('PRD / Spec');
   await expect(page.locator('.desk-tabs')).toContainText('交付与报价');
+  await expect(page.locator('.desk-tabs')).toContainText('记忆控制');
   await expect(page.locator('.skill-card', { hasText: '深度阅读对话' })).toContainText('稳定使用');
   await expect(page.locator('.skill-card', { hasText: '深度阅读对话' })).toHaveAttribute(
     'href',
@@ -42,6 +43,10 @@ test('Skill Desk homepage shows skill cards and detail entries', async ({ page }
     'href',
     '/personal-website/ai/skill-desk/quotation/'
   );
+  await expect(page.locator('.skill-card', { hasText: '记忆控制层' })).toHaveAttribute(
+    'href',
+    '/personal-website/ai/skill-desk/memory-loader/'
+  );
   const digestCard = page.locator('.skill-card.absorbed-card', { hasText: 'Digest 方法组件' });
   await expect(digestCard).toBeVisible();
   await expect(digestCard).toContainText('已融入周度复盘反思');
@@ -57,7 +62,7 @@ test('Skill Desk homepage shows skill cards and detail entries', async ({ page }
 
 test('Skill Desk homepage separates unvalidated skills into Lab', async ({ page }) => {
   await page.goto('/personal-website/ai/skill-desk/');
-  await expect(page.locator('.skill-card')).toHaveCount(7);
+  await expect(page.locator('.skill-card')).toHaveCount(8);
   const lab = page.locator('.skill-lab');
   await expect(lab).toBeVisible();
   await expect(lab).toContainText('Skill Lab');
@@ -303,6 +308,43 @@ test('quotation detail page exposes timeline labels and links', async ({ page })
   );
 });
 
+test('memory-loader detail page explains the memory control layer', async ({ page }) => {
+  await page.goto('/personal-website/ai/skill-desk/memory-loader/');
+  await expect(page.getByRole('heading', { name: 'memory-loader Skill：给 AI 记忆加控制层' })).toBeVisible();
+  await expect(page.locator('main#deck section')).toHaveCount(10);
+  await expect(page.locator('#s2')).toContainText('所有知识和上下文都塞进 skill');
+  await expect(page.locator('#s3')).toContainText('skill 越多，沉淀越勤，上下文越爆炸');
+  await expect(page.locator('#s4')).toContainText('隐藏 skill');
+  await expect(page.locator('#s5')).toContainText('各 agent 的 skill 目录不能各自为政');
+  await expect(page.locator('#s6')).toContainText('同一领域有很多卡');
+  await expect(page.locator('#s7')).toContainText('README 和 00 索引不是目录，而是路由器');
+  await expect(page.locator('#s8')).toContainText('最小充分上下文包');
+  await expect(page.locator('#s8')).toContainText('未加载什么和原因');
+  await expect(page.locator('#s9')).toContainText('它在产出前先控制记忆');
+  await expect(page.locator('#s10')).toContainText('给 AI 记忆加控制层');
+});
+
+test('memory-loader detail page exposes timeline labels and links', async ({ page }) => {
+  await page.goto('/personal-website/ai/skill-desk/memory-loader/');
+  const timeline = page.locator('nav.timeline');
+  await expect(timeline).toBeVisible();
+  for (const label of ['入口', '塞入', '爆炸', '隐藏', '共享', '卡片', '索引', '包', '关系', '控制']) {
+    await expect(timeline).toContainText(label);
+  }
+  await expect(page.locator('#s10 a', { hasText: '回到 Skill Desk' })).toHaveAttribute(
+    'href',
+    '/personal-website/ai/skill-desk/'
+  );
+  await expect(page.locator('#s10 a', { hasText: '查看 Knowledge Harness' })).toHaveAttribute(
+    'href',
+    '/personal-website/ai/knowledge-harness/'
+  );
+  await expect(page.locator('#s10 a', { hasText: '查看周度复盘' })).toHaveAttribute(
+    'href',
+    '/personal-website/ai/skill-desk/weekly-retro/'
+  );
+});
+
 test('Skill Desk and Zhi Shen Ding Nei decks cross-link', async ({ page }) => {
   await page.goto('/personal-website/ai/skill-desk/reading-dialogue/');
   await expect(page.locator('#s10 a', { hasText: '查看一次真实阅读产出的产品判断' })).toHaveAttribute(
@@ -326,6 +368,7 @@ test('Skill Desk pages have no horizontal overflow on desktop and mobile', async
     '/personal-website/ai/skill-desk/competitive-analysis/',
     '/personal-website/ai/skill-desk/requirement-discovery/',
     '/personal-website/ai/skill-desk/quotation/',
+    '/personal-website/ai/skill-desk/memory-loader/',
   ]) {
     for (const viewport of [
       { width: 1280, height: 800 },
