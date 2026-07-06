@@ -1,16 +1,16 @@
 import { test, expect } from '@playwright/test';
 
 const deckRoutes = [
-  '/personal-website/ai/claude-code-architecture/',
-  '/personal-website/ai/knowledge-harness/',
-  '/personal-website/ai/zhi-shen-ding-nei/',
-  '/personal-website/ai/skill-desk/competitive-analysis/',
-  '/personal-website/ai/skill-desk/memory-loader/',
-  '/personal-website/ai/skill-desk/prd-skill/',
-  '/personal-website/ai/skill-desk/quotation/',
-  '/personal-website/ai/skill-desk/reading-dialogue/',
-  '/personal-website/ai/skill-desk/requirement-discovery/',
-  '/personal-website/ai/skill-desk/weekly-retro/',
+  '/ai/claude-code-architecture/',
+  '/ai/knowledge-harness/',
+  '/ai/zhi-shen-ding-nei/',
+  '/ai/skill-desk/competitive-analysis/',
+  '/ai/skill-desk/memory-loader/',
+  '/ai/skill-desk/prd-skill/',
+  '/ai/skill-desk/quotation/',
+  '/ai/skill-desk/reading-dialogue/',
+  '/ai/skill-desk/requirement-discovery/',
+  '/ai/skill-desk/weekly-retro/',
 ];
 
 test('DeckLayout pages follow the shared light theme state by default', async ({ page }) => {
@@ -28,7 +28,7 @@ test('DeckLayout pages follow the shared light theme state by default', async ({
 
 test('DeckLayout theme toggle persists to the global theme state', async ({ page }) => {
   await page.addInitScript(() => localStorage.setItem('theme', 'light'));
-  await page.goto('/personal-website/ai/claude-code-architecture/');
+  await page.goto('/ai/claude-code-architecture/');
 
   await page.locator('#deck-theme-toggle').click();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');

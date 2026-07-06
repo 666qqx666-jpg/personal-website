@@ -5,7 +5,7 @@ export default defineConfig({
   use: { baseURL: 'http://localhost:4321' },
   webServer: {
     command: 'npm run dev',
-    url: 'http://localhost:4321/personal-website/',
+    url: 'http://localhost:4321/',
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,
   },
