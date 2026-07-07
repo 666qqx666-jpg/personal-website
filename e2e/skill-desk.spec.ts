@@ -105,9 +105,16 @@ test('reading-dialogue flagship has ten sections and core controls', async ({ pa
   await expect(page.locator('main#deck section')).toHaveCount(10);
   await expect(page.locator('#s4')).toContainText('事故现场：《置身钉内》里的失控');
   await expect(page.locator('#s6')).toContainText('划线交流档');
+  await expect(page.locator('#s6')).toContainText('为什么划线');
+  await expect(page.locator('#s6')).toContainText('只有明确切档后');
+  await expect(page.locator('#s6')).toContainText('需求发现或产品文档工作流');
   await expect(page.locator('#s7')).toContainText('单条划线最多两轮');
-  await expect(page.locator('#s8')).toContainText('候选池，不直接制卡');
+  await expect(page.locator('#s8')).toContainText('三分流收口');
+  await expect(page.locator('#s8')).toContainText('观点知识卡');
+  await expect(page.locator('#s8')).toContainText('需求构思候选池');
+  await expect(page.locator('#s8')).toContainText('不是灵感池');
   await expect(page.locator('#s9')).toContainText('入库门禁');
+  await expect(page.locator('#s9')).toContainText('需求构思成熟后');
   await expect(page.locator('#s10')).toContainText('开源潜力');
 });
 
@@ -115,7 +122,7 @@ test('reading-dialogue flagship exposes timeline labels', async ({ page }) => {
   await page.goto('/ai/skill-desk/reading-dialogue/');
   const timeline = page.locator('nav.timeline');
   await expect(timeline).toBeVisible();
-  for (const label of ['入口', '问题', '直觉', '事故', '反思', '档位', '刹车', '候选', '门禁', '资产']) {
+  for (const label of ['入口', '问题', '直觉', '事故', '反思', '档位', '刹车', '分流', '门禁', '资产']) {
     await expect(timeline).toContainText(label);
   }
 });

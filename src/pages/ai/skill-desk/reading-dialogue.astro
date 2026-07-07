@@ -6,15 +6,15 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 ---
 <DeckLayout
   title="reading-dialogue Skill：把深度阅读变成知识生产 — QQ星"
-  description="一次真实长阅读任务让我意识到：深度追问如果没有边界，会从阅读沉淀滑进产品共创。"
+  description="一次真实长阅读任务让我意识到：阅读对话要先围绕划线轻量交流，再分流到阅读笔记、观点知识卡和需求构思候选池。"
 >
   <main id="deck" class="skill-method-deck">
     <section id="s1">
       <div class="chapter">Skill Desk · 旗舰子页</div>
       <h1>reading-dialogue Skill：把深度阅读变成知识生产</h1>
-      <p class="sub hero-copy">一次真实长阅读任务让我意识到：深度追问如果没有边界，会从阅读沉淀滑进产品共创。</p>
+      <p class="sub hero-copy">一次真实长阅读任务让我意识到：阅读对话要先围绕划线轻量交流，再分流到阅读笔记、观点知识卡和需求构思候选池。</p>
       <div class="pipeline" aria-label="reading dialogue pipeline">
-        {['划线', '追问', '最小记录', '候选池', '入库门禁', '长期资产'].map((item, index) => (
+        {['划线', '轻量追问', '阅读笔记', '观点知识卡', '需求构思', '入库门禁'].map((item, index) => (
           <>
             <span>{item}</span>
             {index < 5 && <i>-></i>}
