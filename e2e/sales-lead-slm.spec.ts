@@ -119,3 +119,45 @@ test('reduced motion renders final content without ScrollTrigger pinning', async
   await expect(page.locator('#s11')).toContainText('待验证');
   await context.close();
 });
+
+test('deck has no horizontal overflow on desktop and mobile', async ({ page }) => {
+  for (const viewport of [{ width: 1280, height: 800 }, { width: 390, height: 844 }]) {
+    await page.setViewportSize(viewport);
+    await page.goto(route);
+    await expect(page.locator('[data-sales-lead-deck]')).toHaveAttribute('data-motion-ready', 'true');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)).toBe(false);
+  }
+});
+
+test('chapter navigation updates aria-current and anchors remain usable', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(route);
+  const rebuild = page.getByRole('navigation', { name: '销售线索案例章节' }).getByRole('link', { name: '重构' });
+  await rebuild.click();
+  await expect(page).toHaveURL(/#s9$/);
+  await expect(page.locator('#s9')).toBeAttached();
+  await expect(rebuild).toHaveAttribute('aria-current', 'true');
+});
+
+test('desktop horizontal chapter moves the track while keeping S8 readable', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(route);
+  const track = page.locator('[data-motion="industry-track"]');
+  const before = await track.evaluate((element) => getComputedStyle(element).transform);
+  const stageTop = await page.locator('[data-motion="industry-stage"]').evaluate((element) => element.getBoundingClientRect().top + window.scrollY);
+  await page.evaluate((top) => window.scrollTo(0, top + window.innerWidth * .82), stageTop);
+  await page.waitForTimeout(250);
+  expect(await track.evaluate((element) => getComputedStyle(element).transform)).not.toBe(before);
+  await expect(page.locator('#s8')).toContainText('问题必须前移到清洗层');
+});
+
+test('deck produces no browser errors during the main scroll path', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
+  page.on('pageerror', (error) => errors.push(error.message));
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(route);
+  const maxScroll = await page.evaluate(() => document.documentElement.scrollHeight - window.innerHeight);
+  for (const progress of [0, .12, .25, .38, .5, .62, .75, .88, 1]) { await page.evaluate(([max, ratio]) => window.scrollTo(0, max * ratio), [maxScroll, progress]); await page.waitForTimeout(120); }
+  expect(errors).toEqual([]);
+});

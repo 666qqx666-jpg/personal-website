@@ -205,6 +205,7 @@ const scale = [
 </DeckLayout>
 
 <style>
+  :global(html:has(.sales-lead-deck)) { scroll-behavior: auto; }
   .sales-lead-deck {
     --slm-surface: color-mix(in srgb, var(--glass) 88%, transparent);
     --slm-line: color-mix(in srgb, var(--c-blue) 34%, var(--glass-border));
@@ -265,4 +266,11 @@ const scale = [
   [data-sales-lead-deck][data-motion-mode='reduce'] .industry-stage,
   [data-sales-lead-deck][data-motion-mode='fallback'] .industry-stage { height: auto; overflow: visible; }
   @media (max-width: 860px) { .sales-lead-deck section { padding-inline: 1rem; } .result-line { align-items: stretch; flex-direction: column; } .rings { grid-template-columns: repeat(2, 1fr); } .sales-lead-nav a { padding-inline: .55rem; } .sales-lead-nav a span:last-child { font-size: .72rem; } }
+  @media (max-width: 860px), (prefers-reduced-motion: reduce) {
+    .decision-panels, .industry-track { display: grid; width: 100%; height: auto; transform: none; }
+    .decision-panel, .industry-track > section { position: relative; inset: auto; width: 100%; min-height: auto; opacity: 1; visibility: visible; transform: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sales-lead-deck *, .sales-lead-deck *::before, .sales-lead-deck *::after { scroll-behavior: auto; animation-duration: .01ms; animation-iteration-count: 1; transition-duration: .01ms; }
+  }
 </style>

@@ -22,7 +22,8 @@ function initChapterNav(root: HTMLElement) {
   const setActive = (chapterId: string) => links.forEach((link) => {
     const active = link.dataset.chapterLink === chapterId;
     link.classList.toggle('active', active);
-    link.toggleAttribute('aria-current', active);
+    if (active) link.setAttribute('aria-current', 'true');
+    else link.removeAttribute('aria-current');
   });
   const observer = new IntersectionObserver((entries) => {
     const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
@@ -77,10 +78,18 @@ export function initSalesLeadMotion(root: HTMLElement) {
           gsap.timeline({ scrollTrigger: { id: 'sales-lead-industry', trigger: stage, start: 'top top', end: () => `+=${distance()}`, pin: true, scrub: .8, anticipatePin: 1, invalidateOnRefresh: true, onEnter: () => chapterNav.setActive('s7'), onEnterBack: () => chapterNav.setActive('s7') } }).to(track, { x: () => -distance(), ease: 'none' });
         }
       }
-      setMode(root, isDesktop ? 'desktop' : isMobile ? 'mobile' : 'fallback', true);
-      syncDiagnostics(root);
+      if (isDesktop) {
+        document.fonts?.ready.then(() => window.setTimeout(() => {
+          if (disposed || root.dataset.motionMode !== 'desktop') return;
+          ScrollTrigger.refresh();
+          setMode(root, 'desktop', true);
+          syncDiagnostics(root);
+        }, 250));
+      } else {
+        setMode(root, isMobile ? 'mobile' : 'fallback', true);
+        syncDiagnostics(root);
+      }
     }, root);
-    document.fonts?.ready.then(() => { if (!disposed && root.dataset.motionMode === 'desktop') ScrollTrigger.refresh(); });
     document.addEventListener('astro:before-swap', cleanup);
   } catch (error) {
     cleanup();
