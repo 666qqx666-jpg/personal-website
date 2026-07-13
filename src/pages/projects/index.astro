@@ -1,6 +1,19 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SectionGrid from '../../components/SectionGrid.astro';
-const items = [{ title: '项目梳理中', hook: '职业项目案例即将上线', tags: ['敬请期待'] }];
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const items = [
+  {
+    title: '全域销售线索管理系统',
+    hook: '让线索真正到达合适的门店：从动态匹配到责任链重构',
+    tags: ['销售线索', '公海池', '责任链重构'],
+    href: `${base}projects/sales-lead-slm/`,
+    cover: 'linear-gradient(120deg, #2563eb 0%, #7c3aed 52%, #0891b2 100%)',
+  },
+];
 ---
-<BaseLayout title="项目经历"><SectionGrid title="项目经历" icon="🚀" items={items} /></BaseLayout>
+
+<BaseLayout title="项目经历">
+  <SectionGrid title="项目经历" icon="🚀" items={items} />
+</BaseLayout>
