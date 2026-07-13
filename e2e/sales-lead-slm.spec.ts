@@ -11,3 +11,46 @@ test('projects listing exposes the sales lead flagship case', async ({ page }) =
   await expect(card).toContainText('责任链重构');
   await expect(card).toHaveAttribute('href', route);
 });
+
+test('deck renders eleven scenes and five chapter links', async ({ page }) => {
+  await page.goto(route);
+
+  await expect(page.getByRole('heading', { name: '让线索真正到达合适的门店' })).toBeVisible();
+  await expect(page.locator('section[data-scene]')).toHaveCount(11);
+
+  const nav = page.getByRole('navigation', { name: '销售线索案例章节' });
+  for (const label of ['起点', '评分', '机制', '边界', '重构']) {
+    await expect(nav.getByRole('link', { name: label })).toBeVisible();
+  }
+});
+
+test('deck preserves verified facts and contribution boundary', async ({ page }) => {
+  await page.goto(route);
+
+  await expect(page.locator('#s1')).toContainText('10+');
+  await expect(page.locator('#s1')).toContainText('15k+');
+  await expect(page.locator('#s1')).toContainText('5 类来源');
+  await expect(page.locator('#s2')).toContainText('前任 PM 已经搭建采集接入底座');
+  await expect(page.locator('#s3')).toContainText('最近 180 天');
+  await expect(page.locator('#s3')).toContainText('探索过但未上线');
+  await expect(page.locator('#s5')).toContainText('3 公里');
+  await expect(page.locator('#s5')).toContainText('30 公里');
+  await expect(page.locator('#s6')).toContainText('不足 49.4%');
+  await expect(page.locator('#s6')).toContainText('61.7%');
+  await expect(page.locator('#s6')).toContainText('超过 12.3 个百分点');
+  await expect(page.locator('#s6')).toContainText('卡券核销计为成交');
+
+  const body = await page.locator('body').innerText();
+  expect(body).not.toContain('从零建设');
+  expect(body).not.toContain('独立完成整套系统');
+});
+
+test('future work keeps visible and accurate status labels', async ({ page }) => {
+  await page.goto(route);
+
+  await expect(page.locator('#s9 [data-status]')).toHaveText('已排期');
+  await expect(page.locator('#s10 [data-status]')).toHaveText('方案规划中');
+  await expect(page.locator('#s11 [data-status]')).toHaveText('待验证');
+  await expect(page.locator('#s10')).toContainText('平台不经手资金');
+  await expect(page.locator('#s10')).toContainText('尚未进入详细 PRD');
+});

@@ -1,0 +1,251 @@
+---
+import DeckLayout from '../../layouts/DeckLayout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const chapters = [
+  { href: '#s1', label: '起点' },
+  { href: '#s3', label: '评分' },
+  { href: '#s5', label: '机制' },
+  { href: '#s7', label: '边界' },
+  { href: '#s9', label: '重构' },
+];
+const scale = [
+  ['10+', '付费品牌'],
+  ['15k+', '覆盖门店'],
+  ['5 类来源', '平台线索接入'],
+];
+---
+
+<DeckLayout
+  title="全域销售线索管理系统｜QQ星"
+  description="从动态匹配到责任链重构：让线索真正到达合适的门店。"
+>
+  <main id="sales-lead-deck" class="sales-lead-deck" data-sales-lead-deck data-motion-mode="static">
+    <section id="s1" data-scene="origin" data-chapter="origin">
+      <div class="scene-shell hero-shell">
+        <p class="chapter">Sales Lead Management</p>
+        <h1>让线索真正到达合适的门店</h1>
+        <p class="lead">全域销售线索管理系统：从动态匹配到责任链重构</p>
+        <div class="scale-grid">
+          {scale.map(([value, label]) => <div class="metric"><strong>{value}</strong><span>{label}</span></div>)}
+        </div>
+        <p class="role-line">我从报表与分配问题进入，推动智能分发、任务、公海池、隐私外呼、自动回收与门店经营能力持续演进。</p>
+      </div>
+    </section>
+
+    <section id="s2" data-scene="problem" data-chapter="origin">
+      <div class="scene-shell">
+        <p class="eyebrow">业务断点</p>
+        <h2>下载麻烦只是表象，真正流失的是跟进责任</h2>
+        <div class="breakpoint-grid" data-motion="problem-lines">
+          <article><strong>信息不完整</strong><p>缺少地理位置、最近门店和意向门店，线索无法到达合适的承接方。</p></article>
+          <article><strong>最佳时间被错过</strong><p>下载、导入、再分配拉长链路，门店看到时已经错过最佳跟进时间。</p></article>
+          <article><strong>责任无法回收</strong><p>门店积极性不足，却没有回收机制把线索重新交给愿意负责的人。</p></article>
+        </div>
+        <p class="boundary-note">前任 PM 已经搭建采集接入底座；我的核心贡献从报表、分配与经营问题进入，继续推动分发、任务、公海池、隐私外呼、自动回收与门店经营模块。</p>
+      </div>
+    </section>
+
+    <div class="decision-stage" data-motion="decision-stage">
+      <div class="decision-panels">
+        <section id="s3" class="decision-panel" data-scene="scoring" data-chapter="scoring">
+          <div class="scene-shell">
+            <p class="eyebrow">先尝试计算</p>
+            <h2>我们一度想用一套总分决定“最合适的门店”</h2>
+            <span class="status status-explored">探索过但未上线</span>
+            <div class="score-cloud" data-motion="score-cloud">
+              <article><strong>线索 · 创建时间</strong><p>新鲜度与最佳跟进窗口</p></article>
+              <article><strong>线索 · 标签</strong><p>有效性、价值、成交难度</p></article>
+              <article><strong>线索 · 地理位置</strong><p>位置与来源准确性</p></article>
+              <article><strong>门店 · 评分</strong><p>任务失败、跟进效率、成交绩效、客户意向度、意向门店成交绩效</p></article>
+              <article><strong>门店 · 当前负载</strong><p>已分配数量与跟进中数量</p></article>
+              <article><strong>门店 · 基本属性</strong><p>地理位置与品类适配</p></article>
+            </div>
+            <p class="formula-note">历史数据 + 最近 180 天；线性计算、阶梯递减和数据映射都讨论过，但没有足够验证成本支撑上线。</p>
+          </div>
+        </section>
+
+        <section id="s4" class="decision-panel" data-scene="decision" data-chapter="scoring">
+          <div class="scene-shell">
+            <p class="eyebrow">放弃伪精确</p>
+            <h2>当团队无法证明权重，正确决策不是继续调分</h2>
+            <div class="decision-balance" data-motion="decision-balance">
+              <article><span>不再保留</span><strong>臆想出来的综合评分与距离乘法系数</strong></article>
+              <article><span>成交加分</span><strong>让持续兑现结果的门店获得正向信用</strong></article>
+              <article><span>超时回收扣分</span><strong>让抢单但不跟进的行为承担成本</strong></article>
+              <article><span>资格过滤</span><strong>只校验经营分与门店当前负载</strong></article>
+            </div>
+          </div>
+        </section>
+
+        <section id="s5" class="decision-panel" data-scene="pool" data-chapter="mechanism">
+          <div class="scene-shell">
+            <p class="eyebrow">公海池机制</p>
+            <h2>用时间保护地理优势，用抢单建立跟进责任</h2>
+            <div class="pool-layout" data-motion="pool-rings">
+              <div class="rings" aria-label="保护期后按 3、5、10、30 公里扩圈">
+                <span>3 公里</span><span>5 公里</span><span>10 公里</span><span>30 公里</span>
+              </div>
+              <ol>
+                <li>能够直接分发给意向门店的线索不进入公海池。</li>
+                <li>意向门店和购买线索最近门店最早看到线索。</li>
+                <li>场景开始时间与阶段保护时间共同控制扩圈。</li>
+                <li>早期门店不抢也一直可见，不会因扩圈被移除。</li>
+                <li>线索已经分配为任务或被门店抢过，回收后过滤对应门店。</li>
+              </ol>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <section id="s6" data-scene="result" data-chapter="mechanism">
+      <div class="scene-shell result-shell">
+        <p class="eyebrow">结果验证</p>
+        <h2>责任机制落地后，卡券核销率明显上升</h2>
+        <div class="result-line" data-motion="result-line">
+          <div><span>改造前</span><strong>不足 49.4%</strong></div>
+          <div class="result-arrow" aria-hidden="true">→</div>
+          <div><span>改造后</span><strong>61.7%</strong></div>
+        </div>
+        <p class="result-delta">提升超过 12.3 个百分点</p>
+        <p class="evidence-note">同一客户 · 约 3 个月 · 月均约 10 万条线索 · 卡券核销计为成交</p>
+      </div>
+    </section>
+
+    <div class="industry-stage" data-motion="industry-stage">
+      <div class="industry-track" data-motion="industry-track">
+        <section id="s7" data-scene="industry" data-chapter="boundary">
+          <div class="scene-shell">
+            <p class="eyebrow">行业边界</p>
+            <h2>头部家电行业为何能承接这套机制</h2>
+            <div class="industry-grid">
+              <article><strong>线索质量高</strong><p>平台流量扶持和广告预算更充足。</p></article>
+              <article><strong>门店密度高</strong><p>一个地区通常有多家可承接门店。</p></article>
+              <article><strong>总部先把关</strong><p>客服团队会先排除一部分低质量线索。</p></article>
+              <article><strong>成交链路短</strong><p>部分卡券甚至已经在门店购买，后续更接近履约。</p></article>
+            </div>
+          </div>
+        </section>
+
+        <section id="s8" data-scene="limit" data-chapter="boundary">
+          <div class="scene-shell">
+            <p class="eyebrow">机制边界</p>
+            <h2>低质量线索不能继续由门店承担</h2>
+            <div class="industry-grid">
+              <article><strong>非本人手机号</strong><p>联系人本身就不成立。</p></article>
+              <article><strong>误触表单或客服</strong><p>用户没有形成真实购买意向。</p></article>
+              <article><strong>地理位置错误</strong><p>小众品牌一个城市可能只有一两家门店，错误会被放大。</p></article>
+              <article><strong>链路更长</strong><p>全屋定制、家具等品类需要更长的决策和服务周期。</p></article>
+            </div>
+            <p class="boundary-note">继续加重门店处罚，只会让门店为上游数据错误承担责任；问题必须前移到清洗层。</p>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <div class="responsibility-stage" data-motion="responsibility-stage">
+      <section id="s9" data-scene="cleaning" data-chapter="rebuild">
+        <div class="scene-shell">
+          <span class="status status-scheduled" data-status>已排期</span>
+          <h2>先建立清洗层，再把正确责任交给门店</h2>
+          <ol class="responsibility-flow">
+            <li data-motion="responsibility-node">确认本人</li>
+            <li data-motion="responsibility-node">确认地理位置与最近门店</li>
+            <li data-motion="responsibility-node">确认初步意向，约定由专业人员继续跟进</li>
+            <li data-motion="responsibility-node">补充客户意向门店</li>
+            <li data-motion="responsibility-node">选择直接分发给意向门店或进入付费公海池</li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="s10" data-scene="points" data-chapter="rebuild">
+        <div class="scene-shell">
+          <span class="status status-planning" data-status>方案规划中</span>
+          <h2>用线索点连接门店付费意愿与抢单责任</h2>
+          <ol class="responsibility-flow">
+            <li data-motion="responsibility-node">门店自行线下充值</li>
+            <li data-motion="responsibility-node">后台提交并审核工单</li>
+            <li data-motion="responsibility-node">审核通过后增加对应门店线索点</li>
+            <li data-motion="responsibility-node">门店抢单后获得线索并扣减线索点</li>
+          </ol>
+          <p class="boundary-note">平台不经手资金；当前仅有方案索引，尚未进入详细 PRD。</p>
+        </div>
+      </section>
+
+      <section id="s11" data-scene="validation" data-chapter="rebuild">
+        <div class="scene-shell">
+          <span class="status status-validation" data-status>待验证</span>
+          <h2>下一步不是继续加功能，而是证明责任重构成立</h2>
+          <div class="validation-grid">
+            <article data-motion="responsibility-node"><strong>跟进时效</strong><p>清洗后到首次有效跟进是否缩短。</p></article>
+            <article data-motion="responsibility-node"><strong>有效联系率</strong><p>本人、位置与意向确认是否提升可联系性。</p></article>
+            <article data-motion="responsibility-node"><strong>抢单后回收率</strong><p>付费抢单是否减少占单不跟进。</p></article>
+            <article data-motion="responsibility-node"><strong>点数消耗</strong><p>门店是否愿意持续为可承接线索付费。</p></article>
+            <article data-motion="responsibility-node"><strong>投诉与退款边界</strong><p>清洗错误或线索争议如何被识别和处理。</p></article>
+          </div>
+          <a class="back-projects" href={`${base}projects/`}>返回项目经历</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <nav class="sales-lead-nav" aria-label="销售线索案例章节">
+    {chapters.map((chapter, index) => (
+      <a href={chapter.href} class:list={{ active: index === 0 }} data-chapter-link={chapter.href.slice(1)}>
+        <span class="nav-dot"></span><span>{chapter.label}</span>
+      </a>
+    ))}
+  </nav>
+</DeckLayout>
+
+<style>
+  .sales-lead-deck {
+    --slm-surface: color-mix(in srgb, var(--glass) 88%, transparent);
+    --slm-line: color-mix(in srgb, var(--c-blue) 34%, var(--glass-border));
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+  .sales-lead-deck section { width: 100%; height: auto; min-height: 100svh; scroll-snap-align: none; padding: clamp(5.5rem, 9vw, 8rem) clamp(1.25rem, 6vw, 6rem); }
+  .scene-shell { width: min(1120px, 100%); margin-inline: auto; }
+  .hero-shell { text-align: center; }
+  .lead, .role-line, .formula-note, .boundary-note, .evidence-note { color: var(--text-dim); line-height: 1.8; }
+  .lead { font-size: clamp(1.1rem, 2vw, 1.45rem); margin: 1.2rem auto 2.2rem; max-width: 740px; }
+  .role-line, .formula-note, .boundary-note, .evidence-note { max-width: 880px; margin: 1.5rem auto 0; }
+  .eyebrow { color: var(--c-cyan); font-size: .8rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; margin-bottom: .75rem; }
+  .scale-grid, .score-cloud, .breakpoint-grid, .industry-grid, .validation-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+  .metric, .score-cloud article, .breakpoint-grid article, .industry-grid article, .validation-grid article, .decision-balance article { border: 1px solid var(--glass-border); border-radius: 1.1rem; background: var(--slm-surface); padding: 1.15rem; }
+  .metric { display: grid; gap: .35rem; text-align: center; }
+  .metric strong, .result-line strong { color: var(--c-cyan); font-size: clamp(1.65rem, 3vw, 2.45rem); }
+  .metric span, article p { color: var(--text-dim); line-height: 1.65; }
+  article strong { display: block; margin-bottom: .45rem; }
+  .decision-panels, .industry-track { display: grid; }
+  .decision-balance { display: grid; gap: .75rem; }
+  .decision-balance span { display: block; color: var(--c-cyan); font-size: .78rem; margin-bottom: .35rem; }
+  .rings { display: grid; grid-template-columns: repeat(4, minmax(5.5rem, 1fr)); gap: .7rem; }
+  .rings span { display: grid; place-items: center; aspect-ratio: 1; border: 1px solid var(--slm-line); border-radius: 50%; color: var(--c-cyan); font-weight: 700; }
+  .pool-layout ol { display: grid; gap: .7rem; margin: 1.4rem 0 0; padding-left: 1.25rem; line-height: 1.7; }
+  .result-shell { text-align: center; }
+  .result-line, .responsibility-flow { display: flex; align-items: center; gap: 1rem; }
+  .result-line { justify-content: center; margin-top: 2rem; }
+  .result-line > div:not(.result-arrow) { display: grid; gap: .45rem; padding: 1.2rem; min-width: 13rem; border: 1px solid var(--glass-border); border-radius: 1rem; background: var(--slm-surface); }
+  .result-line span { color: var(--text-dim); }
+  .result-arrow { color: var(--c-cyan); font-size: 2rem; }
+  .result-delta { color: var(--c-decide); font-size: 1.1rem; font-weight: 700; margin-top: 1rem; }
+  .responsibility-flow { flex-wrap: wrap; list-style-position: inside; margin-top: 1.5rem; }
+  .responsibility-flow li { max-width: 18rem; padding: .85rem 1rem; border: 1px solid var(--glass-border); border-radius: .85rem; background: var(--slm-surface); line-height: 1.5; }
+  .status { display: inline-flex; border: 1px solid var(--glass-border); border-radius: 999px; padding: .35rem .7rem; color: var(--text); background: var(--glass); margin-bottom: 1rem; }
+  .status-explored { color: var(--c-think); }
+  .status-scheduled { color: var(--c-cyan); }
+  .status-planning { color: var(--c-violet); }
+  .status-validation { color: var(--c-problem); }
+  .back-projects { display: inline-flex; margin-top: 2rem; color: var(--text); border: 1px solid var(--glass-border); border-radius: 999px; padding: .7rem 1rem; text-decoration: none; }
+  #s11 { padding-bottom: 10rem; }
+  .sales-lead-nav { position: fixed; z-index: 18; left: 50%; bottom: 1rem; transform: translateX(-50%); display: flex; gap: .35rem; padding: .55rem; border: 1px solid var(--glass-border); border-radius: 999px; background: var(--chrome-bg); backdrop-filter: blur(16px); }
+  .sales-lead-nav a { display: inline-flex; align-items: center; gap: .4rem; border-radius: 999px; padding: .45rem .7rem; color: var(--text-dim); text-decoration: none; }
+  .sales-lead-nav a.active { color: var(--text); background: var(--glass); }
+  .nav-dot { width: .5rem; height: .5rem; border-radius: 50%; background: currentColor; }
+  @media (max-width: 860px) { .sales-lead-deck section { padding-inline: 1rem; } .result-line { align-items: stretch; flex-direction: column; } .rings { grid-template-columns: repeat(2, 1fr); } .sales-lead-nav a { padding-inline: .55rem; } .sales-lead-nav a span:last-child { font-size: .72rem; } }
+</style>
