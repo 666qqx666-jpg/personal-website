@@ -247,5 +247,17 @@ const scale = [
   .sales-lead-nav a { display: inline-flex; align-items: center; gap: .4rem; border-radius: 999px; padding: .45rem .7rem; color: var(--text-dim); text-decoration: none; }
   .sales-lead-nav a.active { color: var(--text); background: var(--glass); }
   .nav-dot { width: .5rem; height: .5rem; border-radius: 50%; background: currentColor; }
+  [data-sales-lead-deck][data-motion-mode='desktop'] .decision-stage { position: relative; height: 100svh; overflow: hidden; }
+  [data-sales-lead-deck][data-motion-mode='desktop'] .decision-panels { position: relative; height: 100%; }
+  [data-sales-lead-deck][data-motion-mode='desktop'] .decision-panel { position: absolute; inset: 0; }
+  [data-sales-lead-deck][data-motion-mode='desktop'] .industry-stage { width: 100%; height: 100svh; overflow: clip; }
+  [data-sales-lead-deck][data-motion-mode='desktop'] .industry-track { display: flex; width: 200vw; height: 100%; will-change: transform; }
+  [data-sales-lead-deck][data-motion-mode='desktop'] .industry-track > section { flex: 0 0 100vw; min-height: 100svh; }
+  [data-sales-lead-deck][data-motion-mode='mobile'] .decision-stage,
+  [data-sales-lead-deck][data-motion-mode='reduce'] .decision-stage,
+  [data-sales-lead-deck][data-motion-mode='fallback'] .decision-stage,
+  [data-sales-lead-deck][data-motion-mode='mobile'] .industry-stage,
+  [data-sales-lead-deck][data-motion-mode='reduce'] .industry-stage,
+  [data-sales-lead-deck][data-motion-mode='fallback'] .industry-stage { height: auto; overflow: visible; }
   @media (max-width: 860px) { .sales-lead-deck section { padding-inline: 1rem; } .result-line { align-items: stretch; flex-direction: column; } .rings { grid-template-columns: repeat(2, 1fr); } .sales-lead-nav a { padding-inline: .55rem; } .sales-lead-nav a span:last-child { font-size: .72rem; } }
 </style>

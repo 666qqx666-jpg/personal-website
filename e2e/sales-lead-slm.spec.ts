@@ -54,3 +54,29 @@ test('future work keeps visible and accurate status labels', async ({ page }) =>
   await expect(page.locator('#s10')).toContainText('平台不经手资金');
   await expect(page.locator('#s10')).toContainText('尚未进入详细 PRD');
 });
+
+test('deck replaces inherited snap scrolling with document scrolling', async ({ page }) => {
+  await page.goto(route);
+
+  const scrollMode = await page.locator('[data-sales-lead-deck]').evaluate((element) => {
+    const style = getComputedStyle(element);
+    return { height: style.height, overflowY: style.overflowY, scrollSnapType: style.scrollSnapType };
+  });
+
+  expect(scrollMode.height).not.toBe(`${page.viewportSize()?.height}px`);
+  expect(scrollMode.overflowY).toBe('visible');
+  expect(scrollMode.scrollSnapType).toBe('none');
+});
+
+test('static mode keeps every scene readable without JavaScript', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  await page.goto(route);
+
+  await expect(page.locator('[data-sales-lead-deck]')).toHaveAttribute('data-motion-mode', 'static');
+  for (let index = 1; index <= 11; index += 1) await expect(page.locator(`#s${index}`)).toBeAttached();
+  await page.locator('#s11').scrollIntoViewIfNeeded();
+  await expect(page.locator('#s11')).toBeVisible();
+  await expect(page.locator('#s11')).toContainText('投诉与退款边界');
+  await context.close();
+});
