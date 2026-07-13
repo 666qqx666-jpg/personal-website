@@ -80,3 +80,42 @@ test('static mode keeps every scene readable without JavaScript', async ({ brows
   await expect(page.locator('#s11')).toContainText('投诉与退款边界');
   await context.close();
 });
+
+test('desktop motion creates exactly two pinned chapters without markers', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(route);
+  const root = page.locator('[data-sales-lead-deck]');
+  await expect(root).toHaveAttribute('data-motion-ready', 'true');
+  await expect(root).toHaveAttribute('data-motion-mode', 'desktop');
+  await expect(root).toHaveAttribute('data-motion-trigger-count', '5');
+  await expect(root).toHaveAttribute('data-motion-pin-count', '2');
+  await expect(page.locator('.pin-spacer')).toHaveCount(2);
+  await expect(page.locator('.gsap-marker-start, .gsap-marker-end')).toHaveCount(0);
+});
+
+test('mobile motion keeps the full vertical flow without pin spacers', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(route);
+  const root = page.locator('[data-sales-lead-deck]');
+  await expect(root).toHaveAttribute('data-motion-ready', 'true');
+  await expect(root).toHaveAttribute('data-motion-mode', 'mobile');
+  await expect(root).toHaveAttribute('data-motion-trigger-count', '3');
+  await expect(root).toHaveAttribute('data-motion-pin-count', '0');
+  await expect(page.locator('.pin-spacer')).toHaveCount(0);
+  await expect(page.locator('#s7')).toBeAttached();
+  await expect(page.locator('#s8')).toBeAttached();
+});
+
+test('reduced motion renders final content without ScrollTrigger pinning', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 1280, height: 800 }, reducedMotion: 'reduce' });
+  const page = await context.newPage();
+  await page.goto(route);
+  const root = page.locator('[data-sales-lead-deck]');
+  await expect(root).toHaveAttribute('data-motion-ready', 'true');
+  await expect(root).toHaveAttribute('data-motion-mode', 'reduce');
+  await expect(root).toHaveAttribute('data-motion-trigger-count', '0');
+  await expect(root).toHaveAttribute('data-motion-pin-count', '0');
+  await expect(page.locator('.pin-spacer')).toHaveCount(0);
+  await expect(page.locator('#s11')).toContainText('待验证');
+  await context.close();
+});

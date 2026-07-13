@@ -197,6 +197,11 @@ const scale = [
       </a>
     ))}
   </nav>
+  <script>
+    import { initSalesLeadMotion } from '../../scripts/sales-lead-slm-motion';
+    const root = document.querySelector<HTMLElement>('[data-sales-lead-deck]');
+    if (root) initSalesLeadMotion(root);
+  </script>
 </DeckLayout>
 
 <style>
