@@ -35,14 +35,33 @@ const scale = [
 
     <section id="s2" data-scene="problem" data-chapter="origin">
       <div class="scene-shell">
-        <p class="eyebrow">业务断点</p>
-        <h2>下载麻烦只是表象，真正流失的是跟进责任</h2>
-        <div class="breakpoint-grid" data-motion="problem-lines">
-          <article><strong>信息不完整</strong><p>缺少地理位置、最近门店和意向门店，线索无法到达合适的承接方。</p></article>
-          <article><strong>最佳时间被错过</strong><p>下载、导入、再分配拉长链路，门店看到时已经错过最佳跟进时间。</p></article>
-          <article><strong>责任无法回收</strong><p>门店积极性不足，却没有回收机制把线索重新交给愿意负责的人。</p></article>
+        <p class="eyebrow">业务背景与需求来源</p>
+        <h2>一条线索，要经过总部和门店，才可能变成成交</h2>
+        <div class="lead-journey" data-motion="problem-lines" aria-label="销售线索从产生到成交的业务链路">
+          <article class="journey-step"><span class="journey-index">01</span><strong>顾客留资或领券</strong><p>顾客在内容或团购平台表达购买意向。</p></article>
+          <article class="journey-step"><span class="journey-index">02</span><strong>平台产生线索</strong><p>平台记录联系方式与行为，但字段完整度不一。</p></article>
+          <article class="journey-step"><span class="journey-index">03</span><strong>总部汇总线索</strong><p>从不同平台下载，再导入企业自己的系统。</p></article>
+          <article class="journey-step"><span class="journey-index">04</span><strong>匹配合适门店</strong><p>结合意向门店、最近门店和位置寻找承接方。</p></article>
+          <article class="journey-step"><span class="journey-index">05</span><strong>门店跟进顾客</strong><p>及时联系顾客，确认需求并继续服务。</p></article>
+          <article class="journey-step"><span class="journey-index">06</span><strong>核销或成交</strong><p>顾客到店核销卡券，或完成最终购买。</p></article>
         </div>
-        <p class="boundary-note">前任 PM 已经搭建采集接入底座；我的核心贡献从报表、分配与经营问题进入，继续推动分发、任务、公海池、隐私外呼、自动回收与门店经营模块。</p>
+        <div class="demand-origin">
+          <article class="demand-card demand-surface">
+            <span class="demand-label">客户最初提出</span>
+            <strong>多平台下载、导入和分配太麻烦</strong>
+            <p>他们首先感受到的是采集和操作层的断点。</p>
+          </article>
+          <span class="demand-shift" aria-hidden="true">→</span>
+          <article class="demand-card demand-root">
+            <span class="demand-label">继续追查后发现</span>
+            <strong>信息缺失、分配延迟、责任无法回收，才是线索流失的根因</strong>
+            <div class="root-cause-list" aria-label="三个业务根因">
+              <span>缺位置与门店信息</span><span>错过最佳跟进时间</span><span>无人跟进时无法回收</span>
+            </div>
+          </article>
+        </div>
+        <p class="bridge-note">所以我们先从最难的一问开始：什么才是“合适的门店”？</p>
+        <p class="boundary-note"><strong>贡献边界：</strong>前任 PM 已经搭建采集接入底座；我的核心贡献从报表、分配与经营问题进入，继续推动分发、任务、公海池、隐私外呼、自动回收与门店经营模块。</p>
       </div>
     </section>
 
@@ -82,6 +101,10 @@ const scale = [
           <div class="scene-shell">
             <p class="eyebrow">公海池机制</p>
             <h2>用时间保护地理优势，用抢单建立跟进责任</h2>
+            <div class="concept-explainer">
+              <p><strong>公海池：</strong>无法直接分发给明确意向门店的线索，向符合资格的门店开放抢单。</p>
+              <p><strong>保护期：</strong>意向门店和最近门店先看、先抢；到期后才按距离逐步扩圈。</p>
+            </div>
             <div class="pool-layout" data-motion="pool-rings">
               <div class="rings" aria-label="保护期后按 3、5、10、30 公里扩圈">
                 <span>3 公里</span><span>5 公里</span><span>10 公里</span><span>30 公里</span>
@@ -109,7 +132,7 @@ const scale = [
           <div><span>改造后</span><strong>61.7%</strong></div>
         </div>
         <p class="result-delta">提升超过 12.3 个百分点</p>
-        <p class="evidence-note">同一客户 · 约 3 个月 · 月均约 10 万条线索 · 卡券核销计为成交</p>
+        <p class="evidence-note">同一客户 · 约 3 个月 · 月均约 10 万条线索。在这个客户的业务里，卡券核销计为成交。</p>
       </div>
     </section>
 
@@ -221,16 +244,37 @@ const scale = [
   .lead { font-size: clamp(1.1rem, 2vw, 1.45rem); margin: 1.2rem auto 2.2rem; max-width: 740px; }
   .role-line, .formula-note, .boundary-note, .evidence-note { max-width: 880px; margin: 1.5rem auto 0; }
   .eyebrow { color: var(--c-cyan); font-size: .8rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; margin-bottom: .75rem; }
-  .scale-grid, .score-cloud, .breakpoint-grid, .industry-grid, .validation-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
-  .metric, .score-cloud article, .breakpoint-grid article, .industry-grid article, .validation-grid article, .decision-balance article { border: 1px solid var(--glass-border); border-radius: 1.1rem; background: var(--slm-surface); padding: 1.15rem; }
+  .scale-grid, .score-cloud, .industry-grid, .validation-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+  .metric, .score-cloud article, .industry-grid article, .validation-grid article, .decision-balance article { border: 1px solid var(--glass-border); border-radius: 1.1rem; background: var(--slm-surface); padding: 1.15rem; }
   .metric { display: grid; gap: .35rem; text-align: center; }
   .metric strong, .result-line strong { color: var(--c-cyan); font-size: clamp(1.65rem, 3vw, 2.45rem); }
   .metric span, article p { color: var(--text-dim); line-height: 1.65; }
   article strong { display: block; margin-bottom: .45rem; }
+  .lead-journey { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .75rem; margin-top: 1.35rem; }
+  .journey-step { position: relative; min-width: 0; border: 1px solid var(--glass-border); border-radius: 1rem; background: var(--slm-surface); padding: .9rem; }
+  .journey-step:not(:last-child)::after { content: '→'; position: absolute; z-index: 2; top: 50%; right: -.63rem; translate: 0 -50%; color: var(--c-cyan); font-weight: 800; }
+  .journey-index, .demand-label { display: block; color: var(--c-cyan); font-size: .7rem; font-weight: 800; letter-spacing: .1em; margin-bottom: .45rem; }
+  .journey-step strong { font-size: .92rem; line-height: 1.4; }
+  .journey-step p { font-size: .78rem; line-height: 1.55; margin: 0; }
+  .demand-origin { display: grid; grid-template-columns: minmax(0, .85fr) auto minmax(0, 1.35fr); align-items: stretch; gap: .85rem; margin-top: 1rem; }
+  .demand-card { border: 1px solid var(--glass-border); border-radius: 1rem; padding: 1rem 1.1rem; background: var(--slm-surface); }
+  .demand-surface { border-color: color-mix(in srgb, var(--c-problem) 42%, var(--glass-border)); }
+  .demand-root { border-color: var(--slm-line); background: color-mix(in srgb, var(--c-blue) 9%, var(--slm-surface)); }
+  .demand-card strong { line-height: 1.5; }
+  .demand-card p { font-size: .82rem; line-height: 1.55; margin: 0; }
+  .demand-shift { display: grid; place-items: center; color: var(--c-cyan); font-size: 1.45rem; font-weight: 800; }
+  .root-cause-list { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .7rem; }
+  .root-cause-list span { border: 1px solid var(--slm-line); border-radius: 999px; color: var(--text-dim); font-size: .72rem; padding: .3rem .55rem; }
+  .bridge-note { color: var(--text); font-weight: 700; margin: 1rem 0 0; }
+  #s2 .boundary-note { font-size: .82rem; margin-top: .65rem; }
+  #s2 .boundary-note strong { color: var(--text); }
   .decision-panels, .industry-track { display: grid; }
   .decision-balance { display: grid; gap: .75rem; }
   .decision-balance span { display: block; color: var(--c-cyan); font-size: .78rem; margin-bottom: .35rem; }
-  .rings { display: grid; grid-template-columns: repeat(4, minmax(5.5rem, 1fr)); gap: .7rem; }
+  .concept-explainer { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; margin: 1rem 0 1.2rem; }
+  .concept-explainer p { border-left: 2px solid var(--c-cyan); color: var(--text-dim); line-height: 1.65; margin: 0; padding: .55rem .8rem; }
+  .concept-explainer strong { color: var(--text); }
+  .rings { display: grid; grid-template-columns: repeat(4, minmax(5.5rem, 1fr)); gap: .7rem; width: min(920px, 100%); margin-inline: auto; }
   .rings span { display: grid; place-items: center; aspect-ratio: 1; border: 1px solid var(--slm-line); border-radius: 50%; color: var(--c-cyan); font-weight: 700; }
   .pool-layout ol { display: grid; gap: .7rem; margin: 1.4rem 0 0; padding-left: 1.25rem; line-height: 1.7; }
   .result-shell { text-align: center; }
@@ -265,7 +309,17 @@ const scale = [
   [data-sales-lead-deck][data-motion-mode='mobile'] .industry-stage,
   [data-sales-lead-deck][data-motion-mode='reduce'] .industry-stage,
   [data-sales-lead-deck][data-motion-mode='fallback'] .industry-stage { height: auto; overflow: visible; }
-  @media (max-width: 860px) { .sales-lead-deck section { padding-inline: 1rem; } .result-line { align-items: stretch; flex-direction: column; } .rings { grid-template-columns: repeat(2, 1fr); } .sales-lead-nav a { padding-inline: .55rem; } .sales-lead-nav a span:last-child { font-size: .72rem; } }
+  @media (max-width: 860px) {
+    .sales-lead-deck section { padding-inline: 1rem; }
+    .lead-journey { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .journey-step:not(:last-child)::after { display: none; }
+    .demand-origin, .concept-explainer { grid-template-columns: 1fr; }
+    .demand-shift { rotate: 90deg; justify-self: center; }
+    .result-line { align-items: stretch; flex-direction: column; }
+    .rings { grid-template-columns: repeat(2, 1fr); }
+    .sales-lead-nav a { padding-inline: .55rem; }
+    .sales-lead-nav a span:last-child { font-size: .72rem; }
+  }
   @media (max-width: 860px), (prefers-reduced-motion: reduce) {
     .decision-panels, .industry-track { display: grid; width: 100%; height: auto; transform: none; }
     .decision-panel, .industry-track > section { position: relative; inset: auto; width: 100%; min-height: auto; opacity: 1; visibility: visible; transform: none; }

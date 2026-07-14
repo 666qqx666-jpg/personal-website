@@ -1284,6 +1284,45 @@ git commit -m "fix: polish sales lead deck experience"
 
 若没有产生文件修改，不创建空提交。
 
+## Task 7: 补齐门外汉可读性
+
+**Files:**
+- Modify: `docs/superpowers/specs/2026-07-13-sales-lead-slm-gsap-deck-design.md`
+- Modify: `src/pages/projects/sales-lead-slm.astro`
+- Modify: `e2e/sales-lead-slm.spec.ts`
+
+- [x] **Step 1: 用失败测试锁定第一遍阅读所需上下文**
+
+新增一条 Playwright 合同，要求 S2 明示“顾客留资或领券 → 平台产生线索 → 总部汇总线索 → 匹配合适门店 → 门店跟进顾客 → 核销或成交”，并同时出现客户表层诉求与继续追查后的三个根因。
+
+Run: `npx playwright test e2e/sales-lead-slm.spec.ts --grep "business chain"`
+
+Expected: FAIL，现有 S2 只有三个内部断点，没有完整业务链路和需求来源。
+
+- [x] **Step 2: 重写 S2，但保持动效接口和场景数量不变**
+
+保留 `#s2`、`data-scene="problem"`、`data-chapter="origin"` 和 `data-motion="problem-lines"`。将内容改为六步业务链路、表层诉求与真实根因对照、贡献边界和通往 S3 的问题句；不增加场景，不修改 GSAP 控制器。
+
+- [x] **Step 3: 为首次出现的业务术语补一句白话定义**
+
+S5 在机制列表前解释公海池与保护期；S6 把“卡券核销计为成交”改写成完整业务口径。解释只服务第一遍理解，不展开为额外功能说明。
+
+- [x] **Step 4: 更新设计真值源与响应式样式**
+
+同步更新 spec 的 S2、S5、S6、首屏动效和验收合同。桌面端六步链路保持一行扫描，窄屏切为两列并保留编号；需求来源对照在窄屏切为单列，页面不得产生横向溢出。
+
+- [x] **Step 5: 完成工程与视觉验收**
+
+Run: `npm run check`
+
+Run: `npm run build`
+
+Run: `npx playwright test e2e/sales-lead-slm.spec.ts e2e/deck-theme.spec.ts e2e/sections.spec.ts`
+
+Run: `npx playwright test`
+
+Expected: 全部通过。并在 1280×800、390×844 下检查 S2 信息顺序、术语解释和无横向溢出。
+
 ## 2. 完成定义
 
 - `/projects/` 存在可点击的销售线索旗舰案例卡片。

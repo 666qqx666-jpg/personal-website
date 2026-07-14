@@ -45,6 +45,23 @@ test('deck preserves verified facts and contribution boundary', async ({ page })
   expect(body).not.toContain('独立完成整套系统');
 });
 
+test('deck explains the business chain and demand origin for first-time readers', async ({ page }) => {
+  await page.goto(route);
+
+  const background = page.locator('#s2');
+  for (const step of ['顾客留资或领券', '平台产生线索', '总部汇总线索', '匹配合适门店', '门店跟进顾客', '核销或成交']) {
+    await expect(background).toContainText(step);
+  }
+  await expect(background).toContainText('客户最初提出');
+  await expect(background).toContainText('多平台下载、导入和分配太麻烦');
+  await expect(background).toContainText('继续追查后发现');
+  await expect(background).toContainText('信息缺失、分配延迟、责任无法回收');
+
+  await expect(page.locator('#s5')).toContainText('公海池：无法直接分发给明确意向门店的线索');
+  await expect(page.locator('#s5')).toContainText('保护期：意向门店和最近门店先看、先抢');
+  await expect(page.locator('#s6')).toContainText('在这个客户的业务里，卡券核销计为成交');
+});
+
 test('future work keeps visible and accurate status labels', async ({ page }) => {
   await page.goto(route);
 
