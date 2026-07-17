@@ -164,3 +164,42 @@ test('motion controller stays independent from GSAP and ScrollTrigger', async ()
   expect(source).not.toContain("from 'gsap'");
   expect(source).not.toContain('ScrollTrigger');
 });
+
+test('chapter anchors remain usable and active state is accessible', async ({ page }) => {
+  await page.goto(route);
+  const nav = page.getByRole('navigation', { name: '企业权限体系案例章节' });
+  const brand = nav.getByRole('link', { name: '品牌分叉' });
+
+  await brand.click();
+  await expect(page).toHaveURL(/#s6$/);
+  await expect(page.locator('#s6')).toBeAttached();
+  await expect(brand).toHaveAttribute('aria-current', 'true');
+  await expect(page.getByRole('link', { name: '返回项目经历' })).toHaveAttribute('href', '/projects/');
+});
+
+test('controller cleanup restores static readable state', async ({ page }) => {
+  await page.goto(route);
+  const root = page.locator('[data-enterprise-permissions-deck]');
+  await expect(root).toHaveAttribute('data-motion-mode', 'observe');
+
+  await page.evaluate(() => document.dispatchEvent(new Event('astro:before-swap')));
+  await expect(root).toHaveAttribute('data-motion-mode', 'static');
+  await expect(root).not.toHaveAttribute('data-motion-ready', /.+/);
+  await expect(page.locator('section[data-motion-state]')).toHaveCount(0);
+  await expect(page.locator('#s11')).toBeAttached();
+});
+
+test('rapid forward and reverse scrolling produces no browser errors or hidden current scene', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
+  page.on('pageerror', (error) => errors.push(error.message));
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(route);
+
+  for (const id of ['s4', 's8', 's11', 's7', 's2', 's10']) {
+    await page.locator(`#${id}`).scrollIntoViewIfNeeded();
+    await expect(page.locator(`#${id}`)).toHaveAttribute('data-motion-state', 'visible');
+  }
+
+  expect(errors).toEqual([]);
+});

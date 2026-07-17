@@ -12,6 +12,7 @@ const deckRoutes = [
   '/ai/skill-desk/requirement-discovery/',
   '/ai/skill-desk/weekly-retro/',
   '/projects/sales-lead-slm/',
+  '/projects/enterprise-permissions/',
 ];
 
 test('DeckLayout pages follow the shared light theme state by default', async ({ page }) => {
