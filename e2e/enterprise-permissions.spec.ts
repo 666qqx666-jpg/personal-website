@@ -42,3 +42,41 @@ test('deck keeps launched status, public scale, and contribution boundary accura
   expect(body).not.toContain('独立完成研发');
   expect(body).not.toContain('生产权限字典');
 });
+
+test('S7 explains all five permission objects with distinct visual semantics', async ({ page }) => {
+  await page.goto(route);
+  const scene = page.locator('#s7');
+
+  for (const dimension of ['organization', 'store', 'region', 'platform', 'page-action']) {
+    await expect(scene.locator(`[data-dimension="${dimension}"]`)).toHaveCount(1);
+  }
+  await expect(scene.locator('[data-dimension="organization"]')).toContainText('上下级成员治理');
+  await expect(scene.locator('[data-dimension="store"]')).toContainText('全部门店');
+  await expect(scene.locator('[data-dimension="store"]')).toContainText('区域内门店');
+  await expect(scene.locator('[data-dimension="store"]')).toContainText('指定门店');
+  await expect(scene.locator('[data-dimension="region"]')).toContainText('全部');
+  await expect(scene.locator('[data-dimension="region"]')).toContainText('指定');
+  await expect(scene.locator('[data-dimension="region"]')).toContainText('无');
+  await expect(scene.locator('[data-dimension="platform"] .platform-groups span')).toHaveCount(4);
+  await expect(scene.locator('[data-dimension="page-action"]')).toContainText('查看');
+  await expect(scene).toContainText('不自动向节点内成员继承');
+});
+
+test('S8 maps business modules to matching data objects instead of a global intersection', async ({ page }) => {
+  await page.goto(route);
+  const coupon = page.locator('#s8 [data-module="coupon"]');
+  const salesLead = page.locator('#s8 [data-module="sales-lead"]');
+  const member = page.locator('#s8 [data-module="member-governance"]');
+
+  await expect(coupon.locator('[data-permission-ref="store"][data-required]')).toBeVisible();
+  await expect(coupon.locator('[data-permission-ref="platform"][data-required]')).toBeVisible();
+  await expect(coupon.locator('[data-permission-ref="region"][data-excluded]')).toContainText('不参与');
+
+  await expect(salesLead.locator('[data-permission-ref="region"][data-required]')).toBeVisible();
+  await expect(salesLead.locator('[data-permission-ref="platform"][data-required]')).toBeVisible();
+  await expect(salesLead.locator('[data-permission-ref="store"][data-excluded]')).toContainText('不反推');
+
+  await expect(member.locator('[data-permission-ref="organization"][data-required]')).toBeVisible();
+  await expect(page.locator('#s8 [data-governance-boundary="page-action"]')).toContainText('入口与动作');
+  await expect(page.locator('#s8')).toContainText('不是把五类权限全局求交');
+});
