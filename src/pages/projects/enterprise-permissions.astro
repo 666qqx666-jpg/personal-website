@@ -246,6 +246,13 @@ const scale = [
       </a>
     ))}
   </nav>
+
+  <script>
+    import { initEnterprisePermissionsMotion } from '../../scripts/enterprise-permissions-motion';
+
+    const root = document.querySelector<HTMLElement>('[data-enterprise-permissions-deck]');
+    if (root) initEnterprisePermissionsMotion(root);
+  </script>
 </DeckLayout>
 
 <style>
@@ -358,6 +365,22 @@ const scale = [
   .nav-dot { width: .5rem; height: .5rem; border-radius: 50%; background: currentColor; }
   #s11 { padding-bottom: 9rem; }
 
+  [data-enterprise-permissions-deck][data-motion-ready='true'][data-motion-mode='observe'] [data-motion-state='pending'] [data-motion-item] {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+
+  [data-enterprise-permissions-deck][data-motion-mode='observe'] [data-motion-state='visible'] [data-motion-item] {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity .42s ease, transform .42s ease;
+  }
+
+  #s7 [data-motion-item]:nth-child(2) { transition-delay: .04s; }
+  #s7 [data-motion-item]:nth-child(3) { transition-delay: .08s; }
+  #s7 [data-motion-item]:nth-child(4) { transition-delay: .12s; }
+  #s7 [data-motion-item]:nth-child(5) { transition-delay: .16s; }
+
   @media (max-width: 860px) {
     .enterprise-permissions-deck { scroll-snap-type: y proximity; }
     .enterprise-permissions-deck section { height: auto; min-height: 100vh; padding-inline: 1rem; }
@@ -375,6 +398,18 @@ const scale = [
   @supports (height: 100dvh) {
     @media (max-width: 860px) {
       .enterprise-permissions-deck section { min-height: 100dvh; }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .enterprise-permissions-deck *,
+    .enterprise-permissions-deck *::before,
+    .enterprise-permissions-deck *::after {
+      scroll-behavior: auto;
+      animation-duration: .01ms;
+      animation-iteration-count: 1;
+      transition-duration: .01ms;
+      transition-delay: 0ms;
     }
   }
 </style>

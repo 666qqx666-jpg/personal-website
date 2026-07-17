@@ -1,3 +1,4 @@
+import { readFile } from 'node:fs/promises';
 import { test, expect } from '@playwright/test';
 
 const route = '/projects/enterprise-permissions/';
@@ -102,4 +103,64 @@ test('permission semantics remain explicit without relying on color', async ({ p
   await expect(page.locator('#s8 [data-required]')).toHaveCount(5);
   await expect(page.locator('#s8 [data-excluded]')).toHaveCount(2);
   await expect(page.locator('#s9 b[aria-label="同级越权被阻断"]')).toContainText('阻断');
+});
+
+test('static mode keeps all scenes readable without JavaScript', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  await page.goto(route);
+
+  await expect(page.locator('[data-enterprise-permissions-deck]')).toHaveAttribute('data-motion-mode', 'static');
+  await expect(page.locator('section[data-scene]')).toHaveCount(11);
+  await page.locator('#s11').scrollIntoViewIfNeeded();
+  await expect(page.locator('#s11')).toBeVisible();
+  await expect(page.locator('#s11')).toContainText('复用底座，而不是复用错误模型');
+  await context.close();
+});
+
+test('desktop uses native observed reveals without pinning or horizontal tracks', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(route);
+  const root = page.locator('[data-enterprise-permissions-deck]');
+
+  await expect(root).toHaveAttribute('data-motion-ready', 'true');
+  await expect(root).toHaveAttribute('data-motion-mode', 'observe');
+  await expect(page.locator('#s1')).toHaveAttribute('data-motion-state', 'visible');
+  await page.locator('#s8').scrollIntoViewIfNeeded();
+  await expect(page.locator('#s8')).toHaveAttribute('data-motion-state', 'visible');
+  await expect(page.locator('.pin-spacer')).toHaveCount(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)).toBe(false);
+});
+
+test('reduced motion directly exposes final content', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 1280, height: 800 }, reducedMotion: 'reduce' });
+  const page = await context.newPage();
+  await page.goto(route);
+  const root = page.locator('[data-enterprise-permissions-deck]');
+
+  await expect(root).toHaveAttribute('data-motion-mode', 'reduce');
+  await expect(root).toHaveAttribute('data-motion-ready', 'true');
+  await expect(page.locator('section[data-motion-state="visible"]')).toHaveCount(11);
+  await expect(page.locator('.pin-spacer')).toHaveCount(0);
+  await context.close();
+});
+
+test('missing IntersectionObserver falls back to fully visible content', async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, 'IntersectionObserver', { value: undefined, configurable: true });
+  });
+  await page.goto(route);
+  const root = page.locator('[data-enterprise-permissions-deck]');
+
+  await expect(root).toHaveAttribute('data-motion-mode', 'fallback');
+  await expect(root).toHaveAttribute('data-motion-ready', 'false');
+  await expect(page.locator('section[data-motion-state="visible"]')).toHaveCount(11);
+  await page.locator('#s11').scrollIntoViewIfNeeded();
+  await expect(page.locator('#s11')).toBeVisible();
+});
+
+test('motion controller stays independent from GSAP and ScrollTrigger', async () => {
+  const source = await readFile(new URL('../src/scripts/enterprise-permissions-motion.ts', import.meta.url), 'utf8');
+  expect(source).not.toContain("from 'gsap'");
+  expect(source).not.toContain('ScrollTrigger');
 });
