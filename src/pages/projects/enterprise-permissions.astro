@@ -3,7 +3,7 @@ import DeckLayout from '../../layouts/DeckLayout.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const chapters = [
-  { href: '#s1', id: 'constraint', label: '共同约束' },
+  { href: '#s0', id: 'constraint', label: '共同约束' },
   { href: '#s4', id: 'mall', label: '商场基线' },
   { href: '#s6', id: 'brand', label: '品牌分叉' },
   { href: '#s9', id: 'governance', label: '治理闭环' },
@@ -20,13 +20,27 @@ const scale = [
 <DeckLayout
   title="多业务线企业权限体系｜QQ星"
   description="共享同一套业务底座，不代表必须共享同一种权限模型。"
->
+  >
   <main
     id="enterprise-permissions-deck"
     class="enterprise-permissions-deck"
     data-enterprise-permissions-deck
     data-motion-mode="static"
   >
+    <section id="s0" data-scene="background" data-chapter="constraint">
+      <div class="scene-shell background-shell">
+        <p class="eyebrow">Why Enterprise Permissions</p>
+        <h1>企业权限的需求，来自同一平台里的两种治理现实</h1>
+        <p class="lead">平台既服务综合商场，也服务连锁品牌。公司希望继续复用数据库、多数业务模块和操作日志，但新业务线开始管理完全不同的组织与数据对象。</p>
+        <div class="background-constraints" data-motion-item role="list" aria-label="企业权限体系的需求背景">
+          <article role="listitem"><span>业务现实</span><strong>管辖对象不同</strong><p>商场围绕项目与区域，品牌围绕组织分支与门店网络。</p></article>
+          <article role="listitem"><span>平台约束</span><strong>业务底座继续共享</strong><p>不为两条业务线重复维护数据库、模块和操作日志。</p></article>
+          <article role="listitem"><span>真正问题</span><strong>不能强塞进同一种成员模型</strong><p>权限必须跟随真实治理对象分叉，而不是只增加更多角色。</p></article>
+        </div>
+        <p class="principle">需要保留的是共享底座，需要重建的是权限模型。</p>
+      </div>
+    </section>
+
     <section id="s1" data-scene="opening" data-chapter="constraint">
       <div class="scene-shell hero-shell">
         <p class="chapter">Enterprise Permissions</p>
@@ -274,6 +288,13 @@ const scale = [
   .lead { max-width: 780px; margin: 1rem auto 0; color: var(--text-dim); font-size: clamp(1rem, 1.7vw, 1.25rem); line-height: 1.8; }
   .lead-copy, .boundary-note { color: var(--text-dim); line-height: 1.75; }
   .memory-line, .principle { color: var(--text); font-size: clamp(1.05rem, 1.8vw, 1.35rem); font-weight: 750; line-height: 1.6; margin-top: 1.25rem; }
+  .background-constraints { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; margin-top: 1.5rem; text-align: left; }
+  .background-constraints article { display: grid; gap: .45rem; border: 1px solid var(--glass-border); border-radius: 1rem; background: var(--ep-surface); padding: 1rem; }
+  .background-constraints article:nth-child(1) { border-color: color-mix(in srgb, var(--ep-mall) 55%, var(--glass-border)); }
+  .background-constraints article:nth-child(2) { border-color: color-mix(in srgb, var(--ep-shared) 55%, var(--glass-border)); }
+  .background-constraints article:nth-child(3) { border-color: color-mix(in srgb, var(--ep-brand) 55%, var(--glass-border)); }
+  .background-constraints span { color: var(--ep-focus); font-size: .72rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+  .background-constraints p { color: var(--text-dim); line-height: 1.6; }
   .split-shell { display: grid; grid-template-columns: minmax(280px, .9fr) minmax(360px, 1.1fr); gap: clamp(1.25rem, 4vw, 3.5rem); align-items: center; }
   .status, .type-label { display: inline-flex; border: 1px solid currentColor; border-radius: 999px; padding: .3rem .65rem; font-size: .72rem; font-weight: 750; }
 
@@ -384,7 +405,7 @@ const scale = [
   @media (max-width: 860px) {
     .enterprise-permissions-deck { scroll-snap-type: y proximity; }
     .enterprise-permissions-deck section { height: auto; min-height: 100vh; padding-inline: 1rem; }
-    .split-shell, .world-grid, .evolution-grid, .mapping-grid, .result-columns { grid-template-columns: 1fr; }
+    .background-constraints, .split-shell, .world-grid, .evolution-grid, .mapping-grid, .result-columns { grid-template-columns: 1fr; }
     .dimension-grid { grid-template-columns: 1fr; }
     .dimension-card, .dimension-card:nth-child(4), .dimension-card:nth-child(5) { grid-column: auto; }
     .grant-branches { grid-template-columns: 1fr; }

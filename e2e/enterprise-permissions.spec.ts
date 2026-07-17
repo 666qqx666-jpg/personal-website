@@ -13,11 +13,12 @@ test('projects listing exposes the enterprise permissions case', async ({ page }
   await expect(card).toHaveAttribute('href', route);
 });
 
-test('deck renders eleven scenes and five chapter links', async ({ page }) => {
+test('deck renders twelve scenes and five chapter links', async ({ page }) => {
   await page.goto(route);
 
+  await expect(page.getByRole('heading', { name: '企业权限的需求，来自同一平台里的两种治理现实' })).toBeVisible();
   await expect(page.getByRole('heading', { name: '同一套系统，为什么需要两种权限模型？' })).toBeVisible();
-  await expect(page.locator('section[data-scene]')).toHaveCount(11);
+  await expect(page.locator('section[data-scene]')).toHaveCount(12);
 
   const nav = page.getByRole('navigation', { name: '企业权限体系案例章节' });
   for (const label of ['共同约束', '商场基线', '品牌分叉', '治理闭环', '真实运行']) {
@@ -91,7 +92,7 @@ test('desktop keeps DeckLayout snap while mobile preserves reading order without
   await page.goto(route);
   expect(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)).toBe(false);
   const sceneIds = await page.locator('section[data-scene]').evaluateAll((sections) => sections.map((section) => section.id));
-  expect(sceneIds).toEqual(['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10', 's11']);
+  expect(sceneIds).toEqual(['s0', 's1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10', 's11']);
   await expect(page.locator('#s7 [data-dimension]')).toHaveCount(5);
   await expect(page.locator('#s8 [data-module]')).toHaveCount(3);
 });
@@ -111,7 +112,7 @@ test('static mode keeps all scenes readable without JavaScript', async ({ browse
   await page.goto(route);
 
   await expect(page.locator('[data-enterprise-permissions-deck]')).toHaveAttribute('data-motion-mode', 'static');
-  await expect(page.locator('section[data-scene]')).toHaveCount(11);
+  await expect(page.locator('section[data-scene]')).toHaveCount(12);
   await page.locator('#s11').scrollIntoViewIfNeeded();
   await expect(page.locator('#s11')).toBeVisible();
   await expect(page.locator('#s11')).toContainText('复用底座，而不是复用错误模型');
@@ -125,7 +126,7 @@ test('desktop uses native observed reveals without pinning or horizontal tracks'
 
   await expect(root).toHaveAttribute('data-motion-ready', 'true');
   await expect(root).toHaveAttribute('data-motion-mode', 'observe');
-  await expect(page.locator('#s1')).toHaveAttribute('data-motion-state', 'visible');
+  await expect(page.locator('#s0')).toHaveAttribute('data-motion-state', 'visible');
   await page.locator('#s8').scrollIntoViewIfNeeded();
   await expect(page.locator('#s8')).toHaveAttribute('data-motion-state', 'visible');
   await expect(page.locator('.pin-spacer')).toHaveCount(0);
@@ -140,7 +141,7 @@ test('reduced motion directly exposes final content', async ({ browser }) => {
 
   await expect(root).toHaveAttribute('data-motion-mode', 'reduce');
   await expect(root).toHaveAttribute('data-motion-ready', 'true');
-  await expect(page.locator('section[data-motion-state="visible"]')).toHaveCount(11);
+  await expect(page.locator('section[data-motion-state="visible"]')).toHaveCount(12);
   await expect(page.locator('.pin-spacer')).toHaveCount(0);
   await context.close();
 });
@@ -154,7 +155,7 @@ test('missing IntersectionObserver falls back to fully visible content', async (
 
   await expect(root).toHaveAttribute('data-motion-mode', 'fallback');
   await expect(root).toHaveAttribute('data-motion-ready', 'false');
-  await expect(page.locator('section[data-motion-state="visible"]')).toHaveCount(11);
+  await expect(page.locator('section[data-motion-state="visible"]')).toHaveCount(12);
   await page.locator('#s11').scrollIntoViewIfNeeded();
   await expect(page.locator('#s11')).toBeVisible();
 });
