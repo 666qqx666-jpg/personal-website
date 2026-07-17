@@ -80,3 +80,26 @@ test('S8 maps business modules to matching data objects instead of a global inte
   await expect(page.locator('#s8 [data-governance-boundary="page-action"]')).toContainText('入口与动作');
   await expect(page.locator('#s8')).toContainText('不是把五类权限全局求交');
 });
+
+test('desktop keeps DeckLayout snap while mobile preserves reading order without overflow', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(route);
+  expect(await page.locator('[data-enterprise-permissions-deck]').evaluate((element) => getComputedStyle(element).scrollSnapType)).toContain('y');
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(route);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)).toBe(false);
+  const sceneIds = await page.locator('section[data-scene]').evaluateAll((sections) => sections.map((section) => section.id));
+  expect(sceneIds).toEqual(['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10', 's11']);
+  await expect(page.locator('#s7 [data-dimension]')).toHaveCount(5);
+  await expect(page.locator('#s8 [data-module]')).toHaveCount(3);
+});
+
+test('permission semantics remain explicit without relying on color', async ({ page }) => {
+  await page.goto(route);
+
+  await expect(page.locator('#s7 [data-dimension="organization"]')).toHaveAttribute('data-dimension', 'organization');
+  await expect(page.locator('#s8 [data-required]')).toHaveCount(5);
+  await expect(page.locator('#s8 [data-excluded]')).toHaveCount(2);
+  await expect(page.locator('#s9 b[aria-label="同级越权被阻断"]')).toContainText('阻断');
+});
