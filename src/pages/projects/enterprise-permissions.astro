@@ -1,0 +1,258 @@
+---
+import DeckLayout from '../../layouts/DeckLayout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const chapters = [
+  { href: '#s1', id: 'constraint', label: '共同约束' },
+  { href: '#s4', id: 'mall', label: '商场基线' },
+  { href: '#s6', id: 'brand', label: '品牌分叉' },
+  { href: '#s9', id: 'governance', label: '治理闭环' },
+  { href: '#s10', id: 'running', label: '真实运行' },
+];
+const scale = [
+  ['约 25 个', '综合商场'],
+  ['约 30 个', '连锁品牌'],
+  ['约 3,000 名', '已创建成员'],
+  ['单客户 3 万多家门店', '权限管理场景'],
+];
+---
+
+<DeckLayout
+  title="多业务线企业权限体系｜QQ星"
+  description="共享同一套业务底座，不代表必须共享同一种权限模型。"
+>
+  <main
+    id="enterprise-permissions-deck"
+    class="enterprise-permissions-deck"
+    data-enterprise-permissions-deck
+    data-motion-mode="static"
+  >
+    <section id="s1" data-scene="opening" data-chapter="constraint">
+      <div class="scene-shell hero-shell">
+        <p class="chapter">Enterprise Permissions</p>
+        <h1>同一套系统，为什么需要两种权限模型？</h1>
+        <p class="lead">综合商场与连锁品牌共用数据库、多数业务模块和操作日志，但它们真正治理的对象并不相同。</p>
+        <p class="memory-line">共享同一套业务底座，不代表必须共享同一种权限模型。</p>
+      </div>
+    </section>
+
+    <section id="s2" data-scene="worlds" data-chapter="constraint">
+      <div class="scene-shell">
+        <p class="eyebrow">Two Business Worlds</p>
+        <h2>一个围绕商场管辖，一个围绕门店网络生长</h2>
+        <div class="world-grid" data-motion-item>
+          <article class="world-card world-mall">
+            <span class="status" data-status="launched">已上线</span>
+            <h3>综合商场成员与权限体系</h3>
+            <p>围绕具体商场、商场组、区域与集团岗位建立管辖关系。</p>
+            <div class="world-shape" role="img" aria-label="综合商场按商场和商场组治理">
+              <span>集团</span><span>区域</span><span>商场组</span><span>商场</span>
+            </div>
+          </article>
+          <article class="world-card world-brand">
+            <span class="status" data-status="launched">已上线</span>
+            <h3>连锁品牌组织与多维权限体系</h3>
+            <p>围绕门店网络、自定义组织分支、区域、事业部与品类治理。</p>
+            <div class="world-shape" role="img" aria-label="连锁品牌按组织分支和门店网络治理">
+              <span>企业</span><span>区域线</span><span>事业部</span><span>门店网</span>
+            </div>
+          </article>
+        </div>
+        <div class="shared-base" data-motion-item>
+          <strong>共享业务底座</strong>
+          <span>同一数据库</span><span>多数业务模块</span><span>统一操作日志</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="s3" data-scene="identity" data-chapter="constraint">
+      <div class="scene-shell split-shell">
+        <div>
+          <p class="eyebrow">Shared Base, Separate Identity</p>
+          <h2>共用数据库，不等于共用成员模型</h2>
+          <p class="lead-copy">连锁品牌成员承担真实业务鉴权，同时关联一个综合商场成员身份；后者继续作为全系统统一操作身份写入现有日志。</p>
+          <p class="principle">业务权限身份分离，审计操作身份统一。</p>
+        </div>
+        <div class="identity-bridge" data-motion-item role="img" aria-label="业务权限身份与审计操作身份的关联关系">
+          <article><span>业务鉴权</span><strong>品牌成员身份</strong><small>组织、门店、行政区、平台、页面操作</small></article>
+          <span class="bridge-link">关联</span>
+          <article><span>统一审计</span><strong>商场成员身份</strong><small>沿用现有操作日志与业务对象</small></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="s4" data-scene="mall-model" data-chapter="mall">
+      <div class="scene-shell">
+        <p class="eyebrow">Mall Baseline</p>
+        <h2>综合商场先用二维模型解决管辖与操作</h2>
+        <p class="formula">成员有效权限 = 商场管辖范围 × 页面操作范围</p>
+        <div class="matrix" data-motion-item role="img" aria-label="商场管辖范围与页面操作范围组成二维权限矩阵">
+          <div class="matrix-axis matrix-scope"><strong>商场范围</strong><span>具体商场</span><span>商场组</span></div>
+          <span class="matrix-times">×</span>
+          <div class="matrix-axis matrix-action"><strong>页面操作</strong><span>角色</span><span>自定义权限</span></div>
+        </div>
+        <p class="boundary-note">角色只封装页面和操作，不把商场范围打包进去。</p>
+      </div>
+    </section>
+
+    <section id="s5" data-scene="mall-evolution" data-chapter="mall">
+      <div class="scene-shell">
+        <p class="eyebrow">From Repetition to Reuse</p>
+        <h2>把逐人配置收敛成角色复用与动态商场组</h2>
+        <div class="evolution-grid" data-motion-item>
+          <article><span class="type-label">绝对范围</span><strong>具体商场</strong><p>成员直接选择一组确定商场，范围固定。</p><div class="fixed-set"><i>A 商场</i><i>B 商场</i><i>C 商场</i></div></article>
+          <article><span class="type-label">相对范围</span><strong>动态商场组</strong><p>按组织关系覆盖当前商场，并自动覆盖未来新增商场。</p><div class="dynamic-set"><i>华东组</i><i>当前商场</i><i>未来新增</i></div></article>
+          <article><span class="type-label">操作复用</span><strong>客户自建角色</strong><p>常规岗位复用角色，特殊岗位保留自定义页面操作。</p><div class="role-set"><i>区域负责人</i><i>运营岗位</i></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="s6" data-scene="branch" data-chapter="brand">
+      <div class="scene-shell split-shell">
+        <div>
+          <p class="eyebrow">Model Branch</p>
+          <h2>品牌管的不是商场，而是企业组织与门店网络</h2>
+          <p class="lead-copy">客户可能按区域组织，也可能按事业部或品类组织。固定“总部—区域—门店”模板无法覆盖真实组织，商场二维模型也无法解释品牌业务数据。</p>
+          <p class="principle">共享底座继续复用，治理模型从这里分叉。</p>
+        </div>
+        <div class="branch-figure" data-motion-item role="img" aria-label="品牌组织按区域、事业部和品类形成自定义分支">
+          <strong>品牌企业</strong>
+          <div><span>区域组织</span><span>事业部</span><span>品类线</span></div>
+          <div><i>门店网络</i><i>成员关系</i><i>业务数据</i></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="s7" data-scene="dimensions" data-chapter="brand">
+      <div class="scene-shell scene-shell-wide">
+        <p class="eyebrow">Five Independent Objects</p>
+        <h2>五类权限对象，每一维只解决一种治理问题</h2>
+        <div class="dimension-grid">
+          <article class="dimension-card" data-dimension="organization" data-motion-item>
+            <h3>组织架构权限</h3>
+            <p>决定上下级成员治理，以及能否管理下级创建的数据。</p>
+            <div class="org-tree" role="img" aria-label="组织权限树：总部向区域和事业部分支">
+              <strong>总部</strong><div><span>华东区域</span><span>事业部 A</span></div><div><i>成员</i><i>下级数据</i></div>
+            </div>
+          </article>
+          <article class="dimension-card" data-dimension="store" data-motion-item>
+            <h3>门店权限</h3>
+            <p>作用于以门店为数据对象的业务范围。</p>
+            <div class="store-scopes" role="img" aria-label="门店权限包含全部门店、区域内门店和指定门店">
+              <span>全部门店</span><span>区域内门店</span><span>指定门店</span>
+            </div>
+          </article>
+          <article class="dimension-card" data-dimension="region" data-motion-item>
+            <h3>行政区权限</h3>
+            <p>直接作用于只携带行政区的数据，不从门店地址反推。</p>
+            <div class="region-rings" role="img" aria-label="行政区权限包含全部、指定和无权限三档"><span>全部</span><span>指定</span><span>无</span></div>
+          </article>
+          <article class="dimension-card" data-dimension="platform" data-motion-item>
+            <h3>平台权限</h3>
+            <p>成员可管辖的平台集合可被多个业务模块共同读取。</p>
+            <div class="platform-groups" role="img" aria-label="平台权限按内容、电商、本地生活和私域分类">
+              <span>内容平台</span><span>电商平台</span><span>本地生活</span><span>私域平台</span>
+            </div>
+          </article>
+          <article class="dimension-card" data-dimension="page-action" data-motion-item>
+            <h3>页面及操作权限</h3>
+            <p>控制页面入口，以及查看、创建、编辑和授权动作。</p>
+            <div class="menu-tree" role="img" aria-label="页面菜单树和按钮级操作权限">
+              <strong>业务菜单</strong><span>卡券页</span><span>线索页</span><div><i>查看</i><i>编辑</i><i>授权</i></div>
+            </div>
+          </article>
+        </div>
+        <p class="boundary-note">组织节点只确定上下级关系，不自动向节点内成员继承门店、行政区、平台或页面权限。</p>
+      </div>
+    </section>
+
+    <section id="s8" data-scene="module-mapping" data-chapter="brand">
+      <div class="scene-shell scene-shell-wide">
+        <p class="eyebrow">The Product Decision</p>
+        <h2>业务模块各取所需，而不是把五类权限全局求交</h2>
+        <div class="mapping-grid" data-motion-item role="group" aria-label="卡券、销售线索和成员治理按业务对象读取权限">
+          <article class="module-card" data-module="coupon">
+            <h3>卡券</h3><p>卡券归属于门店，并来自具体平台。</p>
+            <div class="permission-picks"><span data-permission-ref="store" data-required>门店</span><span data-permission-ref="platform" data-required>平台</span><span data-permission-ref="region" data-excluded>行政区不参与</span></div>
+          </article>
+          <article class="module-card" data-module="sales-lead">
+            <h3>销售线索</h3><p>部分线索只有行政区和来源平台。</p>
+            <div class="permission-picks"><span data-permission-ref="region" data-required>行政区</span><span data-permission-ref="platform" data-required>平台</span><span data-permission-ref="store" data-excluded>不反推门店</span></div>
+          </article>
+          <article class="module-card" data-module="member-governance">
+            <h3>成员治理</h3><p>上下级关系决定能管理谁，以及谁创建的数据。</p>
+            <div class="permission-picks"><span data-permission-ref="organization" data-required>组织架构</span></div>
+          </article>
+        </div>
+        <div class="governance-rails">
+          <p data-governance-boundary="organization"><strong>组织治理横向边界</strong><span>决定下级成员及其创建数据的治理关系，不充当业务数据筛选字段。</span></p>
+          <p data-governance-boundary="page-action"><strong>页面与操作横向边界</strong><span>继续控制三个模块的入口与动作，不与业务范围混成全局交集。</span></p>
+        </div>
+        <p class="principle">权限越多不等于模型越强，关键是依赖关系与数据对象匹配。</p>
+      </div>
+    </section>
+
+    <section id="s9" data-scene="governance" data-chapter="governance">
+      <div class="scene-shell">
+        <p class="eyebrow">Governance Loop</p>
+        <h2>向下授权只能缩小，同级越权在边界处停止</h2>
+        <div class="governance-figure" data-motion-item role="group" aria-label="总部向下授权、同级区域隔离和统一审计">
+          <div class="grant-source"><strong>总部</strong><span>可跨区域治理</span></div>
+          <div class="grant-branches">
+            <article><strong>华东区域</strong><span>默认带入上级范围</span><span>只允许继续缩小</span></article>
+            <b aria-label="同级越权被阻断">× 同级阻断</b>
+            <article><strong>华南区域</strong><span>管理本区成员</span><span>不能访问华东分支</span></article>
+          </div>
+          <div class="control-chain"><span>前端控制入口与按钮</span><span>后端接口再次校验</span><span>统一审计身份写入日志</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="s10" data-scene="results" data-chapter="running">
+      <div class="scene-shell">
+        <p class="eyebrow">Running at Real Scale</p>
+        <h2>规模证明系统真实运行，治理行为证明边界成立</h2>
+        <div class="result-columns">
+          <div class="stats" role="group" aria-label="企业权限体系实际采用规模">
+            {scale.map(([value, label]) => <article class="stat"><b>{value}</b><span>{label}</span></article>)}
+          </div>
+          <div class="governance-results" data-motion-item>
+            <strong>真实治理行为</strong>
+            <p>区域负责人可以治理本区域成员及其业务数据。</p>
+            <p>同级区域不能互相访问或修改。</p>
+            <p>总部可以跨区域管理。</p>
+          </div>
+        </div>
+        <p class="boundary-note">采用规模不等于单一功能带来的业务增长，也不虚构效率提升比例。</p>
+      </div>
+    </section>
+
+    <section id="s11" data-scene="conclusion" data-chapter="running">
+      <div class="scene-shell conclusion-shell">
+        <p class="eyebrow">Conclusion</p>
+        <h2>复用底座，而不是复用错误模型</h2>
+        <p class="lead">数据库、多数业务模块和操作日志继续共享；综合商场与连锁品牌按各自治理对象分别生长。</p>
+        <div class="conclusion-base" data-motion-item><span>综合商场模型</span><strong>共享业务底座</strong><span>连锁品牌模型</span></div>
+        <p class="boundary-note">这不是一个包打天下的权限引擎，而是两套与真实业务对象匹配、已经进入运行的权限模型。</p>
+        <a class="back-projects" href={`${base}projects/`}>返回项目经历</a>
+      </div>
+    </section>
+  </main>
+
+  <nav class="enterprise-permissions-nav" aria-label="企业权限体系案例章节">
+    {chapters.map((chapter, index) => (
+      <a href={chapter.href} class:list={{ active: index === 0 }} data-chapter-link={chapter.id} aria-current={index === 0 ? 'true' : undefined}>
+        <span class="nav-dot"></span><span>{chapter.label}</span>
+      </a>
+    ))}
+  </nav>
+</DeckLayout>
+
+<style>
+  .enterprise-permissions-deck section { width: 100%; }
+  .scene-shell { width: min(1120px, 100%); margin-inline: auto; }
+  .scene-shell-wide { width: min(1240px, 100%); }
+  .hero-shell, .conclusion-shell { text-align: center; }
+  .lead, .lead-copy, .boundary-note { color: var(--text-dim); line-height: 1.75; }
+  .enterprise-permissions-nav { position: fixed; z-index: 18; left: 50%; bottom: 1rem; translate: -50% 0; }
+</style>
