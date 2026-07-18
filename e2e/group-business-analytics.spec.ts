@@ -1,3 +1,4 @@
+import { readFile } from 'node:fs/promises';
 import { test, expect } from '@playwright/test';
 
 const route = '/projects/group-business-analytics/';
@@ -177,4 +178,148 @@ test('desktop model lab uses a deliberate grid-based visual layout', async ({ pa
   await expect(page.locator('#s7 .model-lab-shell')).toHaveCSS('display', 'grid');
   await expect(page.locator('#s7 .model-phases')).toHaveCSS('display', 'grid');
   await expect(page.locator('#s7 [data-model-phase="problem"]')).toHaveCSS('min-height', '384px');
+});
+
+test('desktop creates exactly one local model pin with four semantic phases', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(route);
+  const root = page.locator('[data-group-analytics-deck]');
+  await expect(root).toHaveAttribute('data-motion-ready', 'true');
+  await expect(root).toHaveAttribute('data-motion-mode', 'desktop');
+  await expect(root).toHaveAttribute('data-motion-trigger-count', '1');
+  await expect(root).toHaveAttribute('data-motion-pin-count', '1');
+  await expect(page.locator('.pin-spacer')).toHaveCount(1);
+  const stage = page.locator('[data-model-stage]');
+  await expect(stage.locator('section[data-scene]')).toHaveCount(2);
+  await expect(stage.locator('#s7')).toHaveCount(1);
+  await expect(stage.locator('#s8')).toHaveCount(1);
+  await expect(stage.locator('xpath=..')).toHaveClass(/pin-spacer/);
+  await expect(page.locator('.gsap-marker-start, .gsap-marker-end')).toHaveCount(0);
+  await expect(stage.locator('[data-model-phase]')).toHaveCount(4);
+});
+
+test('desktop model lab advances from the problem to the metric mapping', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(route);
+  const root = page.locator('[data-group-analytics-deck]');
+  await expect(root).toHaveAttribute('data-model-phase-active', 'problem');
+  const top = await page.locator('[data-model-stage]').evaluate((element) => element.getBoundingClientRect().top + window.scrollY);
+  await page.evaluate((stageTop) => window.scrollTo(0, stageTop + window.innerHeight * 1.55), top);
+  await expect(root).toHaveAttribute('data-model-phase-active', 'metrics');
+  await expect(page.locator('#s8')).toContainText('小程序页面访问日志');
+});
+
+test('mobile keeps all four phases visible and creates no ScrollTrigger', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(route);
+  const root = page.locator('[data-group-analytics-deck]');
+  await expect(root).toHaveAttribute('data-motion-ready', 'true');
+  await expect(root).toHaveAttribute('data-motion-mode', 'mobile');
+  await expect(root).toHaveAttribute('data-motion-trigger-count', '0');
+  await expect(root).toHaveAttribute('data-motion-pin-count', '0');
+  await expect(root).toHaveAttribute('data-model-phase-active', 'all');
+  await expect(page.locator('.pin-spacer')).toHaveCount(0);
+  for (const phase of ['problem', 'objects', 'query', 'metrics']) {
+    await expect(page.locator(`[data-model-phase="${phase}"]`)).toBeVisible();
+  }
+});
+
+test('reduced motion exposes final content without pinning or delayed reveals', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 1280, height: 800 }, reducedMotion: 'reduce' });
+  const page = await context.newPage();
+  await page.goto(route);
+  const root = page.locator('[data-group-analytics-deck]');
+  await expect(root).toHaveAttribute('data-motion-mode', 'reduce');
+  await expect(root).toHaveAttribute('data-motion-ready', 'true');
+  await expect(root).toHaveAttribute('data-motion-trigger-count', '0');
+  await expect(root).toHaveAttribute('data-motion-pin-count', '0');
+  await expect(root).toHaveAttribute('data-model-phase-active', 'all');
+  await expect(page.locator('.pin-spacer')).toHaveCount(0);
+  await expect(page.locator('section[data-motion-state="visible"]')).toHaveCount(9);
+  await context.close();
+});
+
+test('motion source owns only one pin and no debug markers', async () => {
+  const source = await readFile(new URL('../src/scripts/group-business-analytics-motion.ts', import.meta.url), 'utf8');
+  expect(source.match(/pin:\s*true/g)).toHaveLength(1);
+  expect(source).toContain("id: 'group-analytics-model-lab'");
+  expect(source).not.toContain('markers: true');
+});
+
+test('missing IntersectionObserver falls back to fully visible content without a pin', async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, 'IntersectionObserver', { value: undefined, configurable: true });
+  });
+  await page.goto(route);
+  const root = page.locator('[data-group-analytics-deck]');
+  await expect(root).toHaveAttribute('data-motion-mode', 'fallback');
+  await expect(root).toHaveAttribute('data-motion-ready', 'false');
+  await expect(root).toHaveAttribute('data-motion-trigger-count', '0');
+  await expect(root).toHaveAttribute('data-motion-pin-count', '0');
+  await expect(page.locator('.pin-spacer')).toHaveCount(0);
+  await expect(page.locator('[data-model-stage] [data-model-phase]')).toHaveCount(4);
+  await page.locator('#s11').scrollIntoViewIfNeeded();
+  await expect(page.locator('#s11')).toBeVisible();
+});
+
+test('observer initialization failure also returns to the readable fallback state', async ({ page }) => {
+  await page.addInitScript(() => {
+    class BrokenIntersectionObserver {
+      constructor() { throw new Error('synthetic observer failure'); }
+    }
+    Object.defineProperty(window, 'IntersectionObserver', { value: BrokenIntersectionObserver, configurable: true });
+  });
+  await page.goto(route);
+  const root = page.locator('[data-group-analytics-deck]');
+  await expect(root).toHaveAttribute('data-motion-mode', 'fallback');
+  await expect(root).toHaveAttribute('data-motion-ready', 'false');
+  await expect(page.locator('.pin-spacer')).toHaveCount(0);
+  await expect(page.locator('[data-model-stage] [data-model-phase]')).toHaveCount(4);
+});
+
+test('chapter navigation works with keyboard and updates aria-current', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(route);
+  const nav = page.getByRole('navigation', { name: '集团经营数据分析案例章节' });
+  const reflection = nav.getByRole('link', { name: '产品反思' });
+  await reflection.focus();
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/#s9$/);
+  await expect(page.locator('#s9')).toBeAttached();
+  await expect(reflection).toHaveAttribute('aria-current', 'true');
+  await expect(page.getByRole('link', { name: '返回项目经历' })).toHaveAttribute('href', '/projects/');
+});
+
+test('controller cleanup removes the pin and restores static readable state', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(route);
+  const root = page.locator('[data-group-analytics-deck]');
+  await expect(root).toHaveAttribute('data-motion-mode', 'desktop');
+  await expect(page.locator('.pin-spacer')).toHaveCount(1);
+
+  await page.evaluate(() => document.dispatchEvent(new Event('astro:before-swap')));
+  await expect(root).toHaveAttribute('data-motion-mode', 'static');
+  await expect(root).not.toHaveAttribute('data-motion-ready', /.+/);
+  await expect(root).not.toHaveAttribute('data-motion-trigger-count', /.+/);
+  await expect(root).not.toHaveAttribute('data-motion-pin-count', /.+/);
+  await expect(root).toHaveAttribute('data-model-phase-active', 'all');
+  await expect(page.locator('.pin-spacer')).toHaveCount(0);
+  await expect(page.locator('section[data-motion-state]')).toHaveCount(0);
+  await expect(page.locator('#s10')).toContainText('技术债');
+});
+
+test('viewport changes rebuild motion without accumulating pin spacers', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(route);
+  const root = page.locator('[data-group-analytics-deck]');
+  await expect(page.locator('.pin-spacer')).toHaveCount(1);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(root).toHaveAttribute('data-motion-mode', 'mobile');
+  await expect(page.locator('.pin-spacer')).toHaveCount(0);
+
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await expect(root).toHaveAttribute('data-motion-mode', 'desktop');
+  await expect(root).toHaveAttribute('data-motion-pin-count', '1');
+  await expect(page.locator('.pin-spacer')).toHaveCount(1);
 });
