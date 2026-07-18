@@ -17,12 +17,6 @@ if (backgroundMetrics.length !== 0 && backgroundMetrics.length !== 3) {
 }
 const hasBackgroundMetrics = backgroundMetrics.length === 3;
 
-const adoptionStats = [
-  { value: '8 个', label: '运行停车 2.0 的商场', scope: '35 个停车商场' },
-  { value: '27 个', label: '继续运行停车 1.0', scope: '存量商场' },
-  { value: '约 7.57 万笔', label: '2.0 月停车缴费单', scope: '8 个 2.0 商场' },
-  { value: '1 / 18', label: '某集团 2.0 / 1.0 商场', scope: '集团共 19 个商场' },
-];
 ---
 
 <DeckLayout title="智慧停车 2.0｜QQ星" description="从无文档外包系统到可持续演进的自有停车产品。">
@@ -80,7 +74,7 @@ const adoptionStats = [
 
     <section id="s9" data-scene="evolution" data-chapter="evolution"><div class="scene-shell"><p class="eyebrow">Back to Evolution</p><h2>从 1.0 黑盒重构为 2.0，再让能力持续扩展</h2><div class="evolution-lineage" data-motion-item><article class="evolution-stage legacy-stage" data-evolution-stage="legacy"><span>停车 1.0</span><strong>1.0 仍在运行</strong><p>既有业务可以运转，但产品维护和演进依赖外部团队。</p></article><div class="evolution-arrow" aria-hidden="true">→</div><article class="evolution-stage rebuild-stage" data-evolution-stage="rebuild"><span>停车 2.0</span><strong>2.0 原生重构基线</strong><p>重新规划身份、权益、支付与外部接入，停车重新拥有可维护的内部基线。</p></article></div><div class="evolution-expansion" data-evolution-stage="iterate"><p>真实问题持续带来能力扩展</p><div class="iteration-grid" data-motion-item><article data-iteration="benefits"><strong>权益扩展</strong><p>会员等级、积分抵现、商户停车券、消费减免和便捷出场进入统一体系。</p></article><article data-iteration="vehicle-risk"><strong>车辆风控</strong><p>从仅限制会员升级为会员与车辆双维限制，并增加绑定查询、后台解绑和操作日志。</p></article><article data-iteration="double-pay"><strong>双重支付治理</strong><p>针对 ETC 与小程序结果同步时间差，增加支付后 Loading 与等待出场提示；优化后未再明显发生同类问题。</p></article><article data-iteration="refund"><strong>异常闭环</strong><p>现金与权益同步回退；再次执行只重试失败步骤，以校验时间处理跨日核销，超出宽限时由退款兜底。</p></article></div></div></div></section>
 
-    <section id="s10" data-scene="running" data-chapter="running"><div class="scene-shell"><p class="eyebrow">Running at Real Scale</p><h2>真实落地，也保留真实迁移边界</h2><div class="adoption-stats" role="group" aria-label="停车 2.0 实际采用范围">{adoptionStats.map((stat) => <article><strong>{stat.value}</strong><span>{stat.label}</span><small>{stat.scope}</small></article>)}</div><div class="version-lanes" data-motion-item role="group" aria-label="停车 2.0 与 1.0 渐进迁移"><article data-version="2.0"><strong>2.0 车道</strong><span>8 个商场 · 完整缴费与权益能力</span></article><article data-version="1.0"><strong>1.0 车道</strong><span>27 个存量商场 · 历史数据整合成本待处理</span></article></div><p class="mixed-version-note" data-motion-item>某集团共 19 个商场，其中 1 个使用 2.0、18 个继续使用 1.0；版本按商场配置，支持渐进迁移。</p><p class="new-mall-note">其中一个 2.0 商场刚上线、交易数据较少，不把不完整月份包装为成熟月均。</p><p class="boundary-note">退款能力已上线，但暂无真实线上退款订单；版本并存不等于全面替代 1.0。</p></div></section>
+    <section id="s10" data-scene="running" data-chapter="running"><div class="scene-shell"><p class="eyebrow">Running at Real Scale</p><h2>2.0 已真实运行，但仍处于渐进迁移阶段</h2><div class="adoption-story" data-motion-item><div class="adoption-total" data-adoption-total><span>当前停车业务总盘子</span><strong>35 个停车商场</strong></div><div class="version-distribution" role="group" aria-label="35 个停车商场的版本分布"><article data-version="2.0"><span>停车 2.0</span><strong>8 个</strong><small>已启用完整缴费与权益能力</small></article><div class="distribution-track" aria-hidden="true"><i></i><b></b></div><article data-version="1.0"><span>停车 1.0</span><strong>27 个</strong><small>车辆、订单、规则与历史数据整合成本待处理</small></article></div><div class="adoption-evidence"><article data-adoption-evidence="volume"><span>2.0 运行证据</span><strong>约 7.57 万笔 / 月</strong><p>停车缴费单，统计范围为 8 个 2.0 商场。</p></article><article data-adoption-evidence="migration"><span>渐进迁移样本</span><strong>1 个 2.0 · 18 个 1.0</strong><p>某集团共 19 个商场，版本按商场配置并存。</p></article></div></div><p class="new-mall-note">其中一个 2.0 商场刚上线、交易数据较少，不把不完整月份包装为成熟月均。</p><p class="boundary-note">退款能力已上线，但暂无真实线上退款订单；版本并存不等于全面替代 1.0。</p></div></section>
 
     <section id="s11" data-scene="conclusion" data-chapter="running"><div class="scene-shell conclusion-shell"><p class="eyebrow">Conclusion</p><h2>迁回的是产品定义权与演进能力</h2><p class="lead">从线上 1.0 黑盒还原能力，重新规划身份、权益、交易与系统分层，再通过真实问题持续完善 2.0。</p><div class="conclusion-points" data-motion-item><span>不是重做页面</span><span>不是原样复制</span><span>不是全面替代</span></div><p class="boundary-note">本人负责产品盘点、重构规划、规则与系统分层设计并推动上线；研发团队完成工程实现。</p><a class="back-projects" href={`${base}projects/`}>返回项目经历</a></div></section>
   </main>
@@ -144,6 +138,28 @@ const adoptionStats = [
   .evolution-expansion > p::before, .evolution-expansion > p::after { content: ''; display: inline-block; width: clamp(2rem, 11vw, 9rem); height: 1px; margin: 0 .7rem .3rem; background: var(--sp-line); }
   .evolution-expansion .iteration-grid { margin-top: 0; }
   @media (max-width: 860px) { .evolution-lineage { grid-template-columns: 1fr; } .evolution-arrow { min-height: 1.5rem; transform: rotate(90deg); } .evolution-expansion > p::before, .evolution-expansion > p::after { width: clamp(1rem, 8vw, 3rem); } }
+  .adoption-story { display: grid; gap: .85rem; margin-top: 1.15rem; }
+  .adoption-total { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; border-bottom: 1px solid var(--glass-border); padding: 0 .25rem .8rem; }
+  .adoption-total > span { color: var(--text-dim); font-size: .86rem; font-weight: 700; }
+  .adoption-total > strong { color: var(--text); font-size: clamp(1.35rem, 2.6vw, 2rem); }
+  .version-distribution { display: grid; grid-template-columns: minmax(0, .8fr) minmax(8rem, 1fr) minmax(0, 1.2fr); gap: .8rem; align-items: center; }
+  .version-distribution article { display: grid; grid-template-columns: 1fr auto; gap: .35rem .75rem; align-items: center; min-height: 6.2rem; }
+  .version-distribution article > span { color: var(--text-dim); font-size: .82rem; font-weight: 800; letter-spacing: .08em; }
+  .version-distribution article > strong { font-size: clamp(1.45rem, 3vw, 2.1rem); }
+  .version-distribution article > small { grid-column: 1 / -1; color: var(--text-dim); line-height: 1.5; }
+  .version-distribution [data-version='2.0'] { border-color: color-mix(in srgb, var(--sp-native) 62%, var(--glass-border)); }
+  .version-distribution [data-version='2.0'] > strong { color: var(--sp-native); }
+  .version-distribution [data-version='1.0'] { border-color: color-mix(in srgb, var(--sp-lane) 62%, var(--glass-border)); }
+  .version-distribution [data-version='1.0'] > strong { color: var(--sp-lane); }
+  .distribution-track { display: grid; grid-template-columns: 8fr 27fr; height: .8rem; overflow: hidden; border: 1px solid var(--glass-border); border-radius: 999px; background: var(--sp-surface); }
+  .distribution-track i { background: var(--sp-native); }
+  .distribution-track b { background: color-mix(in srgb, var(--sp-lane) 76%, transparent); }
+  .adoption-evidence { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem; }
+  .adoption-evidence article { display: grid; grid-template-columns: 1fr auto; gap: .35rem .8rem; align-items: baseline; }
+  .adoption-evidence article > span { color: var(--text-dim); font-size: .82rem; font-weight: 800; }
+  .adoption-evidence article > strong { color: var(--text); font-size: clamp(1.05rem, 2vw, 1.4rem); }
+  .adoption-evidence article > p { grid-column: 1 / -1; color: var(--text-dim); line-height: 1.55; }
+  @media (max-width: 860px) { .adoption-total { display: grid; } .version-distribution, .adoption-evidence { grid-template-columns: 1fr; } .distribution-track { min-height: .8rem; } }
   .opening-road { display: grid; grid-template-columns: minmax(9rem, 1fr) 2fr minmax(9rem, 1fr); max-width: 820px; margin: 2rem auto 0; border-color: var(--glass-border); background: linear-gradient(110deg, var(--sp-road), var(--sp-road-strong)); padding: 1.2rem; }
   .opening-road span, .opening-road strong, .journey-only span { border: 1px solid var(--glass-border); border-radius: .8rem; padding: .7rem; } .opening-road span { color: var(--sp-lane); } .opening-road strong { color: var(--sp-native); } .opening-road i { height: 2px; background: repeating-linear-gradient(90deg, var(--sp-lane) 0 1.2rem, transparent 1.2rem 2rem); }
   .background-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); } .background-metrics, .legacy-grid, .iteration-grid, .adoption-stats { margin-top: 1.4rem; } .smart-parking-deck article, .blackbox-map, .architecture-notes, .discount-cap, .mixed-version-note { background: var(--sp-surface); }

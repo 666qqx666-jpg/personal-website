@@ -120,10 +120,14 @@ test('S9 and S10 prove continued evolution while preserving migration boundaries
     await expect(page.locator(`#s9 [data-iteration="${iteration}"]`)).toHaveCount(1);
   }
   await expect(page.locator('#s9')).toContainText('再次执行只重试失败步骤');
-  await expect(page.locator('#s10 [data-version="2.0"]')).toContainText('8 个商场');
-  await expect(page.locator('#s10 [data-version="1.0"]')).toContainText('27 个存量商场');
-  await expect(page.locator('#s10')).toContainText('约 7.57 万笔');
-  await expect(page.locator('#s10')).toContainText('1 个使用 2.0、18 个继续使用 1.0');
+  await expect(page.locator('#s10')).toContainText('2.0 已真实运行，但仍处于渐进迁移阶段');
+  await expect(page.locator('#s10 [data-adoption-total]')).toContainText('35 个停车商场');
+  await expect(page.locator('#s10 [data-version="2.0"]')).toContainText('8 个');
+  await expect(page.locator('#s10 [data-version="1.0"]')).toContainText('27 个');
+  await expect(page.locator('#s10 [data-adoption-evidence="volume"]')).toContainText('约 7.57 万笔 / 月');
+  await expect(page.locator('#s10 [data-adoption-evidence="migration"]')).toContainText('1 个 2.0 · 18 个 1.0');
+  await expect(page.locator('#s10 .adoption-stats')).toHaveCount(0);
+  await expect(page.locator('#s10 .version-lanes')).toHaveCount(0);
   await expect(page.locator('#s10')).toContainText('其中一个 2.0 商场刚上线');
 });
 
