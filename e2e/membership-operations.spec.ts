@@ -87,12 +87,19 @@ test('growth chapter distinguishes shared infrastructure, business reuse, and an
   await expect(touch).not.toContainText('创建计划');
 
   const attribution = page.locator('#s9');
-  await expect(attribution.locator('[data-channel="short-link"]')).toContainText('线上短链');
-  await expect(attribution.locator('[data-channel="qr"]')).toContainText('线下二维码');
+  await expect(attribution.locator('[data-attribution-layer="analysis"]')).toContainText('会员分析');
+  await expect(attribution.locator('[data-attribution-layer="analysis"]')).toContainText('小程序会员分析');
+  await expect(attribution.locator('[data-analysis-chart]')).toHaveCount(2);
+  for (const source of ['orders', 'questionnaire', 'members', 'coupons']) {
+    await expect(attribution.locator(`[data-attribution-data="${source}"]`)).toHaveCount(1);
+  }
+  await expect(attribution.locator('[data-channel="promotion"]')).toContainText('推广渠道');
+  await expect(attribution.locator('[data-channel="offline-qr"]')).toContainText('线下二维码');
+  await expect(attribution.locator('[data-attribution-layer="data"]')).toHaveCount(1);
+  await expect(attribution.locator('[data-attribution-layer="channel"]')).toHaveCount(1);
   await expect(attribution.locator('[data-loop="growth"]')).toHaveCount(1);
   await expect(attribution).toContainText('给最上层的数据分析打下基础');
-  await expect(attribution).toContainText('统一沉淀推广渠道与渠道明细');
-  await expect(attribution).toContainText('短链点击与小程序访问使用同一页面访问日志');
+  await expect(attribution).toContainText('携带推广渠道与渠道明细');
   for (const behavior of ['开卡', '领券', '核销', '下单']) {
     await expect(attribution).toContainText(behavior);
   }
