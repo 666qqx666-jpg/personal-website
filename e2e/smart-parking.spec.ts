@@ -112,3 +112,41 @@ test('S9 and S10 prove continued evolution while preserving migration boundaries
   await expect(page.locator('#s10')).toContainText('1 个使用 2.0、18 个继续使用 1.0');
   await expect(page.locator('#s10')).toContainText('其中一个 2.0 商场刚上线');
 });
+
+test('desktop keeps snap while mobile preserves scene order without overflow', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(route);
+  expect(await page.locator('[data-smart-parking-deck]').evaluate((element) => getComputedStyle(element).scrollSnapType)).toContain('y');
+  expect(await page.locator('#s5 .identity-road').evaluate((element) => getComputedStyle(element).display)).toBe('grid');
+  expect(await page.locator('#s8 .payment-flow').evaluate((element) => getComputedStyle(element).display)).toBe('grid');
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(route);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)).toBe(false);
+  const sceneIds = await page.locator('section[data-scene]').evaluateAll((sections) => sections.map((section) => section.id));
+  expect(sceneIds).toEqual(['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10', 's11']);
+});
+
+test('light and dark themes retain parking semantic tokens', async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('theme', 'light'));
+  await page.goto(route);
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  const lightTokens = await page.locator('[data-smart-parking-deck]').evaluate((element) => {
+    const style = getComputedStyle(element);
+    return [style.getPropertyValue('--sp-lane').trim(), style.getPropertyValue('--sp-native').trim(), style.getPropertyValue('--sp-member').trim()];
+  });
+  expect(lightTokens.every(Boolean)).toBe(true);
+
+  await page.locator('#deck-theme-toggle').click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(page.locator('#deck-theme-toggle')).toContainText('☀️');
+});
+
+test('parking semantics remain explicit without relying on color', async ({ page }) => {
+  await page.goto(route);
+  await expect(page.locator('#s5 [data-identity="xcu"]')).toHaveAttribute('data-identity', 'xcu');
+  await expect(page.locator('#s5 [data-identity="mcu"]')).toHaveAttribute('data-identity', 'mcu');
+  await expect(page.locator('#s7 [data-limit-axis]')).toHaveCount(2);
+  await expect(page.locator('#s10 [data-version]')).toHaveCount(2);
+  await expect(page.locator('#s10 [data-version="1.0"]')).toContainText('历史数据整合成本');
+});
