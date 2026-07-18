@@ -1,0 +1,266 @@
+---
+import DeckLayout from '../../layouts/DeckLayout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const chapters = [
+  { id: 'demand', href: '#s1', label: '需求诞生' },
+  { id: 'modeling', href: '#s3', label: '建模演进' },
+  { id: 'reflection', href: '#s9', label: '产品反思' },
+  { id: 'running', href: '#s11', label: '真实运行' },
+];
+const launchedReports = ['会员新增趋势 2.0', '小程序访问趋势', '积分产生 / 消耗趋势', '销售趋势'];
+const statusRows = [
+  { status: 'warehouse-launched', label: '后续数仓方案已使用', items: ['小程序访问趋势', '积分产生 / 消耗趋势'] },
+  { status: 'legacy-launched', label: '已上线 · 仍为旧方案', items: ['会员新增趋势 2.0', '销售趋势'] },
+  { status: 'solution-unscheduled', label: '方案完成 · 未排期', items: ['有价券分析'] },
+  { status: 'debt-unscheduled', label: '技术债 · 未排期', items: ['会员新增趋势 2.0 数仓改造', '销售趋势数仓改造', '拍照积分订单纳入销售趋势'] },
+];
+const adoption = [
+  ['约 25 个综合商场', '标准能力开放范围'],
+  ['季度考核', '集团会员指标进入管理机制'],
+  ['至少 20 次下载', '原典型半年分析工作量'],
+  ['一次跨商场查询与下载', '集团—商场两级分析后的工作方式'],
+];
+---
+
+<DeckLayout
+  title="集团经营数据分析体系｜QQ星"
+  description="从集团考核需求、指标建模到数仓方案演进的数据产品案例。"
+>
+  <main class="group-analytics-deck" data-group-analytics-deck data-motion-mode="static" data-model-phase-active="all">
+    <nav class="chapter-nav" aria-label="集团经营数据分析案例章节">
+      {chapters.map((chapter, index) => (
+        <a href={chapter.href} data-chapter-link={chapter.id} aria-current={index === 0 ? 'true' : undefined}>
+          <span aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>{chapter.label}
+        </a>
+      ))}
+    </nav>
+
+    <section id="s1" data-scene="demand-origin" data-chapter="demand" data-motion-scene>
+      <div class="scene-shell">
+        <p class="eyebrow">集团经营数据分析体系 · 需求诞生</p>
+        <h1>当管理对象从一家商场变成一个集团</h1>
+        <p class="lead">集团管理层不需要逐个进入商场页面完成集团分析；他们需要的是集团汇总、商场横向比较和统一考核入口。</p>
+        <div class="mall-convergence" aria-label="多个商场数据面板收束为集团视角">
+          <div class="mall-stack">
+            <article><span>商场 A</span><b>会员 · 订单 · 积分</b></article>
+            <article><span>商场 B</span><b>会员 · 订单 · 积分</b></article>
+            <article><span>商场 C…</span><b>各自查看 · 各自下载</b></article>
+          </div>
+          <span class="flow-arrow" aria-hidden="true">→</span>
+          <article class="group-lens">
+            <span>集团管理视角</span>
+            <strong>集团汇总</strong><strong>商场横向比较</strong><strong>统一考核入口</strong>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="s2" data-scene="problem" data-chapter="demand" data-motion-scene>
+      <div class="scene-shell">
+        <p class="eyebrow">从效率抱怨追到产品问题</p>
+        <h2>下载次数多只是症状，真正缺的是集团分析结构</h2>
+        <div class="download-story">
+          <article><strong>10 个商场</strong><span>× 半年分析</span></article>
+          <article><strong>至少 20 次下载</strong><span>单次最多三个月，再由集团人工合并</span></article>
+          <article><strong>一次跨商场查询与下载</strong><span>统一口径后仍可继续下钻</span></article>
+        </div>
+        <div class="analysis-levels" aria-label="集团分析的三层需求">
+          <article><b>01 · 集团整体</b><p>先看集团目标与统一指标结果。</p></article>
+          <article><b>02 · 商场对比</b><p>使用同一口径横向识别差异。</p></article>
+          <article><b>03 · 单商场下钻</b><p>从异常结果定位到具体商场。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="s3" data-scene="member-model" data-chapter="modeling" data-motion-scene>
+      <div class="scene-shell">
+        <p class="eyebrow">第一个需求 · 会员新增趋势 2.0</p>
+        <h2>先定义“新增”，再设计统计记录</h2>
+        <p class="statement">集团新增会员 ≠ 各商场新增会员之和</p>
+        <div class="definition-grid">
+          <article><span>集团新增会员</span><p>集团只统计真正首次开卡的会员。</p></article>
+          <article><span>商场新增开卡会员</span><p>会员首次在该商场开卡。</p></article>
+          <article><span>商场新增关联会员</span><p>已在其他商场开卡，首次在该商场产生有效会员交互。</p></article>
+          <article><span>商场新增会员</span><p>商场新增开卡会员 + 商场新增关联会员。</p></article>
+        </div>
+        <div class="record-formula" aria-label="会员新增组合统计记录">
+          <code>日期 × 商场 × 新增类型 × 来源维度 → 新增数量</code>
+          <p>业务口径被转译成可以按集团和商场查询的组合统计记录。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s4" data-scene="sales-model" data-chapter="modeling" data-motion-scene>
+      <div class="scene-shell">
+        <p class="eyebrow">第二个需求 · 销售趋势</p>
+        <h2>从订单事实推导经营指标</h2>
+        <div class="fact-inputs" aria-label="销售指标的数据事实输入">
+          <span>SO</span><span>负数 RSO</span><span>MCUid</span><span>商场 / 门店</span><span>日粒度</span>
+        </div>
+        <span class="flow-arrow" aria-hidden="true">↓</span>
+        <div class="metric-outputs">
+          <article><b>销售额</b><p>SO 与负数 RSO 共同计算</p></article>
+          <article><b>销售笔数</b><p>按有效订单事实统计</p></article>
+          <article><b>销售人数</b><p>按 MCUid 去重</p></article>
+          <article><b>连带率</b><p>由对应分子与分母计算</p></article>
+          <article><b>老客率</b><p>基于 MCUid 完成新老客判断</p></article>
+        </div>
+        <div class="record-formula">
+          <code>日期 × 商场 / 门店 × 数据来源 × 支付渠道 → 日指标统计记录</code>
+          <p><strong>周 / 月比例需要重新聚合分子与分母</strong>，不能简单平均每日百分比。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="s5" data-scene="first-model" data-chapter="modeling" data-motion-scene>
+      <div class="scene-shell">
+        <p class="eyebrow">第一代方案</p>
+        <h2>把查询结果提前算好，是早期上线的合理取舍</h2>
+        <div class="pipeline" aria-label="第一代预聚合统计模型">
+          <article><span>01</span><b>业务事件</b><p>触发对应组合统计记录的增量更新。</p></article>
+          <article><span>02</span><b>组合统计记录</b><p>预先保存常用维度组合的查询结果。</p></article>
+          <article><span>03</span><b>每日兜底重算</b><p>按单日、单商场重新统计，降低同步失败风险。</p></article>
+          <article><span>04</span><b>报表查询</b><p>以较低查询成本支持需求快速落地。</p></article>
+        </div>
+        <p class="note positive">第一代模型不是错误方案；它解决了当时最重要的“先让集团用起来”。</p>
+      </div>
+    </section>
+
+    <section id="s6" data-scene="model-boundary" data-chapter="modeling" data-motion-scene>
+      <div class="scene-shell">
+        <p class="eyebrow">使用中暴露边界</p>
+        <h2>每增加一个分析维度，也增加一组更新责任</h2>
+        <div class="issue-grid">
+          <article><b>组合增殖</b><p>商场、来源、渠道和业务维度交叉生成更多统计节点。</p></article>
+          <article><b>更新断点</b><p>业务事件可能遗漏、错乱，或需要历史回溯补算。</p></article>
+          <article><b>空值组合</b><p>空值也成为维度值，扩大组合和解释成本。</p></article>
+          <article><b>每日重算</b><p>兜底机制逐步带来资源消耗和数据风险。</p></article>
+          <article><b>持续修数</b><p>统计错误与修复工作频繁出现。</p></article>
+          <article><b>扩展责任</b><p>新增平台或维度需要继续扩写更新链路。</p></article>
+        </div>
+        <p class="note warning">继续扩写组合结果表，会把每个新维度变成新的更新责任。</p>
+      </div>
+    </section>
+
+    <div class="model-lab-stage" data-model-stage>
+      <section id="s7" class="model-lab" data-scene="model-lab" data-chapter="modeling">
+        <div class="scene-shell model-lab-shell">
+          <div class="model-lab-copy">
+            <p class="eyebrow">模型实验台</p>
+            <h2>从组合结果，回到可以追溯的业务事实</h2>
+            <p>动画表达的是建模决策，不表示旧报表已经自动迁移。</p>
+          </div>
+          <div class="model-phases" aria-label="数据模型从组合统计表演进为业务对象的前三个阶段">
+            <article data-model-phase="problem">
+              <span>01 · 组合表暴露问题</span><h3>结果先算好，更新责任随维度增长</h3>
+              <div class="combo-nodes"><i>商场×来源</i><i>日期×渠道</i><i>空值组合</i><i>历史重算</i></div>
+            </article>
+            <article data-model-phase="objects">
+              <span>02 · 行为落成对象</span><h3>先记录真实发生了什么</h3>
+              <div class="object-list">
+                <i data-model-object="daily-active">日活记录</i><i data-model-object="launch">启动日志</i>
+                <i data-model-object="page-view">页面访问日志</i><i data-model-object="new-member">新增会员明细</i>
+              </div>
+            </article>
+            <article data-model-phase="query">
+              <span>03 · 查询镜头</span><h3>再按管理问题选择分析维度</h3>
+              <div class="query-lens">
+                {['商场', '平台', '日期', '用户类型', '打开来源', '推广渠道', '页面路径'].map((dimension) => <i data-query-dimension>{dimension}</i>)}
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="s8" data-scene="object-mapping" data-chapter="modeling" data-model-phase="metrics">
+        <div class="scene-shell">
+          <p class="eyebrow">04 · 对象如何被投影为指标</p>
+          <h2>先保留真实行为，再按问题选择聚合方式</h2>
+          <div class="mapping-grid">
+            <article data-fact-object="new-member" data-metric="NM"><span>小程序新增会员明细</span><b>NM</b><p>开卡或绑卡事实及其转化与推广上下文</p></article>
+            <article data-fact-object="daily-active" data-metric="UV"><span>小程序用户日活记录</span><b>UV</b><p>用户在某平台、商场和日期的日活事实</p></article>
+            <article data-fact-object="launch" data-metric="VV"><span>小程序启动日志</span><b>VV</b><p>每次启动及其来源、渠道和会员状态</p></article>
+            <article data-fact-object="page-view" data-metric="PV"><span>小程序页面访问日志</span><b>PV</b><p>页面访问事实，并关联日活与启动上下文</p></article>
+          </div>
+          <p class="boundary-note">按需聚合不等于所有对象合成一个通用宽表，也不等于旧报表已经完成迁移。</p>
+        </div>
+      </section>
+    </div>
+
+    <section id="s9" data-scene="reflection" data-chapter="reflection" data-motion-scene>
+      <div class="scene-shell">
+        <p class="eyebrow">产品反思</p>
+        <h2>页面只是数据产品的最后一层</h2>
+        <ol class="reflection-questions">
+          <li><span>01</span><b>谁用数据？</b><p>先识别集团管理者与商场经营者。</p></li>
+          <li><span>02</span><b>做什么决策？</b><p>明确汇总、比较、考核与下钻动作。</p></li>
+          <li><span>03</span><b>指标怎么定义？</b><p>把业务口径写成可复核的计算关系。</p></li>
+          <li><span>04</span><b>事实对象是什么？</b><p>区分订单、日活、启动、访问与新增事实。</p></li>
+          <li><span>05</span><b>按什么粒度聚合？</b><p>尊重日、商场、门店、用户与事件粒度。</p></li>
+        </ol>
+        <p class="note positive">预聚合帮助快速上线，明细与埋点对象帮助持续扩展；它们是不同阶段的产品选择。</p>
+        <div class="report-scope" aria-label="四类已上线报表范围">
+          {launchedReports.map((report) => <span>{report}</span>)}
+        </div>
+      </div>
+    </section>
+
+    <section id="s10" data-scene="technical-debt" data-chapter="reflection" data-motion-scene>
+      <div class="scene-shell">
+        <p class="eyebrow">技术债 · 完整一章</p>
+        <h2>如实区分已上线、旧方案、方案完成与未排期</h2>
+        <div class="status-matrix">
+          {statusRows.map((row) => (
+            <article data-status={row.status}>
+              <strong>{row.label}</strong>
+              <div>{row.items.map((item) => <span>{item}</span>)}</div>
+            </article>
+          ))}
+        </div>
+        <p class="boundary-note"><strong>能力边界：</strong>MCUid 与统一 SO 只是继续关联分析的基础，不表示统一漏斗已经上线。</p>
+      </div>
+    </section>
+
+    <section id="s11" data-scene="real-running" data-chapter="running" data-motion-scene>
+      <div class="scene-shell">
+        <p class="eyebrow">真实运行与本人角色</p>
+        <h2>从集团考核需求，生长为可以持续演进的数据产品</h2>
+        <div class="adoption-grid">
+          {adoption.map(([value, label]) => <article><strong>{value}</strong><span>{label}</span></article>)}
+        </div>
+        <div class="role-boundary">
+          <article><span>我主导</span><p>客户沟通、问题抽象、指标与分析维度建模、数据方案研究、集团—商场两级结构、PRD 与原型、协作和交付推动。</p></article>
+          <article><span>团队协作</span><p>研发与数据团队完成工程实现；本案例不把数据开发、埋点开发或数仓建设表述为本人独立完成。</p></article>
+        </div>
+        <a class="project-return" href={`${base}projects/`}>返回项目经历</a>
+      </div>
+    </section>
+  </main>
+</DeckLayout>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-group-analytics-deck]');
+  if (root) {
+    import('../../scripts/group-business-analytics-motion')
+      .then(({ initGroupBusinessAnalyticsMotion }) => initGroupBusinessAnalyticsMotion(root))
+      .catch((error) => {
+        root.querySelectorAll<HTMLElement>('[data-motion-scene]').forEach((scene) => { scene.dataset.motionState = 'visible'; });
+        root.dataset.motionMode = 'fallback';
+        root.dataset.motionReady = 'false';
+        root.dataset.motionTriggerCount = '0';
+        root.dataset.motionPinCount = '0';
+        root.dataset.modelPhaseActive = 'all';
+        console.error('Group business analytics motion module failed to load', error);
+      });
+  }
+</script>
+
+<style>
+  .group-analytics-deck { height: auto; min-height: 100vh; overflow: visible; scroll-snap-type: none; }
+  section[data-scene] { min-height: 100vh; height: auto; padding: 6rem 1.5rem; scroll-snap-align: none; }
+  .scene-shell { width: min(1120px, 100%); margin: 0 auto; }
+  .chapter-nav { position: fixed; z-index: 18; right: 1rem; bottom: 1rem; display: flex; gap: .5rem; }
+  [data-model-phase], [data-motion-scene] { opacity: 1; visibility: visible; }
+  @media (max-width: 1023px) { section[data-scene] { min-height: auto; } .chapter-nav span { display: none; } }
+</style>
