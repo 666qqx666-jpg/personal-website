@@ -60,3 +60,46 @@ test('voucher-owner MCU keeps transactions running and exposes the debt', async 
   await expect(scene.locator('[data-identity-debt]')).toContainText('可能长期并存');
   await expect(scene.locator('[data-identity-debt]')).toContainText('不能可靠自动合并');
 });
+
+test('growth chapter connects reusable infrastructure to touch and attribution', async ({ page }) => {
+  await page.goto(route);
+
+  const foundation = page.locator('#s7');
+  for (const capability of ['customer-list', 'audience-filter', 'audience-pack', 'sms-service']) {
+    await expect(foundation.locator(`[data-foundation="${capability}"]`)).toHaveCount(1);
+  }
+
+  const touch = page.locator('#s8');
+  await expect(touch.locator('[data-touch-step]')).toHaveCount(6);
+  for (const label of ['筛选人群', '创建计划', '内容与额度审核', '发送短信', '点击短链', '访问小程序']) {
+    await expect(touch).toContainText(label);
+  }
+
+  const attribution = page.locator('#s9');
+  await expect(attribution.locator('[data-channel="short-link"]')).toContainText('线上短链');
+  await expect(attribution.locator('[data-channel="qr"]')).toContainText('线下二维码');
+  await expect(attribution.locator('[data-loop="growth"]')).toHaveCount(1);
+  await expect(attribution).toContainText('短链点击与小程序访问使用同一页面访问日志');
+  for (const behavior of ['开卡', '领券', '核销', '下单']) {
+    await expect(attribution).toContainText(behavior);
+  }
+  await expect(attribution).toContainText('完整链路不等于增量因果');
+});
+
+test('result scene binds every number to its counting boundary', async ({ page }) => {
+  await page.goto(route);
+  const scene = page.locator('#s10');
+
+  await expect(scene.locator('[data-metric="mcu-records"]')).toContainText('约 876 万条');
+  await expect(scene.locator('[data-metric="mcu-records"]')).toContainText('记录数，不是独立自然人数');
+  await expect(scene.locator('[data-metric="annual-new-members"]')).toContainText('约 11.37 万');
+  await expect(scene.locator('[data-metric="post-signup-reach"]')).toContainText('约 10.08 万');
+  await expect(scene.locator('[data-metric="reach-rate"]')).toContainText('约 88.7%');
+  await expect(scene).toContainText('开卡后触达覆盖率');
+  await expect(scene.locator('[data-status="launched"]')).toContainText('核心能力均已正式上线');
+
+  const body = await page.locator('body').innerText();
+  expect(body).not.toContain('短信带来 11.37 万人开卡');
+  expect(body).not.toContain('营销计划直接带来 7,296 万元销售额');
+  expect(body).not.toContain('最大单一客户约 271 万');
+});
