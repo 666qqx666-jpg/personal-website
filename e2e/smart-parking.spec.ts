@@ -93,7 +93,7 @@ test('S7 keeps four benefits, one total cap, and member plus vehicle limits expl
   await expect(scene).toContainText('每名会员每天最多使用一次');
 });
 
-test('S8 closes the payment lifecycle for cash, zero-pay, and failure branches', async ({ page }) => {
+test('S8 contrasts legacy one-time lookup with a validated and reversible 2.0 payment lifecycle', async ({ page }) => {
   await page.goto(route);
   const scene = page.locator('#s8');
   const legacy = scene.locator('[data-payment-version="1.0"]');
@@ -101,9 +101,12 @@ test('S8 closes the payment lifecycle for cash, zero-pay, and failure branches',
   await expect(legacy).toContainText('调用权益接口');
   await expect(legacy).toContainText('直接通知停车场“优惠已使用”');
   await expect(scene.locator('[data-payment-version="2.0"]')).toContainText('每一步都有状态与回退');
-  for (const state of ['validate', 'freeze', 'pending', 'paid', 'zero', 'release', 'notify']) {
+  for (const state of ['query', 'validate', 'freeze', 'pending', 'paid', 'release', 'notify']) {
     await expect(scene.locator(`[data-payment-state="${state}"]`)).toHaveCount(1);
   }
+  await expect(scene.locator('[data-payment-state="query"]')).toContainText('缴费页查询可用优惠');
+  await expect(scene.locator('[data-payment-state="validate"]')).toContainText('支付时二次校验');
+  await expect(scene.locator('[data-payment-state="zero"]')).toHaveCount(0);
   await expect(scene).toContainText('并发重复占用');
 });
 
