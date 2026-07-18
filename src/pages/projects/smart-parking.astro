@@ -69,7 +69,7 @@ const adoptionStats = [
     </section>
 
     <section id="s5" data-scene="identity" data-chapter="native">
-      <div class="scene-shell"><p class="eyebrow">Identity Decoupling</p><h2>第一项重构：缴费不再以开卡为前提</h2><p class="lead-copy">XCU—MCU 身份解耦属于 2.0 首发能力，支付身份与会员身份从产品基线开始就被分开。</p><div class="identity-road" data-motion-item role="group" aria-label="XCU 访客直接缴费与 MCU 会员权益支线"><article data-identity="xcu"><span>XCU 访客身份</span><strong>无需开卡，直接缴费</strong><p>先承接车辆查询与停车支付。</p></article><div class="gate" aria-hidden="true"><i></i><b></b></div><article data-identity="mcu"><span>MCU 会员身份</span><strong>自愿成为会员后使用会员权益</strong><p>再接入会员等级、积分和卡券。</p></article></div><p class="boundary-note">这项设计满足支付宝平台授权边界，但不声称提升了开卡率或支付转化。</p></div>
+      <div class="scene-shell"><p class="eyebrow">Identity Decoupling</p><h2>第一项重构：缴费不再以开卡为前提</h2><p class="lead-copy">XCU—MCU 身份解耦属于 2.0 首发能力，支付身份与会员身份从产品基线开始就被分开。</p><div class="identity-road" data-motion-item role="group" aria-label="XCU 访客直接缴费与 MCU 会员权益支线"><article data-identity="xcu"><span>XCU 访客身份</span><strong>无需开卡，直接缴费</strong><p>先承接车辆查询与停车支付。</p></article><div class="gate" aria-hidden="true"><span class="disconnect-mark">×</span></div><article data-identity="mcu"><span>MCU 会员身份</span><strong>自愿成为会员后使用会员权益</strong><p>再接入会员等级、积分和卡券。</p></article></div><p class="boundary-note">这项设计满足支付宝平台授权边界，但不声称提升了开卡率或支付转化。</p></div>
     </section>
 
     <section id="s6" data-scene="architecture" data-chapter="native"><div class="scene-shell"><p class="eyebrow">Native Architecture</p><h2>把停车接回内部业务，再用统一协议连接外部系统</h2><div class="architecture-stack" data-motion-item><article data-layer="internal"><strong>内部业务</strong><span>XCU / MCU / 会员等级 / 积分 / 卡券 / SO / 支付</span></article><article data-layer="parking-service"><strong>停车后端服务</strong><span>缴费、权益和订单状态编排</span></article><article data-layer="parking-middleware"><strong>停车业务中台</strong><span>统一查询、缴费通知和回调协议</span></article><article data-layer="adapter"><strong>厂商适配器 / 集团停车中台</strong><span>吸收外部接口差异</span></article><article data-layer="parking-lot"><strong>商场停车场</strong><span>真实计费与出场系统</span></article></div><div class="architecture-notes" data-motion-item><p><strong>平台型接入</strong><span>某集团一次集团级对接可覆盖 19 个商场。</span></p><p><strong>真实边界</strong><span>外部生态没有被完全标准化，独立部署系统仍可能逐客户适配。</span></p></div></div></section>
@@ -107,6 +107,10 @@ const adoptionStats = [
     --sp-line: color-mix(in srgb, var(--sp-native) 38%, var(--glass-border));
   }
   .smart-parking-deck h1 span { display: block; }
+  .gate { display: grid; place-items: center; }
+  .disconnect-mark { color: var(--sp-risk); font-size: 4.25rem; font-weight: 300; line-height: 1; }
+  [data-smart-parking-deck][data-motion-ready='true'][data-motion-mode='observe'] #s5[data-motion-state='pending'] .disconnect-mark { opacity: 0; scale: .72; }
+  [data-smart-parking-deck][data-motion-mode='observe'] #s5[data-motion-state='visible'] .disconnect-mark { opacity: 1; scale: 1; transition: opacity .35s ease .12s, scale .35s ease .12s; }
   .opening-road { display: grid; grid-template-columns: minmax(9rem, 1fr) 2fr minmax(9rem, 1fr); max-width: 820px; margin: 2rem auto 0; border-color: var(--glass-border); background: linear-gradient(110deg, var(--sp-road), var(--sp-road-strong)); padding: 1.2rem; }
   .opening-road span, .opening-road strong, .journey-only span { border: 1px solid var(--glass-border); border-radius: .8rem; padding: .7rem; } .opening-road span { color: var(--sp-lane); } .opening-road strong { color: var(--sp-native); } .opening-road i { height: 2px; background: repeating-linear-gradient(90deg, var(--sp-lane) 0 1.2rem, transparent 1.2rem 2rem); }
   .background-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); } .background-metrics, .legacy-grid, .iteration-grid, .adoption-stats { margin-top: 1.4rem; } .smart-parking-deck article, .blackbox-map, .architecture-notes, .discount-cap, .mixed-version-note { background: var(--sp-surface); }

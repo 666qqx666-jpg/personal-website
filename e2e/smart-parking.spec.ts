@@ -54,6 +54,7 @@ test('S5 makes visitor payment independent from voluntary membership', async ({ 
   await expect(scene.locator('[data-identity="xcu"]')).toContainText('直接缴费');
   await expect(scene.locator('[data-identity="mcu"]')).toContainText('自愿成为会员');
   await expect(scene.locator('[data-identity="mcu"]')).toContainText('会员权益');
+  await expect(scene.locator('.disconnect-mark')).toHaveText('×');
   await expect(scene).toContainText('2.0 首发能力');
 });
 
