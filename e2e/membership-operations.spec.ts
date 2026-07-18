@@ -37,6 +37,11 @@ test('identity chapter preserves inherited model and asset boundaries', async ({
   for (const entity of ['MCU', 'ECU', 'XCU']) {
     await expect(foundation.locator(`[data-identity-entity="${entity.toLowerCase()}"]`)).toHaveCount(1);
   }
+  await expect(foundation.locator('[data-xcu-node]')).toHaveCount(5);
+  await expect(foundation.locator('[data-xcu-convergence]')).toHaveCount(1);
+  for (const platform of ['微信', '支付宝', '抖音', '小红书', '快手']) {
+    await expect(foundation.locator('[data-identity-entity="xcu"]')).toContainText(platform);
+  }
   await expect(foundation.locator('[data-contribution-boundary]')).toContainText('多平台接入、券主 MCU、会员触达、渠道归因和异常治理');
   await expect(foundation.locator('[data-contribution-boundary]')).toContainText('研发团队负责工程实现');
 

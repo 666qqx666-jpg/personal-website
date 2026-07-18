@@ -80,10 +80,20 @@ const platformEntries = ['微信', '支付宝', '抖音', '小红书', '快手',
         <h2>继承身份底座，在清楚的贡献边界上继续扩展</h2>
         <p class="lead-copy">原始微信 / 支付宝模型由其他产品经理规划；我的工作从理解、吸收并扩展这套关系开始。</p>
         <p class="contribution-boundary" data-contribution-boundary><strong>本人主导范围</strong><span>多平台接入、券主 MCU、会员触达、渠道归因和异常治理的业务建模、方案设计与上线推动；研发团队负责工程实现。</span></p>
-        <div class="identity-model" data-motion-item role="img" aria-label="XCU 通过 ECU 关联客户主体下的 MCU">
-          <article data-identity-entity="xcu"><span>平台访客</span><strong>XCU</strong><p>顾客在某一小程序平台中的访客身份</p></article>
-          <span class="model-link">→</span>
-          <article data-identity-entity="ecu"><span>关系层</span><strong>ECU</strong><p>连接 MCU 与不同平台 XCU 的当前归属</p></article>
+        <div class="identity-model" data-motion-item role="img" aria-label="多个平台 XCU 汇聚到同一个 ECU，再关联客户主体下的 MCU">
+          <article class="xcu-cluster" data-identity-entity="xcu">
+            <span>多个平台访客</span><strong>XCU × N</strong>
+            <div class="xcu-node-grid" role="list" aria-label="不同平台中的访客身份">
+              <span class="xcu-node" data-xcu-node role="listitem"><b>微信</b><small>XCU</small></span>
+              <span class="xcu-node" data-xcu-node role="listitem"><b>支付宝</b><small>XCU</small></span>
+              <span class="xcu-node" data-xcu-node role="listitem"><b>抖音</b><small>XCU</small></span>
+              <span class="xcu-node" data-xcu-node role="listitem"><b>小红书</b><small>XCU</small></span>
+              <span class="xcu-node" data-xcu-node role="listitem"><b>快手</b><small>XCU</small></span>
+            </div>
+            <p>同一会员在不同小程序平台中的访客身份</p>
+          </article>
+          <div class="xcu-convergence" data-xcu-convergence aria-hidden="true"><i></i><i></i><i></i><span>身份汇聚</span></div>
+          <article data-identity-entity="ecu"><span>关系层</span><strong>同一个 ECU</strong><p>汇聚多个平台 XCU，并维护它们与 MCU 的当前归属</p></article>
           <span class="model-link">→</span>
           <article data-identity-entity="mcu"><span>会员主体</span><strong>MCU</strong><p>承载会员卡、积分、卡券、消费和等级资产</p></article>
         </div>
@@ -319,11 +329,22 @@ const platformEntries = ['微信', '支付宝', '抖音', '小红书', '快手',
   .contribution-boundary, .debt-note { display: grid; grid-template-columns: auto 1fr; gap: .75rem; margin-top: 1rem; padding: .8rem 1rem; border: 1px solid var(--glass-border); border-left: 3px solid var(--mo-decision); background: var(--glass); color: var(--text-dim); line-height: 1.6; }
   .debt-note { border-left-color: var(--mo-blocked); border-style: dashed; }
   .identity-model, .voucher-paths, .foundation-grid, .channel-sources, .result-grid, .risk-chain, .governance-loop { display: grid; gap: 1rem; margin-top: 1.25rem; }
-  .identity-model { grid-template-columns: 1fr auto 1fr auto 1fr; align-items: stretch; }
+  .identity-model { grid-template-columns: minmax(22rem, 1.5fr) 4.25rem minmax(11rem, .75fr) auto minmax(11rem, .75fr); gap: .8rem; align-items: stretch; }
   .identity-model article, .voucher-paths article, .foundation-grid article, .channel-sources article, .result-grid article, .risk-chain article, .governance-loop article { border: 1px solid var(--glass-border); border-radius: 1rem; background: var(--glass); padding: 1rem; }
   .identity-model article { text-align: center; }
   .identity-model article strong { display: block; color: var(--mo-identity); font-size: 1.3rem; }
   .identity-model p, .voucher-paths p, .foundation-grid p, .channel-sources p, .risk-chain p, .governance-loop p { color: var(--text-dim); line-height: 1.6; }
+  .xcu-node-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .35rem; margin: .65rem 0; }
+  .xcu-node { min-width: 0; border: 1px solid color-mix(in srgb, var(--mo-identity) 42%, var(--glass-border)); border-radius: .65rem; background: color-mix(in srgb, var(--mo-identity) 6%, var(--glass)); padding: .45rem .25rem; }
+  .xcu-node b, .xcu-node small { display: block; }
+  .xcu-node b { overflow: hidden; font-size: .72rem; text-overflow: ellipsis; white-space: nowrap; }
+  .xcu-node small { color: var(--mo-identity); font-size: .62rem; font-weight: 800; letter-spacing: .08em; margin-top: .15rem; }
+  .xcu-convergence { position: relative; align-self: stretch; min-height: 7rem; }
+  .xcu-convergence i { position: absolute; top: 50%; right: .35rem; width: calc(100% - .35rem); height: 1px; background: linear-gradient(90deg, var(--mo-identity), var(--mo-decision)); transform-origin: right center; }
+  .xcu-convergence i:first-child { rotate: 18deg; }
+  .xcu-convergence i:last-of-type { rotate: -18deg; }
+  .xcu-convergence::after { content: ''; position: absolute; top: calc(50% - .24rem); right: .05rem; width: .48rem; height: .48rem; border-top: 2px solid var(--mo-decision); border-right: 2px solid var(--mo-decision); rotate: 45deg; }
+  .xcu-convergence span { position: absolute; right: 0; bottom: .65rem; left: 0; color: var(--text-dim); font-size: .62rem; font-weight: 750; text-align: center; white-space: nowrap; }
   .model-link, .attribution-flow b { align-self: center; color: var(--mo-decision); font-size: 1.35rem; }
   .rebind-figure { display: grid; gap: .8rem; border: 1px solid var(--glass-border); border-radius: 1.2rem; background: var(--glass); padding: 1.2rem; }
   .rebind-before { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; }
@@ -426,6 +447,8 @@ const platformEntries = ['微信', '支付宝', '抖音', '小红书', '快手',
     .attribution-data-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     #s9 .eyebrow { margin-left: 0; }
     .flow-arrow { rotate: 90deg; justify-self: center; }
+    .xcu-node-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .xcu-convergence { width: 4.25rem; min-height: 4.25rem; rotate: 90deg; justify-self: center; }
     .model-link { rotate: 90deg; justify-self: center; }
   }
   @media (max-width: 620px) { .foundation-grid, .result-grid, .risk-chain, .governance-loop, .business-module-grid, .attribution-data-grid { grid-template-columns: 1fr; } .foundation-node-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .capability-call-bus { grid-template-columns: 1fr; justify-items: center; } .capability-call-bus i { width: 1px; height: .65rem; background: var(--mo-growth); } .analysis-card-grid article { grid-template-columns: 1fr; } .analysis-layer, .data-layer, .channel-layer { width: 100%; } .attribution-connector { grid-template-columns: 1fr; justify-items: center; width: 100%; } .attribution-connector i { width: 1px; height: .65rem; background: var(--mo-growth); } .attribution-connector span { white-space: normal; text-align: center; } .membership-operations-nav { width: calc(100% - 1rem); justify-content: space-between; } .membership-operations-nav a span:last-child { font-size: .68rem; } .contribution-boundary, .debt-note { grid-template-columns: 1fr; } }
