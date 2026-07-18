@@ -103,3 +103,42 @@ test('result scene binds every number to its counting boundary', async ({ page }
   expect(body).not.toContain('营销计划直接带来 7,296 万元销售额');
   expect(body).not.toContain('最大单一客户约 271 万');
 });
+
+test('risk escalation leads to a bounded governance loop', async ({ page }) => {
+  await page.goto(route);
+
+  const escalation = page.locator('#s11');
+  await expect(escalation.locator('[data-risk-stage]')).toHaveCount(4);
+  for (const stage of ['本店员工刷单', '本店员工订单不产生积分', '跨店互刷与黄牛刷单', '单一身份硬规则失效']) {
+    await expect(escalation).toContainText(stage);
+  }
+
+  const governance = page.locator('#s12');
+  await expect(governance.locator('[data-governance-step]')).toHaveCount(4);
+  for (const step of ['可配置预警', '人工核查', '白名单 / 禁用', '有限权益限制']) {
+    await expect(governance).toContainText(step);
+  }
+  for (const scope of ['全部门店', '分类', '楼层', '标签', '业态', '指定门店']) {
+    await expect(governance).toContainText(scope);
+  }
+  await expect(governance).toContainText('每日计算异常会员及触发订单');
+  await expect(governance).toContainText('通知运营人员');
+  await expect(governance.locator('[data-loop="governance"]')).toHaveCount(1);
+  await expect(governance).toContainText('禁止会员升级和积分消耗');
+  await expect(governance).toContainText('仍允许获取积分、自然降级和领取免费券');
+
+  const body = await page.locator('body').innerText();
+  expect(body).not.toContain('具体风控阈值');
+  expect(body).not.toContain('真实异常会员名单');
+});
+
+test('deck exposes twelve scenes and four usable chapter links', async ({ page }) => {
+  await page.goto(route);
+  await expect(page.locator('section[data-scene]')).toHaveCount(12);
+
+  const nav = page.getByRole('navigation', { name: '多平台会员运营体系案例章节' });
+  for (const label of ['会员主线', '身份扩展', '增长闭环', '风险治理']) {
+    await expect(nav.getByRole('link', { name: label })).toBeVisible();
+  }
+  await expect(page.getByRole('link', { name: '返回项目经历' })).toHaveAttribute('href', '/projects/');
+});

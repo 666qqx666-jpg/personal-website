@@ -175,7 +175,49 @@ const platformEntries = ['微信', '支付宝', '抖音', '小红书', '快手',
         <p class="boundary-note">年度积分与销售数据只说明体系承载规模，不作为营销计划的增量结果。</p>
       </div>
     </section>
+
+    <section id="s11" data-scene="risk-escalation" data-chapter="risk">
+      <div class="scene-shell">
+        <p class="eyebrow">Real-world Adversaries</p>
+        <h2>增长系统进入真实业务后，身份硬规则开始被绕过</h2>
+        <div class="risk-chain" role="list" aria-label="异常消费从本店刷单演变到跨店互刷">
+          <article data-risk-stage data-motion-item role="listitem"><span>01</span><strong>本店员工刷单</strong><p>在本店制造消费，获取积分和会员等级。</p></article>
+          <article data-risk-stage data-motion-item role="listitem"><span>02</span><strong>本店员工订单不产生积分</strong><p>用员工身份规则限制最直接的刷单。</p></article>
+          <article data-risk-stage data-motion-item role="listitem"><span>03</span><strong>跨店互刷与黄牛刷单</strong><p>行为转向其他门店，静态身份标签被绕过。</p></article>
+          <article data-risk-stage data-motion-item role="listitem"><span>04</span><strong>单一身份硬规则失效</strong><p>问题必须从“封禁某类人”升级为异常行为治理。</p></article>
+        </div>
+        <p class="principle">规则写得更多，不代表系统更懂正在变化的风险。</p>
+      </div>
+    </section>
+
+    <section id="s12" data-scene="governance-loop" data-chapter="risk">
+      <div class="scene-shell conclusion-shell">
+        <p class="eyebrow">The Product Decision</p>
+        <h2>把封禁升级为可发现、可核查、可纠错、可处置的治理闭环</h2>
+        <div class="governance-loop" data-loop="governance" data-motion-item role="list" aria-label="异常会员预警、核查、纠错和有限处置闭环">
+          <article data-governance-step role="listitem"><strong>可配置预警</strong><p>按全部门店、分类、楼层、标签、业态或指定门店配置范围，识别单笔、单店累计和跨店累计异常。</p></article>
+          <article data-governance-step role="listitem"><strong>人工核查</strong><p>系统每日计算异常会员及触发订单，记录异常原因并通知运营人员核查。</p></article>
+          <article data-governance-step role="listitem"><strong>白名单 / 禁用</strong><p>正常高频消费者进入白名单，确认风险的会员进入禁用。</p></article>
+          <article data-governance-step role="listitem"><strong>有限权益限制</strong><p>禁止会员升级和积分消耗；仍允许获取积分、自然降级和领取免费券。</p></article>
+        </div>
+        <p class="memory-line">身份不是终点，它让每次触达、响应、交易和处置回到同一条会员业务主线。</p>
+        <a class="back-projects" href={`${base}projects/`}>返回项目经历</a>
+      </div>
+    </section>
   </main>
+
+  <nav class="membership-operations-nav" aria-label="多平台会员运营体系案例章节">
+    {chapters.map((chapter, index) => (
+      <a
+        href={chapter.href}
+        class:list={{ active: index === 0 }}
+        data-chapter-link={chapter.id}
+        aria-current={index === 0 ? 'true' : undefined}
+      >
+        <span class="nav-dot"></span><span>{chapter.label}</span>
+      </a>
+    ))}
+  </nav>
 </DeckLayout>
 
 <style>
