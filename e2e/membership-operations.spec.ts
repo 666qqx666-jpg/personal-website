@@ -45,7 +45,7 @@ test('background connects fragmented platform identities to unified member opera
   expect(body).not.toContain('876 万独立用户');
 });
 
-test('identity chapter preserves inherited model and asset boundaries', async ({ page }) => {
+test('identity chapter preserves the inherited model without a detached rebinding scene', async ({ page }) => {
   await page.goto(route);
 
   const foundation = page.locator('#s4');
@@ -61,12 +61,11 @@ test('identity chapter preserves inherited model and asset boundaries', async ({
   await expect(foundation.locator('[data-contribution-boundary]')).toContainText('多平台接入、券主 MCU、会员触达、渠道归因和异常治理');
   await expect(foundation.locator('[data-contribution-boundary]')).toContainText('研发团队负责工程实现');
 
-  const rebind = page.locator('#s5');
-  await expect(rebind.locator('[data-rebind="xcu"]')).toContainText('当前平台身份迁移');
-  await expect(rebind.locator('[data-assets="preserved"]')).toContainText('积分、卡券、消费和等级保持不动');
-  await expect(rebind).toContainText('重绑定不等于会员资产合并');
+  await expect(page.locator('#s5')).toHaveCount(0);
 
   const body = await page.locator('body').innerText();
+  expect(body).not.toContain('迁移当前平台身份，但不合并旧会员资产');
+  expect(body).not.toContain('重绑定不等于会员资产合并');
   expect(body).not.toContain('原始身份模型由我从零设计');
   expect(body).not.toContain('自动识别同一自然人');
 });
@@ -177,9 +176,9 @@ test('risk escalation leads to a bounded governance loop', async ({ page }) => {
   expect(body).not.toContain('真实异常会员名单');
 });
 
-test('deck exposes twelve scenes and four usable chapter links', async ({ page }) => {
+test('deck exposes eleven scenes and four usable chapter links', async ({ page }) => {
   await page.goto(route);
-  await expect(page.locator('section[data-scene]')).toHaveCount(12);
+  await expect(page.locator('section[data-scene]')).toHaveCount(11);
 
   const nav = page.getByRole('navigation', { name: '多平台会员运营体系案例章节' });
   for (const label of ['会员主线', '身份扩展', '增长闭环', '风险治理']) {
@@ -199,10 +198,10 @@ test('membership spine and diagrams use explicit semantic labels', async ({ page
   await expect(page.locator('[data-loop="growth"]')).toHaveCount(1);
   await expect(page.locator('[data-loop="governance"]')).toHaveCount(1);
   await expect(page.locator('img')).toHaveCount(0);
-  await expect(page.locator('[role="img"]')).toHaveCount(5);
+  await expect(page.locator('[role="img"]')).toHaveCount(4);
 });
 
-test('desktop keeps DeckLayout snap and mobile preserves all twelve scenes without overflow', async ({ page }) => {
+test('desktop keeps DeckLayout snap and mobile preserves all eleven scenes without overflow', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto(route);
   expect(await page.locator('[data-membership-operations-deck]').evaluate((element) => getComputedStyle(element).scrollSnapType)).toContain('y');
@@ -211,7 +210,7 @@ test('desktop keeps DeckLayout snap and mobile preserves all twelve scenes witho
   await page.goto(route);
   expect(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)).toBe(false);
   const ids = await page.locator('section[data-scene]').evaluateAll((sections) => sections.map((section) => section.id));
-  expect(ids).toEqual(['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10', 's11', 's12']);
+  expect(ids).toEqual(['s1', 's2', 's3', 's4', 's6', 's7', 's8', 's9', 's10', 's11', 's12']);
   await expect(page.locator('#s12 [data-governance-step]')).toHaveCount(4);
 });
 
@@ -221,7 +220,7 @@ test('static mode keeps the complete story readable without JavaScript', async (
   await page.goto(route);
 
   await expect(page.locator('[data-membership-operations-deck]')).toHaveAttribute('data-motion-mode', 'static');
-  await expect(page.locator('section[data-scene]')).toHaveCount(12);
+  await expect(page.locator('section[data-scene]')).toHaveCount(11);
   await page.locator('#s12').scrollIntoViewIfNeeded();
   await expect(page.locator('#s12')).toBeVisible();
   await expect(page.locator('#s12')).toContainText('身份不是终点');
@@ -239,7 +238,7 @@ test('native motion observes scenes and retains a static fallback', async ({ pag
   await fallback.addInitScript(() => Object.defineProperty(window, 'IntersectionObserver', { value: undefined, configurable: true }));
   await fallback.goto(route);
   await expect(fallback.locator('[data-membership-operations-deck]')).toHaveAttribute('data-motion-mode', 'fallback');
-  await expect(fallback.locator('section[data-motion-state="visible"]')).toHaveCount(12);
+  await expect(fallback.locator('section[data-motion-state="visible"]')).toHaveCount(11);
   await context.close();
 });
 
