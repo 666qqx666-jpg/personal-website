@@ -226,6 +226,13 @@ const platformEntries = ['微信', '支付宝', '抖音', '小红书', '快手',
       </a>
     ))}
   </nav>
+
+  <script>
+    import { initMembershipOperationsMotion } from '../../scripts/membership-operations-motion';
+
+    const root = document.querySelector<HTMLElement>('[data-membership-operations-deck]');
+    if (root) initMembershipOperationsMotion(root);
+  </script>
 </DeckLayout>
 
 <style>
@@ -296,6 +303,8 @@ const platformEntries = ['微信', '支付宝', '抖音', '小红书', '快手',
   .membership-operations-nav { position: fixed; z-index: 18; bottom: 1rem; left: 50%; translate: -50% 0; display: flex; gap: .3rem; padding: .5rem; border: 1px solid var(--glass-border); border-radius: 999px; background: var(--chrome-bg); }
   .membership-operations-nav a { display: inline-flex; align-items: center; gap: .4rem; padding: .42rem .65rem; border-radius: 999px; color: var(--text-dim); text-decoration: none; white-space: nowrap; }
   .membership-operations-nav a.active { color: var(--text); background: var(--glass); }
+  [data-membership-operations-deck][data-motion-ready='true'][data-motion-mode='observe'] [data-motion-state='pending'] [data-motion-item] { opacity: 0; transform: translateY(1rem); }
+  [data-membership-operations-deck][data-motion-mode='observe'] [data-motion-state='visible'] [data-motion-item] { opacity: 1; transform: translateY(0); transition: opacity .42s ease, transform .42s ease; }
   #s12 { padding-bottom: 9rem; }
   @media (max-width: 1040px) { .member-progress b { display: none; } .foundation-grid, .result-grid, .risk-chain, .governance-loop { grid-template-columns: repeat(2, 1fr); } .touch-flow { grid-template-columns: repeat(3, 1fr); } }
   @media (max-width: 860px) {

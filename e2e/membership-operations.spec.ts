@@ -182,3 +182,18 @@ test('static mode keeps the complete story readable without JavaScript', async (
   await expect(page.locator('#s12')).toContainText('身份不是终点');
   await context.close();
 });
+
+test('native motion observes scenes and retains a static fallback', async ({ page, browser }) => {
+  await page.goto(route);
+  await expect(page.locator('[data-membership-operations-deck]')).toHaveAttribute('data-motion-mode', 'observe');
+  await expect(page.locator('[data-membership-operations-deck]')).toHaveAttribute('data-motion-ready', 'true');
+  await expect(page.locator('#s1')).toHaveAttribute('data-motion-state', 'visible');
+
+  const context = await browser.newContext();
+  const fallback = await context.newPage();
+  await fallback.addInitScript(() => Object.defineProperty(window, 'IntersectionObserver', { value: undefined, configurable: true }));
+  await fallback.goto(route);
+  await expect(fallback.locator('[data-membership-operations-deck]')).toHaveAttribute('data-motion-mode', 'fallback');
+  await expect(fallback.locator('section[data-motion-state="visible"]')).toHaveCount(12);
+  await context.close();
+});
