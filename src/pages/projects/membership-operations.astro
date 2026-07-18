@@ -177,7 +177,7 @@ const platformEntries = ['微信', '支付宝', '抖音', '小红书', '快手',
         <h2>来源写进业务数据，最上层分析才能看清渠道价值</h2>
         <p class="lead-copy">推广渠道与线下二维码不是最终报表，而是让会员、卡券、订单和问卷数据拥有统一来源的底层能力。</p>
         <div class="attribution-stack" data-loop="growth" data-motion-item role="img" aria-label="推广渠道和线下二维码为会员、卡券、订单、问卷数据记录来源，再支撑会员分析与小程序会员分析">
-          <div class="attribution-layer analysis-layer" data-attribution-layer="analysis">
+          <div class="attribution-layer analysis-layer" data-attribution-layer="analysis" data-attribution-card="analysis">
             <p class="layer-label"><span>最上层</span><strong>数据分析</strong></p>
             <div class="analysis-card-grid">
               <article data-analysis-chart="member-analysis">
@@ -188,10 +188,18 @@ const platformEntries = ['微信', '支付宝', '抖音', '小红书', '快手',
                 <div><strong>小程序会员分析</strong><small>访问 → 开卡 → 领券 → 交易</small></div>
                 <div class="member-funnel-chart" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
               </article>
+              <article data-analysis-chart="sales-trend">
+                <div><strong>销售趋势</strong><small>交易金额 · 订单量 · 时间趋势</small></div>
+                <div class="sales-trend-chart" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              </article>
+              <article data-analysis-chart="points-analysis">
+                <div><strong>积分分析</strong><small>积分获取 · 消耗 · 余额结构</small></div>
+                <div class="points-donut-chart" aria-hidden="true"><i></i><span>获取 / 消耗</span></div>
+              </article>
             </div>
           </div>
-          <div class="attribution-connector"><span>聚合分析</span><i aria-hidden="true"></i><strong>按来源拆解会员行为</strong></div>
-          <div class="attribution-layer data-layer" data-attribution-layer="data">
+          <div class="attribution-connector" data-attribution-connector="aggregate"><i aria-hidden="true"></i><span><b>↑</b> 聚合分析 · 按来源拆解会员行为</span><i aria-hidden="true"></i></div>
+          <div class="attribution-layer data-layer" data-attribution-layer="data" data-attribution-card="data">
             <p class="layer-label"><span>中层</span><strong>携带来源的业务数据</strong></p>
             <div class="attribution-data-grid">
               <article data-attribution-data="orders"><strong>订单数据</strong><p>下单 · 核销</p><small>记录交易对应的渠道来源</small></article>
@@ -200,8 +208,8 @@ const platformEntries = ['微信', '支付宝', '抖音', '小红书', '快手',
               <article data-attribution-data="coupons"><strong>卡券数据</strong><p>领券 · 核销</p><small>记录活动与转化来源</small></article>
             </div>
           </div>
-          <div class="attribution-connector source-connector"><span>写入来源</span><i aria-hidden="true"></i><strong>携带推广渠道与渠道明细</strong></div>
-          <div class="attribution-layer channel-layer" data-attribution-layer="channel">
+          <div class="attribution-connector source-connector" data-attribution-connector="source"><i aria-hidden="true"></i><span><b>↑</b> 写入来源 · 携带推广渠道与渠道明细</span><i aria-hidden="true"></i></div>
+          <div class="attribution-layer channel-layer" data-attribution-layer="channel" data-attribution-card="channel">
             <p class="layer-label"><span>底层</span><strong>来源基础设施</strong></p>
             <div class="attribution-channel-grid">
               <article data-channel="promotion"><span>统一来源对象</span><strong>推广渠道</strong><p>区分业务部、活动、门店与线上入口。</p></article>
@@ -347,9 +355,14 @@ const platformEntries = ['微信', '支付宝', '抖音', '小红书', '快手',
   .foundation-node-grid article { display: grid; gap: .15rem; min-width: 0; border: 1px solid color-mix(in srgb, var(--mo-growth) 62%, var(--glass-border)); border-radius: .85rem; background: color-mix(in srgb, var(--mo-growth) 10%, var(--glass)); padding: .6rem; text-align: center; }
   .foundation-node-grid strong { font-size: .82rem; }
   .foundation-node-grid small { color: var(--text-dim); font-size: .65rem; }
-  .attribution-stack { position: relative; display: grid; gap: .45rem; margin-top: .9rem; padding: .85rem; overflow: hidden; border: 1px solid color-mix(in srgb, var(--mo-growth) 36%, var(--glass-border)); border-radius: 1.4rem; background: linear-gradient(160deg, color-mix(in srgb, var(--mo-identity) 6%, var(--glass)), color-mix(in srgb, var(--mo-growth) 5%, var(--glass))); }
-  .attribution-stack::before { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--mo-identity) 14%, transparent) 1px, transparent 0); background-size: 1.5rem 1.5rem; mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent); }
-  .attribution-layer, .attribution-connector { position: relative; z-index: 1; }
+  .attribution-stack { position: relative; display: grid; gap: .18rem; margin-top: .9rem; }
+  .attribution-layer, .attribution-connector { position: relative; }
+  .attribution-layer { padding: .62rem .72rem .72rem; border-radius: 1.15rem; backdrop-filter: blur(16px); box-shadow: 0 .65rem 1.7rem color-mix(in srgb, var(--text) 6%, transparent); }
+  .analysis-layer { width: 88%; justify-self: start; border: 1px solid color-mix(in srgb, var(--mo-identity) 62%, var(--glass-border)); background: linear-gradient(135deg, color-mix(in srgb, var(--mo-identity) 10%, var(--glass)), color-mix(in srgb, var(--mo-decision) 7%, var(--glass))); }
+  .data-layer { width: 94%; justify-self: end; border: 1px solid color-mix(in srgb, var(--mo-growth) 55%, var(--glass-border)); background: linear-gradient(135deg, color-mix(in srgb, var(--mo-growth) 9%, var(--glass)), var(--glass)); }
+  .channel-layer { width: 78%; justify-self: center; border: 1px solid color-mix(in srgb, var(--mo-risk) 52%, var(--glass-border)); background: linear-gradient(135deg, color-mix(in srgb, var(--mo-risk) 8%, var(--glass)), color-mix(in srgb, var(--mo-growth) 7%, var(--glass))); }
+  #s9 .eyebrow { margin-left: 2rem; }
+  #s9 .boundary-note { margin-top: .55rem; }
   .analysis-card-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; }
   .analysis-card-grid article { display: grid; grid-template-columns: minmax(9rem, .72fr) 1.28fr; align-items: center; gap: .8rem; min-width: 0; border: 1px solid color-mix(in srgb, var(--mo-identity) 52%, var(--glass-border)); border-radius: .9rem; background: color-mix(in srgb, var(--mo-identity) 7%, var(--glass)); padding: .65rem .75rem; }
   .analysis-card-grid article > div:first-child { display: grid; gap: .2rem; }
@@ -360,15 +373,25 @@ const platformEntries = ['微信', '支付宝', '抖音', '小红书', '快手',
   .member-funnel-chart { display: grid; justify-items: center; gap: .24rem; }
   .member-funnel-chart i { height: .55rem; border-radius: 999px; background: linear-gradient(90deg, var(--mo-identity), var(--mo-decision)); }
   .member-funnel-chart i:nth-child(1) { width: 100%; }.member-funnel-chart i:nth-child(2) { width: 82%; }.member-funnel-chart i:nth-child(3) { width: 64%; }.member-funnel-chart i:nth-child(4) { width: 46%; }
-  .attribution-connector { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .55rem; color: var(--text-dim); font-size: .66rem; font-weight: 750; padding-inline: .25rem; }
-  .attribution-connector i { height: 1px; background: linear-gradient(90deg, color-mix(in srgb, var(--mo-identity) 20%, transparent), var(--mo-growth), color-mix(in srgb, var(--mo-growth) 20%, transparent)); }
-  .attribution-connector strong { color: var(--text); white-space: nowrap; }
+  .sales-trend-chart { display: flex; align-items: end; gap: .28rem; height: 3.2rem; padding-bottom: .2rem; border-bottom: 1px solid color-mix(in srgb, var(--mo-growth) 40%, var(--glass-border)); }
+  .sales-trend-chart i { flex: 1; border-radius: 999px 999px .2rem .2rem; background: linear-gradient(to top, var(--mo-growth), var(--mo-identity)); }
+  .sales-trend-chart i:nth-child(1) { height: 28%; }.sales-trend-chart i:nth-child(2) { height: 42%; }.sales-trend-chart i:nth-child(3) { height: 36%; }.sales-trend-chart i:nth-child(4) { height: 64%; }.sales-trend-chart i:nth-child(5) { height: 58%; }.sales-trend-chart i:nth-child(6) { height: 76%; }.sales-trend-chart i:nth-child(7) { height: 92%; }
+  .points-donut-chart { display: flex; align-items: center; justify-content: center; gap: .7rem; }
+  .points-donut-chart i { width: 3.25rem; aspect-ratio: 1; border-radius: 50%; background: radial-gradient(circle, var(--glass) 0 42%, transparent 44%), conic-gradient(var(--mo-decision) 0 68%, var(--mo-growth) 68% 86%, color-mix(in srgb, var(--mo-identity) 28%, transparent) 86%); }
+  .points-donut-chart span { color: var(--text-dim); font-size: .65rem; white-space: nowrap; }
+  .attribution-connector { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: .6rem; width: 82%; justify-self: center; color: var(--text); font-size: .66rem; font-weight: 780; padding: .12rem .25rem; }
+  .attribution-connector i { height: 1px; background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--mo-identity) 65%, var(--mo-growth))); }
+  .attribution-connector i:last-child { background: linear-gradient(90deg, color-mix(in srgb, var(--mo-identity) 65%, var(--mo-growth)), transparent); }
+  .attribution-connector span { border: 1px solid color-mix(in srgb, var(--mo-identity) 38%, var(--glass-border)); border-radius: 999px; background: var(--chrome-bg); padding: .25rem .52rem; white-space: nowrap; }
+  .attribution-connector b { color: var(--mo-growth); font-size: .85rem; }
   .attribution-data-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .5rem; }
   .attribution-data-grid article { display: grid; gap: .16rem; min-width: 0; border: 1px solid color-mix(in srgb, var(--mo-growth) 48%, var(--glass-border)); border-radius: .85rem; background: color-mix(in srgb, var(--mo-growth) 7%, var(--glass)); padding: .55rem .65rem; }
   .attribution-data-grid strong { font-size: .84rem; }
   .attribution-data-grid p { color: var(--mo-growth); font-size: .68rem; font-weight: 750; }
   .attribution-data-grid small { color: var(--text-dim); font-size: .64rem; line-height: 1.35; }
-  .source-connector { color: var(--mo-growth); }
+  .source-connector i { background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--mo-risk) 48%, var(--mo-growth))); }
+  .source-connector i:last-child { background: linear-gradient(90deg, color-mix(in srgb, var(--mo-risk) 48%, var(--mo-growth)), transparent); }
+  .source-connector span { border-color: color-mix(in srgb, var(--mo-risk) 38%, var(--glass-border)); }
   .attribution-channel-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .55rem; }
   .attribution-channel-grid article { display: grid; grid-template-columns: auto 1fr; column-gap: .55rem; align-items: center; border: 1px solid color-mix(in srgb, var(--mo-growth) 62%, var(--glass-border)); border-radius: .85rem; background: color-mix(in srgb, var(--mo-growth) 11%, var(--glass)); padding: .55rem .7rem; }
   .attribution-channel-grid article > span { grid-row: 1 / 3; border-radius: 999px; background: var(--mo-growth); color: #06120a; font-size: .62rem; font-weight: 850; padding: .22rem .42rem; }
@@ -401,9 +424,10 @@ const platformEntries = ['微信', '支付宝', '抖音', '小红书', '快手',
     .foundation-node-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .analysis-card-grid, .attribution-channel-grid { grid-template-columns: 1fr; }
     .attribution-data-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #s9 .eyebrow { margin-left: 0; }
     .flow-arrow { rotate: 90deg; justify-self: center; }
     .model-link { rotate: 90deg; justify-self: center; }
   }
-  @media (max-width: 620px) { .foundation-grid, .result-grid, .risk-chain, .governance-loop, .business-module-grid, .attribution-data-grid { grid-template-columns: 1fr; } .foundation-node-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .capability-call-bus { grid-template-columns: 1fr; justify-items: center; } .capability-call-bus i { width: 1px; height: .65rem; background: var(--mo-growth); } .analysis-card-grid article { grid-template-columns: 1fr; } .attribution-connector { grid-template-columns: 1fr; justify-items: center; } .attribution-connector i { width: 1px; height: .65rem; background: var(--mo-growth); } .membership-operations-nav { width: calc(100% - 1rem); justify-content: space-between; } .membership-operations-nav a span:last-child { font-size: .68rem; } .contribution-boundary, .debt-note { grid-template-columns: 1fr; } }
+  @media (max-width: 620px) { .foundation-grid, .result-grid, .risk-chain, .governance-loop, .business-module-grid, .attribution-data-grid { grid-template-columns: 1fr; } .foundation-node-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .capability-call-bus { grid-template-columns: 1fr; justify-items: center; } .capability-call-bus i { width: 1px; height: .65rem; background: var(--mo-growth); } .analysis-card-grid article { grid-template-columns: 1fr; } .analysis-layer, .data-layer, .channel-layer { width: 100%; } .attribution-connector { grid-template-columns: 1fr; justify-items: center; width: 100%; } .attribution-connector i { width: 1px; height: .65rem; background: var(--mo-growth); } .attribution-connector span { white-space: normal; text-align: center; } .membership-operations-nav { width: calc(100% - 1rem); justify-content: space-between; } .membership-operations-nav a span:last-child { font-size: .68rem; } .contribution-boundary, .debt-note { grid-template-columns: 1fr; } }
   @media (prefers-reduced-motion: reduce) { .membership-operations-deck *, .membership-operations-deck *::before, .membership-operations-deck *::after { animation-duration: .01ms; transition-duration: .01ms; transition-delay: 0ms; } }
 </style>
