@@ -66,3 +66,49 @@ test('public copy keeps legacy, contribution, and result boundaries explicit', a
   expect(body).not.toContain('2.0 已经全面替代 1.0');
   expect(body).not.toContain('独立完成研发');
 });
+
+test('S6 exposes five architecture layers without claiming universal standardization', async ({ page }) => {
+  await page.goto(route);
+  const scene = page.locator('#s6');
+  for (const layer of ['internal', 'parking-service', 'parking-middleware', 'adapter', 'parking-lot']) {
+    await expect(scene.locator(`[data-layer="${layer}"]`)).toHaveCount(1);
+  }
+  await expect(scene).toContainText('独立部署系统仍可能逐客户适配');
+  await expect(scene).toContainText('集团级对接可覆盖 19 个商场');
+});
+
+test('S7 keeps four benefits, one total cap, and member plus vehicle limits explicit', async ({ page }) => {
+  await page.goto(route);
+  const scene = page.locator('#s7');
+  for (const benefit of ['level', 'points', 'coupon', 'consumption']) {
+    await expect(scene.locator(`[data-benefit="${benefit}"]`)).toHaveCount(1);
+  }
+  await expect(scene.locator('[data-discount-cap]')).toContainText('单次总减免上限');
+  await expect(scene.locator('[data-limit-axis="member"]')).toContainText('会员');
+  await expect(scene.locator('[data-limit-axis="vehicle"]')).toContainText('车辆');
+  await expect(scene).toContainText('用户选择顺序决定优惠优先级');
+  await expect(scene).toContainText('后端重新校验');
+  await expect(scene).toContainText('每名会员每天最多使用一次');
+});
+
+test('S8 closes the payment lifecycle for cash, zero-pay, and failure branches', async ({ page }) => {
+  await page.goto(route);
+  const scene = page.locator('#s8');
+  for (const state of ['validate', 'freeze', 'pending', 'paid', 'zero', 'release', 'notify']) {
+    await expect(scene.locator(`[data-payment-state="${state}"]`)).toHaveCount(1);
+  }
+  await expect(scene).toContainText('并发重复占用');
+});
+
+test('S9 and S10 prove continued evolution while preserving migration boundaries', async ({ page }) => {
+  await page.goto(route);
+  for (const iteration of ['benefits', 'vehicle-risk', 'double-pay', 'refund']) {
+    await expect(page.locator(`#s9 [data-iteration="${iteration}"]`)).toHaveCount(1);
+  }
+  await expect(page.locator('#s9')).toContainText('再次执行只重试失败步骤');
+  await expect(page.locator('#s10 [data-version="2.0"]')).toContainText('8 个商场');
+  await expect(page.locator('#s10 [data-version="1.0"]')).toContainText('27 个存量商场');
+  await expect(page.locator('#s10')).toContainText('约 7.57 万笔');
+  await expect(page.locator('#s10')).toContainText('1 个使用 2.0、18 个继续使用 1.0');
+  await expect(page.locator('#s10')).toContainText('其中一个 2.0 商场刚上线');
+});
