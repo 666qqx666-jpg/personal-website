@@ -123,3 +123,58 @@ test('deck rejects false completion claims and production identifiers', async ({
     'XCUid',
   ]) expect(body).not.toContain(forbidden);
 });
+
+test('deck uses document scrolling and keeps the model lab local', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(route);
+  const scrollMode = await page.locator('[data-group-analytics-deck]').evaluate((element) => {
+    const style = getComputedStyle(element);
+    return { height: style.height, overflowY: style.overflowY, scrollSnapType: style.scrollSnapType };
+  });
+  expect(scrollMode.height).not.toBe('800px');
+  expect(scrollMode.overflowY).toBe('visible');
+  expect(scrollMode.scrollSnapType).toBe('none');
+  await expect(page.locator('[data-model-stage]')).toHaveCount(1);
+});
+
+test('mobile preserves vertical reading order without horizontal overflow', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(route);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)).toBe(false);
+  expect(await page.locator('#s7 .model-phases').evaluate((element) => getComputedStyle(element).gridTemplateColumns)).not.toContain(' ');
+  const phases = await page.locator('[data-model-stage] [data-model-phase]').evaluateAll((items) => items.map((item) => item.getAttribute('data-model-phase')));
+  expect(phases).toEqual(['problem', 'objects', 'query', 'metrics']);
+  await expect(page.locator('#s10 [data-status]')).toHaveCount(4);
+});
+
+test('static mode keeps all scenes, model phases, and debt readable without JavaScript', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 1280, height: 800 } });
+  const page = await context.newPage();
+  await page.goto(route);
+  const root = page.locator('[data-group-analytics-deck]');
+  await expect(root).toHaveAttribute('data-motion-mode', 'static');
+  await expect(page.locator('section[data-scene]')).toHaveCount(11);
+  await expect(page.locator('[data-model-stage] [data-model-phase]')).toHaveCount(4);
+  await page.locator('#s10').scrollIntoViewIfNeeded();
+  await expect(page.locator('#s10')).toContainText('有价券分析');
+  await page.locator('#s11').scrollIntoViewIfNeeded();
+  await expect(page.locator('#s11')).toContainText('研发与数据团队完成工程实现');
+  await context.close();
+});
+
+test('color is not the only carrier of object and debt semantics', async ({ page }) => {
+  await page.goto(route);
+  await expect(page.locator('#s8 [data-fact-object][data-metric]')).toHaveCount(4);
+  await expect(page.locator('#s10 [data-status] strong')).toHaveCount(4);
+  for (const object of ['new-member', 'daily-active', 'launch', 'page-view']) {
+    await expect(page.locator(`#s8 [data-fact-object="${object}"] p`)).not.toBeEmpty();
+  }
+});
+
+test('desktop model lab uses a deliberate grid-based visual layout', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(route);
+  await expect(page.locator('#s7 .model-lab-shell')).toHaveCSS('display', 'grid');
+  await expect(page.locator('#s7 .model-phases')).toHaveCSS('display', 'grid');
+  await expect(page.locator('#s7 [data-model-phase="problem"]')).toHaveCSS('min-height', '384px');
+});
