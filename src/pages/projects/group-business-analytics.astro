@@ -78,11 +78,15 @@ const adoption = [
         <p class="eyebrow">第一个需求 · 会员新增趋势 2.0</p>
         <h2>先定义“新增”，再设计统计记录</h2>
         <p class="statement">集团新增会员 ≠ 各商场新增会员之和</p>
-        <div class="definition-grid">
-          <article><span>集团新增会员</span><p>集团只统计真正首次开卡的会员。</p></article>
-          <article><span>商场新增开卡会员</span><p>会员首次在该商场开卡。</p></article>
-          <article><span>商场新增关联会员</span><p>已在其他商场开卡，首次在该商场产生有效会员交互。</p></article>
-          <article><span>商场新增会员</span><p>商场新增开卡会员 + 商场新增关联会员。</p></article>
+        <div class="member-hierarchy" aria-label="集团与商场新增会员的口径关系">
+          <article class="member-root" data-member-root>
+            <span>集团视角</span><b>集团新增会员</b><p>只统计真正首次开卡的会员。</p>
+          </article>
+          <div class="member-branches" data-member-branches>
+            <article data-member-branch="new-card"><span>商场贡献 A</span><b>商场新增开卡会员</b><p>会员首次在该商场开卡。</p></article>
+            <article data-member-branch="linked"><span>商场贡献 B</span><b>商场新增关联会员</b><p>已在其他商场开卡，首次在该商场产生有效会员交互。</p></article>
+          </div>
+          <article class="member-result" data-member-result><span>商场视角</span><b>商场新增会员</b><p>商场新增开卡会员 + 商场新增关联会员。</p></article>
         </div>
         <div class="record-formula" aria-label="会员新增组合统计记录">
           <code>日期 × 商场 × 新增类型 × 来源维度 → 新增数量</code>
@@ -300,9 +304,19 @@ const adoption = [
   .analysis-levels p, .definition-grid p, .metric-outputs p, .pipeline p, .issue-grid p, .mapping-grid p, .reflection-questions p, .role-boundary p { margin-top: .55rem; color: var(--text-dim); line-height: 1.65; }
 
   .statement { margin-top: 1.5rem; color: var(--ga-violet); font-size: clamp(1.25rem, 2.4vw, 2rem); font-weight: 900; }
-  .definition-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .member-hierarchy { position: relative; display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 1.25rem 3rem; align-items: center; margin-top: clamp(2rem, 5vw, 4rem); }
+  .member-root, .member-result { position: relative; display: grid; gap: .55rem; padding: 1.4rem; border: 1px solid color-mix(in srgb, var(--ga-violet) 42%, var(--ga-border)); border-radius: 1.2rem; background: color-mix(in srgb, var(--ga-violet) 8%, var(--ga-panel)); }
+  .member-root::after { content: ''; position: absolute; top: 50%; left: 100%; width: 3rem; border-top: 1px solid color-mix(in srgb, var(--ga-violet) 65%, var(--ga-border)); }
+  .member-root::before { content: ''; position: absolute; top: 50%; left: calc(100% + 3rem); height: calc(100% + 1.25rem); border-left: 1px solid color-mix(in srgb, var(--ga-violet) 65%, var(--ga-border)); transform: translateY(-50%); }
+  .member-hierarchy span { color: var(--ga-violet); font-size: .74rem; font-weight: 900; letter-spacing: .09em; }
+  .member-hierarchy b { font-size: clamp(1.1rem, 2vw, 1.45rem); }
+  .member-hierarchy p { color: var(--text-dim); line-height: 1.65; }
+  .member-branches { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  .member-branches article { position: relative; padding: 1.2rem 0 1.2rem 1.15rem; border-left: 3px solid color-mix(in srgb, var(--ga-violet) 60%, var(--ga-border)); }
+  .member-branches article::before { content: ''; position: absolute; top: 50%; left: -3rem; width: 3rem; border-top: 1px solid color-mix(in srgb, var(--ga-violet) 65%, var(--ga-border)); }
+  .member-result { grid-column: 2; background: color-mix(in srgb, var(--ga-cyan) 7%, var(--ga-panel)); border-color: color-mix(in srgb, var(--ga-cyan) 42%, var(--ga-border)); }
+  .member-result span { color: var(--ga-cyan); }
   .definition-grid article, .metric-outputs article, .pipeline article, .issue-grid article, .mapping-grid article, .reflection-questions li, .role-boundary article { padding: 1.25rem; }
-  .definition-grid span { color: var(--ga-violet); font-weight: 800; }
   .record-formula { margin-top: 1rem; padding: 1.25rem; }
   .record-formula code { color: var(--ga-cyan); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: clamp(.82rem, 1.5vw, 1rem); }
   .record-formula p { margin-top: .7rem; color: var(--text-dim); line-height: 1.65; }
@@ -310,14 +324,20 @@ const adoption = [
   .fact-inputs { display: flex; flex-wrap: wrap; gap: .65rem; margin-top: 2rem; }
   .fact-inputs span, .report-scope span, .query-lens i, .combo-nodes i, .object-list i, .metric-map i { padding: .65rem .85rem; border: 1px solid var(--ga-border); border-radius: .7rem; background: var(--ga-panel); font-style: normal; }
   .metric-outputs { grid-template-columns: repeat(5, minmax(0, 1fr)); margin-top: 1rem; }
+  .metric-outputs article { padding: 1.05rem 0; border: 0; border-top: 2px solid color-mix(in srgb, var(--ga-green) 45%, var(--ga-border)); border-radius: 0; background: transparent; box-shadow: none; }
   .metric-outputs b { color: var(--ga-green); }
   .pipeline { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .pipeline { gap: 0; border: 1px solid var(--ga-border); border-radius: 1.1rem; overflow: hidden; background: color-mix(in srgb, var(--ga-cyan) 4%, transparent); }
+  .pipeline article { position: relative; padding: 1.25rem; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+  .pipeline article:not(:last-child) { border-right: 1px solid var(--ga-border); }
+  .pipeline article:not(:last-child)::after { content: '→'; position: absolute; right: -.55rem; top: 50%; z-index: 1; display: grid; place-items: center; width: 1.1rem; height: 1.1rem; border: 1px solid var(--ga-border); border-radius: 50%; background: var(--bg); color: var(--ga-cyan); font-size: .72rem; transform: translateY(-50%); }
   .pipeline span { color: var(--ga-cyan); font: 800 .74rem ui-monospace, monospace; }
   .pipeline b { display: block; margin-top: .65rem; }
   .note { margin-top: 1.25rem; padding: 1rem 1.2rem; line-height: 1.7; }
   .note.positive { border-left: .25rem solid var(--ga-green); }
   .note.warning, .boundary-note { border-left: .25rem solid var(--ga-amber); }
-  .issue-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .issue-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 1.5rem; }
+  .issue-grid article { padding: 1.15rem 0; border: 0; border-top: 1px solid var(--ga-border); border-radius: 0; background: transparent; box-shadow: none; }
   .issue-grid b { color: var(--ga-rose); }
 
   .model-lab-stage { position: relative; }
@@ -374,7 +394,15 @@ const adoption = [
     .mall-convergence, .model-lab-shell { grid-template-columns: 1fr; }
     .mall-convergence > .flow-arrow { transform: rotate(90deg); }
     .download-story, .analysis-levels, .pipeline, .metric-outputs, .issue-grid, .mapping-grid, .reflection-questions, .adoption-grid { grid-template-columns: 1fr; }
-    .definition-grid, .status-matrix, .role-boundary { grid-template-columns: 1fr; }
+    .member-hierarchy, .member-branches, .status-matrix, .role-boundary { grid-template-columns: 1fr; }
+    .member-root::after, .member-root::before, .member-branches article::before { display: none; }
+    .member-root, .member-result { padding: 1.2rem; }
+    .member-branches { gap: 0; }
+    .member-branches article { padding: 1rem 0 1rem 1rem; }
+    .member-result { grid-column: auto; }
+    .pipeline { gap: 0; }
+    .pipeline article:not(:last-child) { border-right: 0; border-bottom: 1px solid var(--ga-border); }
+    .pipeline article:not(:last-child)::after { right: auto; top: auto; bottom: -.55rem; left: 1.2rem; transform: none; }
     .model-phases { grid-template-columns: 1fr; }
     .model-lab-stage, [data-motion-mode='desktop'] .model-lab-stage { height: auto; min-height: 0; overflow: visible; }
     [data-motion-mode='desktop'] .model-lab-stage > section { position: relative; inset: auto; min-height: auto; }

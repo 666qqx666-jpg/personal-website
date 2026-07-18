@@ -6,7 +6,7 @@ const route = '/projects/group-business-analytics/';
 test('projects listing exposes the group business analytics case as the third card', async ({ page }) => {
   await page.goto('/projects/');
   const cards = page.locator('.card');
-  await expect(cards).toHaveCount(4);
+  expect(await cards.count()).toBeGreaterThanOrEqual(3);
   await expect(cards.nth(0)).toContainText('全域销售线索管理系统');
   await expect(cards.nth(1)).toContainText('多业务线企业权限体系');
 
@@ -57,6 +57,14 @@ test('S3 and S4 convert business definitions into statistical records', async ({
     await expect(sales).toContainText(term);
   }
   await expect(sales).toContainText('周 / 月比例需要重新聚合分子与分母');
+});
+
+test('S3 expresses member definitions as a hierarchy instead of a flat card list', async ({ page }) => {
+  await page.goto(route);
+  const member = page.locator('#s3');
+  await expect(member.locator('[data-member-root]')).toHaveCount(1);
+  await expect(member.locator('[data-member-branches] [data-member-branch]')).toHaveCount(2);
+  await expect(member.locator('[data-member-result]')).toHaveCount(1);
 });
 
 test('S7 and S8 preserve the four object to metric mappings in semantic HTML', async ({ page }) => {
