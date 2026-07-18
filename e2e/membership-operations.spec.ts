@@ -25,12 +25,20 @@ test('background connects fragmented platform identities to unified member opera
   await expect(scene).toContainText('同一顾客会以多个平台访客身份进入系统');
   await expect(scene.locator('[data-platform-entry]')).toHaveCount(6);
   await expect(scene.locator('[data-identity-aggregation]')).toContainText('聚合为同一会员');
-  await expect(scene.locator('[data-operation-funnel]')).toHaveCount(1);
+  await expect(scene.locator('[data-operation-card]')).toHaveCount(1);
+  await expect(scene.locator('[data-operation-funnel]')).toHaveCount(0);
   for (const operation of ['开卡有礼', '消费有礼', '生日有礼', '营销游戏', '流失挽回']) {
     await expect(scene.locator('[data-member-operation]').filter({ hasText: operation })).toHaveCount(1);
   }
   await expect(scene.locator('[data-member-operation]')).toHaveCount(5);
   await expect(scene).toContainText('会员运营依赖统一的会员身份');
+
+  const primaryCard = await scene.locator('.platform-flow').boundingBox();
+  const operationCard = await scene.locator('[data-operation-card]').boundingBox();
+  expect(primaryCard).not.toBeNull();
+  expect(operationCard).not.toBeNull();
+  expect(operationCard!.width).toBeLessThan(primaryCard!.width * 0.9);
+  expect(operationCard!.height).toBeLessThan(primaryCard!.height);
 
   const body = await page.locator('body').innerText();
   expect(body).not.toContain('跨客户识别同一自然人');

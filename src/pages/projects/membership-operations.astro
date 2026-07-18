@@ -73,12 +73,14 @@ const memberOperations = ['开卡有礼', '消费有礼', '生日有礼', '营�
             <div class="identity-aggregation" data-identity-aggregation><strong>聚合为同一会员</strong><span>多个访客身份共享运营上下文</span></div>
           </div>
           <div class="operation-bridge" aria-hidden="true"><i></i><span>统一身份释放运营能力</span><i></i></div>
-          <div class="operation-funnel" data-operation-funnel>
-            <strong class="funnel-title">会员运营依赖统一的会员身份</strong>
+          <div class="operation-card" data-operation-card>
+            <div class="operation-card-header">
+              <strong class="operation-card-title">会员运营依赖统一的会员身份</strong>
+              <span class="operation-card-outcome">持续经营同一会员关系</span>
+            </div>
             <div class="member-operation-grid">
               {memberOperations.map((operation) => <span data-member-operation>{operation}</span>)}
             </div>
-            <span class="funnel-outcome">持续经营同一会员关系</span>
           </div>
         </div>
       </div>
@@ -338,14 +340,12 @@ const memberOperations = ['开卡有礼', '消费有礼', '生日有礼', '营�
   .operation-bridge { display: grid; justify-items: center; gap: .15rem; color: var(--text-dim); }
   .operation-bridge i { width: 1px; height: .55rem; background: linear-gradient(var(--mo-decision), var(--mo-identity)); }
   .operation-bridge span { font-size: .66rem; font-weight: 750; letter-spacing: .08em; }
-  .operation-funnel { position: relative; isolation: isolate; display: grid; justify-items: center; gap: .55rem; width: min(900px, calc(100% - 3rem)); margin-inline: auto; padding: .7rem clamp(3rem, 7vw, 5.4rem) 1rem; }
-  .operation-funnel::before, .operation-funnel::after { content: ''; position: absolute; clip-path: polygon(0 0, 100% 0, 82% 100%, 18% 100%); }
-  .operation-funnel::before { z-index: -2; inset: 0; background: linear-gradient(105deg, var(--mo-identity), var(--mo-decision)); }
-  .operation-funnel::after { z-index: -1; inset: 1px; background: linear-gradient(150deg, color-mix(in srgb, var(--mo-identity) 8%, var(--glass)), color-mix(in srgb, var(--mo-decision) 8%, var(--glass))); }
-  .funnel-title { font-size: .78rem; letter-spacing: .05em; }
+  .operation-card { display: grid; gap: .45rem; width: min(720px, calc(100% - 8rem)); margin-inline: auto; padding: .6rem .8rem; border: 1px solid color-mix(in srgb, var(--mo-identity) 48%, var(--glass-border)); border-radius: .9rem; background: linear-gradient(135deg, color-mix(in srgb, var(--mo-identity) 7%, var(--glass)), color-mix(in srgb, var(--mo-decision) 6%, var(--glass))); box-shadow: 0 .75rem 2rem color-mix(in srgb, var(--mo-identity) 7%, transparent); }
+  .operation-card-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-inline: .15rem; }
+  .operation-card-title { font-size: .72rem; letter-spacing: .04em; }
   .member-operation-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .45rem; width: 100%; }
   .member-operation-grid span { border: 1px solid color-mix(in srgb, var(--mo-identity) 45%, var(--glass-border)); border-radius: 999px; background: color-mix(in srgb, var(--glass) 88%, transparent); color: var(--text); font-size: .72rem; font-weight: 700; padding: .38rem .3rem; text-align: center; white-space: nowrap; }
-  .funnel-outcome { color: var(--mo-identity); font-size: .68rem; font-weight: 800; letter-spacing: .06em; }
+  .operation-card-outcome { color: var(--mo-identity); font-size: .62rem; font-weight: 800; letter-spacing: .04em; white-space: nowrap; }
   .scene-shell-wide { width: min(1240px, 100%); }
   .conclusion-shell { text-align: center; }
   .boundary-note { color: var(--text-dim); line-height: 1.8; margin-top: 1rem; }
@@ -475,6 +475,6 @@ const memberOperations = ['开卡有礼', '消费有礼', '生日有礼', '营�
     .xcu-convergence { width: 4.25rem; min-height: 4.25rem; rotate: 90deg; justify-self: center; }
     .model-link { rotate: 90deg; justify-self: center; }
   }
-  @media (max-width: 620px) { .foundation-grid, .result-grid, .risk-chain, .governance-loop, .business-module-grid, .attribution-data-grid { grid-template-columns: 1fr; } .foundation-node-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .capability-call-bus { grid-template-columns: 1fr; justify-items: center; } .capability-call-bus i { width: 1px; height: .65rem; background: var(--mo-growth); } .analysis-card-grid article { grid-template-columns: 1fr; } .analysis-layer, .data-layer, .channel-layer { width: 100%; } .attribution-connector { grid-template-columns: 1fr; justify-items: center; width: 100%; } .attribution-connector i { width: 1px; height: .65rem; background: var(--mo-growth); } .attribution-connector span { white-space: normal; text-align: center; } .operation-funnel { width: 100%; padding-inline: 2.2rem; } .member-operation-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .member-operation-grid span:last-child { grid-column: 1 / -1; justify-self: center; width: 65%; } .membership-operations-nav { width: calc(100% - 1rem); justify-content: space-between; } .membership-operations-nav a span:last-child { font-size: .68rem; } .contribution-boundary, .debt-note { grid-template-columns: 1fr; } }
+  @media (max-width: 620px) { .foundation-grid, .result-grid, .risk-chain, .governance-loop, .business-module-grid, .attribution-data-grid { grid-template-columns: 1fr; } .foundation-node-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .capability-call-bus { grid-template-columns: 1fr; justify-items: center; } .capability-call-bus i { width: 1px; height: .65rem; background: var(--mo-growth); } .analysis-card-grid article { grid-template-columns: 1fr; } .analysis-layer, .data-layer, .channel-layer { width: 100%; } .attribution-connector { grid-template-columns: 1fr; justify-items: center; width: 100%; } .attribution-connector i { width: 1px; height: .65rem; background: var(--mo-growth); } .attribution-connector span { white-space: normal; text-align: center; } .operation-card { width: 100%; } .operation-card-header { align-items: flex-start; flex-direction: column; gap: .15rem; } .member-operation-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .member-operation-grid span:last-child { grid-column: 1 / -1; justify-self: center; width: 65%; } .membership-operations-nav { width: calc(100% - 1rem); justify-content: space-between; } .membership-operations-nav a span:last-child { font-size: .68rem; } .contribution-boundary, .debt-note { grid-template-columns: 1fr; } }
   @media (prefers-reduced-motion: reduce) { .membership-operations-deck *, .membership-operations-deck *::before, .membership-operations-deck *::after { animation-duration: .01ms; transition-duration: .01ms; transition-delay: 0ms; } }
 </style>
