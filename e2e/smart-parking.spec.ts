@@ -236,3 +236,23 @@ test('rapid forward and reverse scrolling keeps current scenes visible without b
   }
   expect(errors).toEqual([]);
 });
+
+test('projects listing exposes smart parking as the fourth public case', async ({ page }) => {
+  await page.goto('/projects/');
+  const cards = page.locator('.card');
+  const firstFourTitles = await cards.locator('h3').evaluateAll((headings) => headings.slice(0, 4).map((heading) => heading.textContent?.trim()));
+  expect(firstFourTitles).toEqual([
+    '全域销售线索管理系统',
+    '多业务线企业权限体系',
+    '集团经营数据分析体系',
+    '智慧停车 2.0',
+  ]);
+
+  const card = cards.nth(3);
+  await expect(card).toContainText('外包系统内收');
+  await expect(card).toContainText('持续演进');
+  await expect(card).toHaveAttribute('href', route);
+
+  const membershipIndex = await cards.evaluateAll((elements) => elements.findIndex((element) => element.textContent?.includes('多平台会员运营体系')));
+  expect(membershipIndex === -1 || membershipIndex > 3).toBe(true);
+});

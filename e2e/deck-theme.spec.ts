@@ -14,6 +14,7 @@ const deckRoutes = [
   '/projects/sales-lead-slm/',
   '/projects/enterprise-permissions/',
   '/projects/group-business-analytics/',
+  '/projects/smart-parking/',
   '/projects/membership-operations/',
 ];
 
