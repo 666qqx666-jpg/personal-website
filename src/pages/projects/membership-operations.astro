@@ -138,31 +138,36 @@ const platformEntries = ['微信', '支付宝', '抖音', '小红书', '快手',
 
     <section id="s8" data-scene="touch-flow" data-chapter="growth">
       <div class="scene-shell scene-shell-wide">
-        <p class="eyebrow">Auditable Outreach</p>
-        <h2>上层业务复用这些基建，把各自的会员运营做得更顺</h2>
-        <div class="business-reuse" data-motion-item role="list" aria-label="复用会员运营基建的业务模块">
-          <span data-business-module="customer-list" role="listitem">顾客列表：用人群筛选器查询目标顾客</span>
-          <span data-business-module="sms-plan" role="listitem">短信计划：组合人群、短信与短链完成触达</span>
-          <span data-business-module="scenario-marketing" role="listitem">场景营销</span>
-          <span data-business-module="questionnaire" role="listitem">问卷表单</span>
-          <span data-business-module="coupon" role="listitem">卡券模块</span>
-          <span data-business-module="points" role="listitem">积分模块</span>
-          <span data-business-module="orders" role="listitem">订单模块</span>
+        <p class="eyebrow">Capability Collaboration</p>
+        <h2>上层模块按需调用底层基建，组合出更多会员运营玩法</h2>
+        <p class="lead-copy">上层模块复用这些基建，找人、触达、承接与归因不再重复建设，而是从共享能力中选择需要的组合。</p>
+        <div class="collaboration-map" data-motion-item role="group" aria-label="上层业务模块通过能力总线调用五项会员运营基建">
+          <div class="collaboration-layer business-layer" data-collaboration-layer="business">
+            <p class="layer-label"><span>上层</span><strong>营销与业务模块</strong></p>
+            <div class="business-module-grid">
+              <article data-business-module="customer-list"><strong>顾客列表</strong><p>查询与圈选目标顾客</p><div><span>人群筛选</span></div></article>
+              <article data-business-module="scenario-marketing"><strong>场景营销</strong><p>按行为触发个性化运营</p><div><span>人群筛选</span><span>公共短信</span><span>短链</span></div></article>
+              <article data-business-module="questionnaire"><strong>问卷表单</strong><p>邀请参与并记录来源</p><div><span>短链</span><span>推广渠道</span><span>二维码</span></div></article>
+              <article data-business-module="coupon"><strong>卡券模块</strong><p>定向投放与活动承接</p><div><span>人群筛选</span><span>公共短信</span><span>短链</span><span>推广渠道</span></div></article>
+              <article data-business-module="points"><strong>积分模块</strong><p>唤醒与积分运营</p><div><span>人群筛选</span><span>公共短信</span></div></article>
+              <article data-business-module="orders"><strong>订单模块</strong><p>关联交易来源与后续触达</p><div><span>推广渠道</span><span>二维码</span></div></article>
+            </div>
+          </div>
+          <div class="capability-call-bus" data-call-bus aria-label="共享能力调用总线">
+            <span>按需调用</span><i aria-hidden="true"></i><strong>组合 · 复用 · 扩展玩法</strong><i aria-hidden="true"></i><span>统一供给</span>
+          </div>
+          <div class="collaboration-layer foundation-layer" data-collaboration-layer="foundation">
+            <p class="layer-label"><span>底层</span><strong>会员运营基建</strong></p>
+            <div class="foundation-node-grid">
+              <article><strong>公共短信</strong><small>统一触达</small></article>
+              <article><strong>人群筛选</strong><small>统一找人</small></article>
+              <article><strong>短链</strong><small>统一承接</small></article>
+              <article><strong>推广渠道</strong><small>统一来源</small></article>
+              <article><strong>二维码</strong><small>统一线下入口</small></article>
+            </div>
+          </div>
         </div>
-        <p class="lead-copy">它们不必各自重建找人、短信和链接能力，而是复用这些基建，按自身业务需求服务会员。</p>
-        <h3>短信计划只是其中一条可审核、可执行、可追踪的链路</h3>
-        <div class="touch-flow" role="list" aria-label="从筛选人群到访问小程序的六步触达链路">
-          <span data-touch-step data-motion-item role="listitem">筛选人群</span>
-          <span data-touch-step data-motion-item role="listitem">创建计划</span>
-          <span data-touch-step data-motion-item role="listitem">内容与额度审核</span>
-          <span data-touch-step data-motion-item role="listitem">发送短信</span>
-          <span data-touch-step data-motion-item role="listitem">点击短链</span>
-          <span data-touch-step data-motion-item role="listitem">访问小程序</span>
-        </div>
-        <div class="touch-boundaries">
-          <p><strong>审核责任</strong><span>审核员可指定成员，也可按角色动态匹配。</span></p>
-          <p><strong>上下文参数</strong><span>短链携带商场、目标页面和推广渠道。</span></p>
-        </div>
+        <p class="principle">基建提供的不是一条固定流程，而是一组能被不同业务自由组合的会员运营能力。</p>
       </div>
     </section>
 
@@ -293,15 +298,30 @@ const platformEntries = ['微信', '支付宝', '抖音', '小红书', '快手',
   .asset-boundary { border-left-color: var(--mo-blocked); }
   .rebind-action span, .asset-boundary span { color: var(--text-dim); }
   .voucher-paths, .channel-sources { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .foundation-grid, .result-grid, .risk-chain, .governance-loop { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .foundation-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .result-grid, .risk-chain, .governance-loop { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .foundation-grid article, .channel-sources article, .result-grid article { border-color: color-mix(in srgb, var(--mo-growth) 45%, var(--glass-border)); }
-  .business-reuse { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.1rem; }
-  .business-reuse span { border: 1px solid color-mix(in srgb, var(--mo-growth) 45%, var(--glass-border)); border-radius: 999px; background: color-mix(in srgb, var(--mo-growth) 8%, var(--glass)); color: var(--text); padding: .5rem .7rem; }
-  .touch-flow { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .6rem; margin-top: 1.25rem; }
-  .touch-flow span { position: relative; display: grid; place-items: center; min-height: 5rem; border: 1px solid color-mix(in srgb, var(--mo-growth) 50%, var(--glass-border)); border-radius: .9rem; padding: .6rem; text-align: center; }
-  .touch-flow span:not(:last-child)::after { content: '→'; position: absolute; right: -.55rem; color: var(--mo-growth); }
-  .touch-boundaries { display: grid; grid-template-columns: repeat(2, 1fr); gap: .8rem; margin-top: 1rem; }
-  .touch-boundaries p, .attribution-flow { border: 1px solid var(--glass-border); border-radius: 1rem; background: var(--glass); padding: 1rem; }
+  .collaboration-map { position: relative; display: grid; gap: .65rem; margin-top: 1rem; padding: 1rem; overflow: hidden; border: 1px solid color-mix(in srgb, var(--mo-growth) 36%, var(--glass-border)); border-radius: 1.4rem; background: linear-gradient(145deg, color-mix(in srgb, var(--mo-growth) 6%, var(--glass)), var(--glass)); }
+  .collaboration-map::before { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: linear-gradient(color-mix(in srgb, var(--mo-growth) 10%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--mo-growth) 10%, transparent) 1px, transparent 1px); background-size: 2rem 2rem; mask-image: linear-gradient(to bottom, transparent, #000 20%, #000 80%, transparent); }
+  .collaboration-layer, .capability-call-bus { position: relative; z-index: 1; }
+  .layer-label { display: flex; align-items: center; gap: .55rem; margin-bottom: .55rem; }
+  .layer-label span { border-radius: 999px; background: var(--mo-growth); color: #06120a; font-size: .68rem; font-weight: 850; letter-spacing: .08em; padding: .25rem .5rem; }
+  .layer-label strong { font-size: .9rem; }
+  .business-module-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .55rem; }
+  .business-module-grid article { position: relative; min-width: 0; border: 1px solid color-mix(in srgb, var(--mo-growth) 42%, var(--glass-border)); border-radius: .9rem; background: color-mix(in srgb, var(--glass) 92%, transparent); padding: .65rem .75rem; }
+  .business-module-grid article::after { content: ''; position: absolute; left: 50%; bottom: -.7rem; width: 1px; height: .7rem; background: color-mix(in srgb, var(--mo-growth) 65%, var(--glass-border)); }
+  .business-module-grid article > strong { display: block; font-size: .92rem; }
+  .business-module-grid article > p { color: var(--text-dim); font-size: .75rem; line-height: 1.45; margin-top: .15rem; }
+  .business-module-grid article > div { display: flex; flex-wrap: wrap; gap: .25rem; margin-top: .45rem; }
+  .business-module-grid article > div span { border: 1px solid color-mix(in srgb, var(--mo-growth) 46%, var(--glass-border)); border-radius: 999px; color: var(--mo-growth); font-size: .62rem; padding: .18rem .35rem; }
+  .capability-call-bus { display: grid; grid-template-columns: auto 1fr auto 1fr auto; align-items: center; gap: .55rem; color: var(--mo-growth); font-size: .7rem; font-weight: 800; letter-spacing: .05em; padding: .35rem .2rem; text-transform: uppercase; }
+  .capability-call-bus i { height: 1px; background: linear-gradient(90deg, transparent, var(--mo-growth), transparent); }
+  .capability-call-bus strong { border: 1px solid color-mix(in srgb, var(--mo-growth) 58%, var(--glass-border)); border-radius: 999px; background: color-mix(in srgb, var(--mo-growth) 12%, var(--glass)); color: var(--text); padding: .35rem .65rem; white-space: nowrap; }
+  .foundation-node-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .5rem; }
+  .foundation-node-grid article { display: grid; gap: .15rem; min-width: 0; border: 1px solid color-mix(in srgb, var(--mo-growth) 62%, var(--glass-border)); border-radius: .85rem; background: color-mix(in srgb, var(--mo-growth) 10%, var(--glass)); padding: .6rem; text-align: center; }
+  .foundation-node-grid strong { font-size: .82rem; }
+  .foundation-node-grid small { color: var(--text-dim); font-size: .65rem; }
+  .attribution-flow { border: 1px solid var(--glass-border); border-radius: 1rem; background: var(--glass); padding: 1rem; }
   .attribution-flow { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; margin-top: 1rem; }
   [data-loop='growth'] { color: var(--mo-growth); }
   [data-loop='governance'] { color: var(--mo-risk); padding: 1rem; border-radius: 1.2rem; box-shadow: inset 0 0 0 1px color-mix(in srgb, currentColor 20%, transparent); }
@@ -321,14 +341,16 @@ const platformEntries = ['微信', '支付宝', '抖音', '小红书', '快手',
   [data-membership-operations-deck][data-motion-ready='true'][data-motion-mode='observe'] [data-motion-state='pending'] [data-motion-item] { opacity: 0; transform: translateY(1rem); }
   [data-membership-operations-deck][data-motion-mode='observe'] [data-motion-state='visible'] [data-motion-item] { opacity: 1; transform: translateY(0); transition: opacity .42s ease, transform .42s ease; }
   #s12 { padding-bottom: 9rem; }
-  @media (max-width: 1040px) { .member-progress b { display: none; } .foundation-grid, .result-grid, .risk-chain, .governance-loop { grid-template-columns: repeat(2, 1fr); } .touch-flow { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 1040px) { .member-progress b { display: none; } .foundation-grid { grid-template-columns: repeat(3, 1fr); } .result-grid, .risk-chain, .governance-loop { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 860px) {
     .membership-operations-deck { scroll-snap-type: y proximity; }
     .membership-operations-deck section { height: auto; min-height: 100vh; padding-inline: 1rem; }
-    .split-shell, .platform-flow, .identity-model, .voucher-paths, .channel-sources, .touch-boundaries { grid-template-columns: 1fr; }
+    .split-shell, .platform-flow, .identity-model, .voucher-paths, .channel-sources { grid-template-columns: 1fr; }
+    .business-module-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .foundation-node-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .flow-arrow { rotate: 90deg; justify-self: center; }
     .model-link { rotate: 90deg; justify-self: center; }
   }
-  @media (max-width: 620px) { .foundation-grid, .result-grid, .risk-chain, .governance-loop, .touch-flow { grid-template-columns: 1fr; } .touch-flow span::after { content: '↓' !important; right: auto !important; bottom: -.65rem; } .touch-flow span:last-child::after { content: none !important; } .membership-operations-nav { width: calc(100% - 1rem); justify-content: space-between; } .membership-operations-nav a span:last-child { font-size: .68rem; } .contribution-boundary, .debt-note { grid-template-columns: 1fr; } }
+  @media (max-width: 620px) { .foundation-grid, .result-grid, .risk-chain, .governance-loop, .business-module-grid { grid-template-columns: 1fr; } .foundation-node-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .capability-call-bus { grid-template-columns: 1fr; justify-items: center; } .capability-call-bus i { width: 1px; height: .65rem; background: var(--mo-growth); } .membership-operations-nav { width: calc(100% - 1rem); justify-content: space-between; } .membership-operations-nav a span:last-child { font-size: .68rem; } .contribution-boundary, .debt-note { grid-template-columns: 1fr; } }
   @media (prefers-reduced-motion: reduce) { .membership-operations-deck *, .membership-operations-deck *::before, .membership-operations-deck *::after { animation-duration: .01ms; transition-duration: .01ms; transition-delay: 0ms; } }
 </style>

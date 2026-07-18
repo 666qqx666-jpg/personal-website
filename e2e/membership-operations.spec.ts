@@ -71,14 +71,20 @@ test('growth chapter distinguishes shared infrastructure, business reuse, and an
   await expect(foundation).toContainText('会员运营基建');
 
   const touch = page.locator('#s8');
-  for (const module of ['customer-list', 'sms-plan', 'scenario-marketing', 'questionnaire', 'coupon', 'points', 'orders']) {
+  for (const module of ['customer-list', 'scenario-marketing', 'questionnaire', 'coupon', 'points', 'orders']) {
     await expect(touch.locator(`[data-business-module="${module}"]`)).toHaveCount(1);
   }
+  await expect(touch.locator('[data-business-module="sms-plan"]')).toHaveCount(0);
   await expect(touch).toContainText('复用这些基建');
-  await expect(touch.locator('[data-touch-step]')).toHaveCount(6);
-  for (const label of ['筛选人群', '创建计划', '内容与额度审核', '发送短信', '点击短链', '访问小程序']) {
-    await expect(touch).toContainText(label);
+  await expect(touch.locator('[data-touch-step]')).toHaveCount(0);
+  await expect(touch.locator('[data-collaboration-layer="business"]')).toHaveCount(1);
+  await expect(touch.locator('[data-collaboration-layer="foundation"]')).toHaveCount(1);
+  await expect(touch.locator('[data-call-bus]')).toHaveCount(1);
+  for (const capability of ['公共短信', '人群筛选', '短链', '推广渠道', '二维码']) {
+    await expect(touch.locator('[data-collaboration-layer="foundation"]')).toContainText(capability);
   }
+  await expect(touch).not.toContainText('内容与额度审核');
+  await expect(touch).not.toContainText('创建计划');
 
   const attribution = page.locator('#s9');
   await expect(attribution.locator('[data-channel="short-link"]')).toContainText('线上短链');
