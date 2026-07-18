@@ -1,0 +1,101 @@
+---
+import DeckLayout from '../../layouts/DeckLayout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const chapters = [
+  { href: '#s1', id: 'background', label: '需求背景' },
+  { href: '#s4', id: 'reconstruct', label: '黑盒还原' },
+  { href: '#s5', id: 'native', label: '原生重构' },
+  { href: '#s9', id: 'evolution', label: '持续演进' },
+  { href: '#s10', id: 'running', label: '真实落地' },
+];
+
+type BackgroundMetric = { value: string; label: string; scope: string; timeBasis: string };
+const backgroundMetrics: BackgroundMetric[] = [];
+if (backgroundMetrics.length !== 0 && backgroundMetrics.length !== 3) {
+  throw new Error('Smart parking background metrics must contain zero or three verified items.');
+}
+const hasBackgroundMetrics = backgroundMetrics.length === 3;
+
+const adoptionStats = [
+  { value: '8 个', label: '运行停车 2.0 的商场', scope: '35 个停车商场' },
+  { value: '27 个', label: '继续运行停车 1.0', scope: '存量商场' },
+  { value: '约 7.57 万笔', label: '2.0 月停车缴费单', scope: '8 个 2.0 商场' },
+  { value: '1 / 18', label: '某集团 2.0 / 1.0 商场', scope: '集团共 19 个商场' },
+];
+---
+
+<DeckLayout title="智慧停车 2.0｜QQ星" description="从无文档外包系统到可持续演进的自有停车产品。">
+  <main id="smart-parking-deck" class="smart-parking-deck" data-smart-parking-deck data-motion-mode="static">
+    <section id="s1" data-scene="opening" data-chapter="background">
+      <div class="scene-shell hero-shell">
+        <p class="chapter">Smart Parking 2.0</p>
+        <h1>让一套停车系统，重新拥有演进能力</h1>
+        <p class="lead">从无文档的外包系统逆向还原，到重新规划产品、接入内部业务体系并持续迭代。</p>
+        <div class="opening-road" data-motion-item role="img" aria-label="从停车 1.0 外包黑盒驶向停车 2.0 自有体系"><span>1.0 外包黑盒</span><i></i><strong>2.0 自有体系</strong></div>
+        <p class="memory-line">迁回内部的不是一套旧页面，而是停车产品的定义权与演进能力。</p>
+      </div>
+    </section>
+
+    <section id="s2" data-scene="business-background" data-chapter="background">
+      <div class="scene-shell">
+        <p class="eyebrow">Business Background</p>
+        <h2>停车，是商场体验的第一站与最后一站</h2>
+        <p class="lead-copy">它贯穿顾客到场、消费和缴费离场，也连接车辆、访客、会员、权益、订单与支付。</p>
+        {hasBackgroundMetrics ? (
+          <div class="background-metrics" data-metric-state="with-data" role="group" aria-label="停车业务规模">
+            {backgroundMetrics.map((metric) => <article data-background-metric data-scope={metric.scope} data-time-basis={metric.timeBasis}><strong>{metric.value}</strong><span>{metric.label}</span><small>{metric.scope} · {metric.timeBasis}</small></article>)}
+          </div>
+        ) : (
+          <div class="journey-only" data-metric-state="without-data" role="img" aria-label="顾客从到场到缴费离场的停车旅程"><span>到场</span><i></i><span>停车</span><i></i><span>消费</span><i></i><span>缴费离场</span></div>
+        )}
+        <p class="principle">当核心服务依赖响应慢、难迭代的外包系统，影响的不只是一个页面。</p>
+      </div>
+    </section>
+
+    <section id="s3" data-scene="legacy" data-chapter="background">
+      <div class="scene-shell">
+        <p class="eyebrow">The Legacy Constraint</p>
+        <h2>1.0 仍在运行，但已经难以继续演进</h2>
+        <div class="legacy-grid" data-motion-item>
+          <article><strong>外包响应慢</strong><p>问题定位、修复与沟通依赖外部团队。</p></article><article><strong>需求迭代慢</strong><p>新业务能力无法跟随内部产品节奏持续演进。</p></article><article><strong>UI 与交互不合理</strong><p>后台和小程序存在明显体验问题。</p></article><article><strong>内部模型割裂</strong><p>会员、积分、卡券和订单需要专用接口反向查询。</p></article>
+        </div>
+        <p class="principle">真正失去的，是公司对停车产品的演进控制。</p>
+      </div>
+    </section>
+
+    <section id="s4" data-scene="reconstruct" data-chapter="reconstruct">
+      <div class="scene-shell split-shell"><div><p class="eyebrow">Black-box Reconstruction</p><h2>没有文档，只能从线上系统反推产品</h2><p class="lead-copy">没有可直接使用的产品文档和开发技术文档，只能查看仍在运行的 1.0 后台和小程序，逐项还原功能、规则、状态、异常与能力边界。</p><p class="principle">功能覆盖接近原系统，但产品结构、业务规则、交互和系统分层重新规划。</p></div><div class="blackbox-map" data-motion-item role="img" aria-label="从停车 1.0 黑盒逐项还原页面流程规则状态异常和边界"><strong>1.0 线上系统</strong><div><span>页面</span><span>流程</span><span>规则</span><span>状态</span><span>异常</span><span>边界</span></div></div></div>
+    </section>
+
+    <section id="s5" data-scene="identity" data-chapter="native">
+      <div class="scene-shell"><p class="eyebrow">Identity Decoupling</p><h2>第一项重构：缴费不再以开卡为前提</h2><p class="lead-copy">XCU—MCU 身份解耦属于 2.0 首发能力，支付身份与会员身份从产品基线开始就被分开。</p><div class="identity-road" data-motion-item role="group" aria-label="XCU 访客直接缴费与 MCU 会员权益支线"><article data-identity="xcu"><span>XCU 访客身份</span><strong>无需开卡，直接缴费</strong><p>先承接车辆查询与停车支付。</p></article><div class="gate" aria-hidden="true"><i></i><b></b></div><article data-identity="mcu"><span>MCU 会员身份</span><strong>自愿成为会员后使用会员权益</strong><p>再接入会员等级、积分和卡券。</p></article></div><p class="boundary-note">这项设计满足支付宝平台授权边界，但不声称提升了开卡率或支付转化。</p></div>
+    </section>
+
+    <section id="s6" data-scene="architecture" data-chapter="native"><div class="scene-shell"><p class="eyebrow">Native Architecture</p><h2>把停车接回内部业务，再用统一协议连接外部系统</h2><div class="architecture-stack" data-motion-item><article data-layer="internal"><strong>内部业务</strong><span>XCU / MCU / 会员等级 / 积分 / 卡券 / SO / 支付</span></article><article data-layer="parking-service"><strong>停车后端服务</strong><span>缴费、权益和订单状态编排</span></article><article data-layer="parking-middleware"><strong>停车业务中台</strong><span>统一查询、缴费通知和回调协议</span></article><article data-layer="adapter"><strong>厂商适配器 / 集团停车中台</strong><span>吸收外部接口差异</span></article><article data-layer="parking-lot"><strong>商场停车场</strong><span>真实计费与出场系统</span></article></div></div></section>
+
+    <section id="s7" data-scene="benefits" data-chapter="native"><div class="scene-shell"><p class="eyebrow">Benefit Orchestration</p><h2>四类权益进入同一套可解释的优惠规则</h2><div class="benefit-grid" data-motion-item><article data-benefit="level">会员等级</article><article data-benefit="points">积分抵现</article><article data-benefit="coupon">停车券</article><article data-benefit="consumption">消费减免</article></div><p>用户选择顺序决定优惠优先级，商场配置单次总减免上限，后端重新校验资格与额度。</p><div class="limit-grid"><span data-limit-axis="member">会员日 / 周 / 月限制</span><span data-limit-axis="vehicle">车辆日 / 周 / 月限制</span></div></div></section>
+
+    <section id="s8" data-scene="payment" data-chapter="native"><div class="scene-shell"><p class="eyebrow">Payment Lifecycle</p><h2>从优惠计算到冻结、支付、扣减与回退</h2><div class="payment-flow" data-motion-item><span data-payment-state="validate">重新校验</span><span data-payment-state="freeze">冻结权益</span><span data-payment-state="pending">待支付</span><span data-payment-state="paid">支付成功后扣减 / 核销</span><span data-payment-state="zero">零元缴费直接完成</span><span data-payment-state="release">失败、取消或超时后解冻</span><span data-payment-state="notify">通知停车中台与停车场</span></div><p class="principle">冻结防止同一积分、停车券或使用次数被并发重复占用。</p></div></section>
+
+    <section id="s9" data-scene="evolution" data-chapter="evolution"><div class="scene-shell"><p class="eyebrow">Back to Evolution</p><h2>真实问题开始进入内部迭代闭环</h2><div class="iteration-grid" data-motion-item><article data-iteration="benefits"><strong>权益扩展</strong><p>等级、积分、商户停车券、消费减免与便捷出场。</p></article><article data-iteration="vehicle-risk"><strong>车辆风控</strong><p>会员与车辆双维限制、绑定查询、解绑和日志。</p></article><article data-iteration="double-pay"><strong>双重支付</strong><p>支付后 Loading 与等待出场提示缓冲结果同步。</p></article><article data-iteration="refund"><strong>异常闭环</strong><p>全额退款、权益回退、失败步骤重试与跨日核销。</p></article></div></div></section>
+
+    <section id="s10" data-scene="running" data-chapter="running"><div class="scene-shell"><p class="eyebrow">Running at Real Scale</p><h2>真实落地，也保留真实迁移边界</h2><div class="adoption-stats" role="group" aria-label="停车 2.0 实际采用范围">{adoptionStats.map((stat) => <article><strong>{stat.value}</strong><span>{stat.label}</span><small>{stat.scope}</small></article>)}</div><div class="version-lanes" data-motion-item role="group" aria-label="停车 2.0 与 1.0 渐进迁移"><article data-version="2.0"><strong>2.0 车道</strong><span>8 个商场 · 完整缴费与权益能力</span></article><article data-version="1.0"><strong>1.0 车道</strong><span>27 个存量商场 · 历史数据整合成本待处理</span></article></div><p class="new-mall-note">其中一个 2.0 商场刚上线、交易数据较少，不把不完整月份包装为成熟月均。</p><p class="boundary-note">退款能力已上线，但暂无真实线上退款订单；版本并存不等于全面替代 1.0。</p></div></section>
+
+    <section id="s11" data-scene="conclusion" data-chapter="running"><div class="scene-shell conclusion-shell"><p class="eyebrow">Conclusion</p><h2>迁回的是产品定义权与演进能力</h2><p class="lead">从线上 1.0 黑盒还原能力，重新规划身份、权益、交易与系统分层，再通过真实问题持续完善 2.0。</p><div class="conclusion-points" data-motion-item><span>不是重做页面</span><span>不是原样复制</span><span>不是全面替代</span></div><p class="boundary-note">本人负责产品盘点、重构规划、规则与系统分层设计并推动上线；研发团队完成工程实现。</p><a class="back-projects" href={`${base}projects/`}>返回项目经历</a></div></section>
+  </main>
+
+  <nav class="smart-parking-nav" data-smart-parking-nav aria-label="智慧停车案例章节">{chapters.map((chapter, index) => <a href={chapter.href} class:list={{ active: index === 0 }} data-chapter-link={chapter.id} aria-current={index === 0 ? 'true' : undefined}><span class="nav-dot"></span><span>{chapter.label}</span></a>)}</nav>
+
+  <script>
+    import { initSmartParkingMotion } from '../../scripts/smart-parking-motion';
+    const root = document.querySelector<HTMLElement>('[data-smart-parking-deck]');
+    if (root) initSmartParkingMotion(root);
+  </script>
+</DeckLayout>
+
+<style>
+  .smart-parking-deck { --sp-road: #111827; --sp-lane: #f59e0b; --sp-native: #14b8a6; --sp-member: #8b5cf6; }
+  .smart-parking-deck section { width: 100%; } .scene-shell { width: min(1120px, 100%); margin-inline: auto; } .hero-shell, .conclusion-shell { text-align: center; } .eyebrow { color: var(--sp-native); font-size: .78rem; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; } .lead, .lead-copy, .boundary-note { color: var(--text-dim); line-height: 1.75; } .lead { max-width: 760px; margin: 1rem auto 0; } .memory-line, .principle { margin-top: 1.2rem; color: var(--text); font-weight: 750; line-height: 1.6; } .split-shell { display: grid; grid-template-columns: .9fr 1.1fr; gap: 2rem; align-items: center; } .opening-road, .journey-only, .identity-road, .benefit-grid, .limit-grid, .payment-flow, .conclusion-points { display: flex; flex-wrap: wrap; gap: .7rem; align-items: center; } .legacy-grid, .iteration-grid, .adoption-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8rem; } article, .blackbox-map, .architecture-stack, .version-lanes { border: 1px solid var(--glass-border); border-radius: 1rem; background: var(--glass); padding: 1rem; } article p, article span, article small { color: var(--text-dim); } .architecture-stack, .version-lanes { display: grid; gap: .6rem; } .architecture-stack article { display: grid; gap: .3rem; } .back-projects { display: inline-flex; margin-top: 1.4rem; color: var(--text); } .smart-parking-nav { position: fixed; z-index: 18; left: 50%; bottom: 1rem; translate: -50% 0; display: flex; border: 1px solid var(--glass-border); border-radius: 999px; background: var(--chrome-bg); padding: .5rem; } .smart-parking-nav a { display: inline-flex; gap: .4rem; align-items: center; color: var(--text-dim); padding: .42rem .65rem; text-decoration: none; white-space: nowrap; } .smart-parking-nav a.active { color: var(--text); } .nav-dot { width: .5rem; height: .5rem; border-radius: 50%; background: currentColor; }
+  @media (max-width: 860px) { .smart-parking-deck { scroll-snap-type: y proximity; } .smart-parking-deck section { height: auto; min-height: 100vh; padding-inline: 1rem; } .split-shell, .legacy-grid, .iteration-grid, .adoption-stats { grid-template-columns: 1fr; } }
+</style>
