@@ -1,3 +1,4 @@
+import { readFile } from 'node:fs/promises';
 import { test, expect } from '@playwright/test';
 
 const route = '/projects/smart-parking/';
@@ -149,4 +150,89 @@ test('parking semantics remain explicit without relying on color', async ({ page
   await expect(page.locator('#s7 [data-limit-axis]')).toHaveCount(2);
   await expect(page.locator('#s10 [data-version]')).toHaveCount(2);
   await expect(page.locator('#s10 [data-version="1.0"]')).toContainText('历史数据整合成本');
+});
+
+test('static mode keeps all scenes readable without JavaScript', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  await page.goto(route);
+  await expect(page.locator('[data-smart-parking-deck]')).toHaveAttribute('data-motion-mode', 'static');
+  await expect(page.locator('section[data-scene]')).toHaveCount(11);
+  await page.locator('#s11').scrollIntoViewIfNeeded();
+  await expect(page.locator('#s11')).toContainText('迁回的是产品定义权与演进能力');
+  await context.close();
+});
+
+test('desktop uses native observed reveals without pinning', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(route);
+  const root = page.locator('[data-smart-parking-deck]');
+  await expect(root).toHaveAttribute('data-motion-ready', 'true');
+  await expect(root).toHaveAttribute('data-motion-mode', 'observe');
+  await expect(page.locator('#s1')).toHaveAttribute('data-motion-state', 'visible');
+  await page.locator('#s7').scrollIntoViewIfNeeded();
+  await expect(page.locator('#s7')).toHaveAttribute('data-motion-state', 'visible');
+  await expect(page.locator('.pin-spacer')).toHaveCount(0);
+});
+
+test('reduced motion directly exposes all scenes', async ({ browser }) => {
+  const context = await browser.newContext({ viewport: { width: 1280, height: 800 }, reducedMotion: 'reduce' });
+  const page = await context.newPage();
+  await page.goto(route);
+  const root = page.locator('[data-smart-parking-deck]');
+  await expect(root).toHaveAttribute('data-motion-mode', 'reduce');
+  await expect(root).toHaveAttribute('data-motion-ready', 'true');
+  await expect(page.locator('section[data-motion-state="visible"]')).toHaveCount(11);
+  await expect(page.locator('.pin-spacer')).toHaveCount(0);
+  await context.close();
+});
+
+test('missing IntersectionObserver falls back to visible content', async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, 'IntersectionObserver', { value: undefined, configurable: true });
+  });
+  await page.goto(route);
+  const root = page.locator('[data-smart-parking-deck]');
+  await expect(root).toHaveAttribute('data-motion-mode', 'fallback');
+  await expect(root).toHaveAttribute('data-motion-ready', 'false');
+  await expect(page.locator('section[data-motion-state="visible"]')).toHaveCount(11);
+});
+
+test('motion controller stays independent from GSAP and ScrollTrigger', async () => {
+  const source = await readFile(new URL('../src/scripts/smart-parking-motion.ts', import.meta.url), 'utf8');
+  expect(source).not.toContain("from 'gsap'");
+  expect(source).not.toContain('ScrollTrigger');
+});
+
+test('chapter anchors remain keyboard usable and active state is accessible', async ({ page }) => {
+  await page.goto(route);
+  const nav = page.getByRole('navigation', { name: '智慧停车案例章节' });
+  const native = nav.getByRole('link', { name: '原生重构' });
+  await native.focus();
+  await page.keyboard.press('Enter');
+  await expect(page).toHaveURL(/#s5$/);
+  await expect(native).toHaveAttribute('aria-current', 'true');
+  await expect(page.getByRole('link', { name: '返回项目经历' })).toHaveAttribute('href', '/projects/');
+});
+
+test('controller cleanup restores static readable state', async ({ page }) => {
+  await page.goto(route);
+  const root = page.locator('[data-smart-parking-deck]');
+  await expect(root).toHaveAttribute('data-motion-mode', 'observe');
+  await page.evaluate(() => document.dispatchEvent(new Event('astro:before-swap')));
+  await expect(root).toHaveAttribute('data-motion-mode', 'static');
+  await expect(root).not.toHaveAttribute('data-motion-ready', /.+/);
+  await expect(page.locator('section[data-motion-state]')).toHaveCount(0);
+});
+
+test('rapid forward and reverse scrolling keeps current scenes visible without browser errors', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
+  page.on('pageerror', (error) => errors.push(error.message));
+  await page.goto(route);
+  for (const id of ['s4', 's8', 's11', 's7', 's2', 's10']) {
+    await page.locator(`#${id}`).scrollIntoViewIfNeeded();
+    await expect(page.locator(`#${id}`)).toHaveAttribute('data-motion-state', 'visible');
+  }
+  expect(errors).toEqual([]);
 });
