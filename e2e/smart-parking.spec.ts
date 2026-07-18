@@ -112,6 +112,10 @@ test('S8 contrasts legacy one-time lookup with a validated and reversible 2.0 pa
 
 test('S9 and S10 prove continued evolution while preserving migration boundaries', async ({ page }) => {
   await page.goto(route);
+  await expect(page.locator('#s9')).toContainText('从 1.0 黑盒重构为 2.0，再让能力持续扩展');
+  await expect(page.locator('#s9 [data-evolution-stage="legacy"]')).toContainText('1.0 仍在运行');
+  await expect(page.locator('#s9 [data-evolution-stage="rebuild"]')).toContainText('2.0 原生重构基线');
+  await expect(page.locator('#s9 [data-evolution-stage="iterate"]')).toContainText('真实问题持续带来能力扩展');
   for (const iteration of ['benefits', 'vehicle-risk', 'double-pay', 'refund']) {
     await expect(page.locator(`#s9 [data-iteration="${iteration}"]`)).toHaveCount(1);
   }
