@@ -1,0 +1,103 @@
+---
+import DeckLayout from '../../layouts/DeckLayout.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const chapters = [
+  { href: '#s1', id: 'member', label: '会员主线' },
+  { href: '#s4', id: 'identity', label: '身份扩展' },
+  { href: '#s7', id: 'growth', label: '增长闭环' },
+  { href: '#s11', id: 'risk', label: '风险治理' },
+];
+const memberAssets = ['会员卡', '积分', '卡券', '消费', '等级', '互动关系'];
+const platformEntries = ['微信', '支付宝', '抖音', '小红书', '快手', '线下二维码'];
+---
+
+<DeckLayout
+  title="多平台会员运营体系｜QQ星"
+  description="在继承会员身份底座后，把平台、触达、归因和风控能力演进成可持续运营的会员关系。"
+>
+  <main
+    id="membership-operations-deck"
+    class="membership-operations-deck"
+    data-membership-operations-deck
+    data-motion-mode="static"
+  >
+    <section id="s1" data-scene="opening" data-chapter="member">
+      <div class="scene-shell hero-shell">
+        <p class="eyebrow">Membership Operations</p>
+        <h1>把分散的平台访客，变成可持续经营的会员关系</h1>
+        <p class="lead">多平台会员运营体系：从身份扩展到增长与风控闭环。</p>
+        <div class="scope-tags" aria-label="案例范围">
+          <span>多平台身份</span><span>会员运营</span><span>异常治理</span>
+        </div>
+        <p class="memory-line">身份不是终点，它让每次触达、交易与处置回到同一条会员主线。</p>
+      </div>
+    </section>
+
+    <section id="s2" data-scene="crm-context" data-chapter="member">
+      <div class="scene-shell split-shell">
+        <div>
+          <p class="eyebrow">Why Membership Matters</p>
+          <h2>CRM 管理的不是一次访问，而是一段持续累积的会员关系</h2>
+          <p class="lead-copy">只有把同一会员在不同时间、平台和业务中的行为持续连接起来，运营与服务才能拥有上下文。</p>
+        </div>
+        <div class="member-spine-figure" data-motion-item role="img" aria-label="会员关系连接会员卡、积分、卡券、消费、等级和互动关系">
+          <strong>持续的会员关系</strong>
+          <div class="asset-orbit">
+            {memberAssets.map((asset) => <span data-member-asset>{asset}</span>)}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="s3" data-scene="platform-fragmentation" data-chapter="member">
+      <div class="scene-shell">
+        <p class="eyebrow">The Business Context</p>
+        <h2>业务扩张，把同一会员拆成多个平台访客</h2>
+        <p class="lead-copy">平台从微信、支付宝扩展到内容平台、交易平台和线下点位；同一顾客会以多个平台访客身份进入系统，身份、触达、交易和来源随之断开。</p>
+        <div class="platform-flow" data-motion-item role="img" aria-label="六类平台入口汇入待连接的会员关系">
+          <div class="platform-cloud">
+            {platformEntries.map((platform) => <span data-platform-entry>{platform}</span>)}
+          </div>
+          <span class="flow-arrow" aria-hidden="true">→</span>
+          <div class="fragmented-member"><strong>同一顾客</strong><span>多个访客身份</span></div>
+        </div>
+        <p class="principle">先认清客户主体下的会员关系，后续运营才不是一组彼此断开的动作。</p>
+      </div>
+    </section>
+  </main>
+</DeckLayout>
+
+<style>
+  .membership-operations-deck {
+    --mo-identity: var(--c-blue);
+    --mo-decision: var(--c-violet);
+    --mo-growth: #22c55e;
+    --mo-risk: #f97316;
+    --mo-blocked: var(--c-problem);
+  }
+  .membership-operations-deck section { width: 100%; }
+  .scene-shell { width: min(1120px, 100%); margin-inline: auto; }
+  .hero-shell { text-align: center; }
+  .eyebrow { color: var(--mo-identity); font-size: .78rem; font-weight: 800; letter-spacing: .16em; margin-bottom: .75rem; text-transform: uppercase; }
+  .lead, .lead-copy { color: var(--text-dim); line-height: 1.8; }
+  .lead { max-width: 760px; margin: 1rem auto 0; font-size: clamp(1rem, 1.7vw, 1.25rem); }
+  .memory-line, .principle { color: var(--text); font-size: clamp(1.05rem, 1.8vw, 1.35rem); font-weight: 750; line-height: 1.6; margin-top: 1.25rem; }
+  .split-shell { display: grid; grid-template-columns: minmax(280px, .9fr) minmax(360px, 1.1fr); gap: clamp(1.25rem, 4vw, 3.5rem); align-items: center; }
+  .scope-tags, .asset-orbit, .platform-cloud { display: flex; flex-wrap: wrap; justify-content: center; gap: .55rem; }
+  .scope-tags { margin-top: 1.3rem; }
+  .scope-tags span, .asset-orbit span, .platform-cloud span { border: 1px solid var(--glass-border); border-radius: 999px; padding: .45rem .7rem; color: var(--text-dim); }
+  .member-spine-figure, .platform-flow { border: 1px solid var(--glass-border); border-radius: 1.2rem; background: var(--glass); padding: 1.2rem; }
+  .member-spine-figure { display: grid; gap: 1rem; text-align: center; }
+  .member-spine-figure strong { color: var(--mo-identity); }
+  .platform-flow { display: grid; grid-template-columns: 1fr auto minmax(8rem, .4fr); gap: 1rem; align-items: center; margin-top: 1.3rem; }
+  .flow-arrow { color: var(--mo-decision); font-size: 1.5rem; font-weight: 850; }
+  .fragmented-member { display: grid; gap: .3rem; text-align: center; }
+  .fragmented-member span { color: var(--text-dim); }
+  @media (max-width: 860px) {
+    .membership-operations-deck { scroll-snap-type: y proximity; }
+    .membership-operations-deck section { height: auto; min-height: 100vh; padding-inline: 1rem; }
+    .split-shell, .platform-flow { grid-template-columns: 1fr; }
+    .flow-arrow { rotate: 90deg; justify-self: center; }
+  }
+</style>
