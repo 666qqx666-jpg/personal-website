@@ -13,6 +13,7 @@ const deckRoutes = [
   '/ai/skill-desk/weekly-retro/',
   '/projects/sales-lead-slm/',
   '/projects/enterprise-permissions/',
+  '/projects/group-business-analytics/',
   '/projects/membership-operations/',
 ];
 

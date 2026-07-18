@@ -6,7 +6,7 @@ const route = '/projects/group-business-analytics/';
 test('projects listing exposes the group business analytics case as the third card', async ({ page }) => {
   await page.goto('/projects/');
   const cards = page.locator('.card');
-  await expect(cards).toHaveCount(3);
+  await expect(cards).toHaveCount(4);
   await expect(cards.nth(0)).toContainText('全域销售线索管理系统');
   await expect(cards.nth(1)).toContainText('多业务线企业权限体系');
 
@@ -322,4 +322,33 @@ test('viewport changes rebuild motion without accumulating pin spacers', async (
   await expect(root).toHaveAttribute('data-motion-mode', 'desktop');
   await expect(root).toHaveAttribute('data-motion-pin-count', '1');
   await expect(page.locator('.pin-spacer')).toHaveCount(1);
+});
+
+test('main scroll path produces no browser errors and releases the model pin', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
+  page.on('pageerror', (error) => errors.push(error.message));
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(route);
+  await expect(page.locator('[data-group-analytics-deck]')).toHaveAttribute('data-motion-ready', 'true');
+
+  const maxScroll = await page.evaluate(() => document.documentElement.scrollHeight - window.innerHeight);
+  for (const progress of [0, .12, .24, .36, .48, .6, .72, .84, 1, .68, .42, .16, 1]) {
+    await page.evaluate(([max, ratio]) => window.scrollTo(0, max * ratio), [maxScroll, progress]);
+    await page.waitForTimeout(100);
+  }
+
+  await page.locator('#s11').scrollIntoViewIfNeeded();
+  await expect(page.locator('#s11')).toBeVisible();
+  await expect(page.locator('#s11')).toContainText('可以持续演进的数据产品');
+  expect(errors).toEqual([]);
+});
+
+test('all supported viewports remain free of horizontal overflow', async ({ page }) => {
+  for (const viewport of [{ width: 1440, height: 900 }, { width: 1024, height: 768 }, { width: 390, height: 844 }]) {
+    await page.setViewportSize(viewport);
+    await page.goto(route);
+    await expect(page.locator('[data-group-analytics-deck]')).toHaveAttribute('data-motion-ready', 'true');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)).toBe(false);
+  }
 });
