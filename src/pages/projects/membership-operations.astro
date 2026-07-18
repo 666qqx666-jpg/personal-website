@@ -21,7 +21,15 @@ const platformEntries = ['微信', '支付宝', '抖音', '小红书', '快手',
     class="membership-operations-deck"
     data-membership-operations-deck
     data-motion-mode="static"
+    data-active-member-node="member"
   >
+    <aside class="member-progress" aria-hidden="true">
+      <span data-member-node="member"><i></i><b>会员主线</b></span>
+      <span data-member-node="identity"><i></i><b>身份扩展</b></span>
+      <span data-member-node="growth"><i></i><b>增长闭环</b></span>
+      <span data-member-node="risk"><i></i><b>风险治理</b></span>
+    </aside>
+
     <section id="s1" data-scene="opening" data-chapter="member">
       <div class="scene-shell hero-shell">
         <p class="eyebrow">Membership Operations</p>
@@ -246,10 +254,57 @@ const platformEntries = ['微信', '支付宝', '抖音', '小红书', '快手',
   .flow-arrow { color: var(--mo-decision); font-size: 1.5rem; font-weight: 850; }
   .fragmented-member { display: grid; gap: .3rem; text-align: center; }
   .fragmented-member span { color: var(--text-dim); }
+  .scene-shell-wide { width: min(1240px, 100%); }
+  .conclusion-shell { text-align: center; }
+  .boundary-note { color: var(--text-dim); line-height: 1.8; margin-top: 1rem; }
+  .contribution-boundary, .debt-note { display: grid; grid-template-columns: auto 1fr; gap: .75rem; margin-top: 1rem; padding: .8rem 1rem; border: 1px solid var(--glass-border); border-left: 3px solid var(--mo-decision); background: var(--glass); color: var(--text-dim); line-height: 1.6; }
+  .debt-note { border-left-color: var(--mo-blocked); border-style: dashed; }
+  .identity-model, .voucher-paths, .foundation-grid, .channel-sources, .result-grid, .risk-chain, .governance-loop { display: grid; gap: 1rem; margin-top: 1.25rem; }
+  .identity-model { grid-template-columns: 1fr auto 1fr auto 1fr; align-items: stretch; }
+  .identity-model article, .voucher-paths article, .foundation-grid article, .channel-sources article, .result-grid article, .risk-chain article, .governance-loop article { border: 1px solid var(--glass-border); border-radius: 1rem; background: var(--glass); padding: 1rem; }
+  .identity-model article { text-align: center; }
+  .identity-model article strong { display: block; color: var(--mo-identity); font-size: 1.3rem; }
+  .identity-model p, .voucher-paths p, .foundation-grid p, .channel-sources p, .risk-chain p, .governance-loop p { color: var(--text-dim); line-height: 1.6; }
+  .model-link, .attribution-flow b { align-self: center; color: var(--mo-decision); font-size: 1.35rem; }
+  .rebind-figure { display: grid; gap: .8rem; border: 1px solid var(--glass-border); border-radius: 1.2rem; background: var(--glass); padding: 1.2rem; }
+  .rebind-before { display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; }
+  .rebind-before span { padding: .5rem; border: 1px solid var(--glass-border); border-radius: .7rem; text-align: center; }
+  .rebind-action, .asset-boundary { display: grid; gap: .3rem; padding-left: .8rem; border-left: 3px solid var(--mo-decision); }
+  .asset-boundary { border-left-color: var(--mo-blocked); }
+  .rebind-action span, .asset-boundary span { color: var(--text-dim); }
+  .voucher-paths, .channel-sources { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .foundation-grid, .result-grid, .risk-chain, .governance-loop { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .foundation-grid article, .channel-sources article, .result-grid article { border-color: color-mix(in srgb, var(--mo-growth) 45%, var(--glass-border)); }
+  .touch-flow { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .6rem; margin-top: 1.25rem; }
+  .touch-flow span { position: relative; display: grid; place-items: center; min-height: 5rem; border: 1px solid color-mix(in srgb, var(--mo-growth) 50%, var(--glass-border)); border-radius: .9rem; padding: .6rem; text-align: center; }
+  .touch-flow span:not(:last-child)::after { content: '→'; position: absolute; right: -.55rem; color: var(--mo-growth); }
+  .touch-boundaries { display: grid; grid-template-columns: repeat(2, 1fr); gap: .8rem; margin-top: 1rem; }
+  .touch-boundaries p, .attribution-flow { border: 1px solid var(--glass-border); border-radius: 1rem; background: var(--glass); padding: 1rem; }
+  .attribution-flow { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; margin-top: 1rem; }
+  [data-loop='growth'] { color: var(--mo-growth); }
+  [data-loop='governance'] { color: var(--mo-risk); padding: 1rem; border-radius: 1.2rem; box-shadow: inset 0 0 0 1px color-mix(in srgb, currentColor 20%, transparent); }
+  .result-grid article { display: grid; gap: .35rem; text-align: center; }
+  .result-grid strong { color: var(--mo-growth); font-size: clamp(1.3rem, 2.6vw, 2.1rem); }
+  .result-grid small { color: var(--text-dim); }
+  .risk-chain article, .governance-loop article { border-color: color-mix(in srgb, var(--mo-risk) 50%, var(--glass-border)); }
+  .back-projects { display: inline-flex; margin-top: 1.4rem; padding: .7rem 1rem; border: 1px solid var(--glass-border); border-radius: 999px; color: var(--text); text-decoration: none; }
+  .member-progress { position: fixed; z-index: 12; top: 50%; left: 1rem; translate: 0 -50%; display: grid; gap: .55rem; padding: .65rem .55rem; border: 1px solid var(--glass-border); border-radius: 1rem; background: var(--chrome-bg); }
+  .member-progress span { display: flex; align-items: center; gap: .45rem; color: var(--text-dim); }
+  .member-progress i, .nav-dot { width: .55rem; height: .55rem; border-radius: 50%; background: currentColor; }
+  .member-progress b { font-size: .68rem; white-space: nowrap; }
+  [data-active-member-node='member'] [data-member-node='member'], [data-active-member-node='identity'] [data-member-node='identity'], [data-active-member-node='growth'] [data-member-node='growth'], [data-active-member-node='risk'] [data-member-node='risk'] { color: var(--text); }
+  .membership-operations-nav { position: fixed; z-index: 18; bottom: 1rem; left: 50%; translate: -50% 0; display: flex; gap: .3rem; padding: .5rem; border: 1px solid var(--glass-border); border-radius: 999px; background: var(--chrome-bg); }
+  .membership-operations-nav a { display: inline-flex; align-items: center; gap: .4rem; padding: .42rem .65rem; border-radius: 999px; color: var(--text-dim); text-decoration: none; white-space: nowrap; }
+  .membership-operations-nav a.active { color: var(--text); background: var(--glass); }
+  #s12 { padding-bottom: 9rem; }
+  @media (max-width: 1040px) { .member-progress b { display: none; } .foundation-grid, .result-grid, .risk-chain, .governance-loop { grid-template-columns: repeat(2, 1fr); } .touch-flow { grid-template-columns: repeat(3, 1fr); } }
   @media (max-width: 860px) {
     .membership-operations-deck { scroll-snap-type: y proximity; }
     .membership-operations-deck section { height: auto; min-height: 100vh; padding-inline: 1rem; }
-    .split-shell, .platform-flow { grid-template-columns: 1fr; }
+    .split-shell, .platform-flow, .identity-model, .voucher-paths, .channel-sources, .touch-boundaries { grid-template-columns: 1fr; }
     .flow-arrow { rotate: 90deg; justify-self: center; }
+    .model-link { rotate: 90deg; justify-self: center; }
   }
+  @media (max-width: 620px) { .foundation-grid, .result-grid, .risk-chain, .governance-loop, .touch-flow { grid-template-columns: 1fr; } .touch-flow span::after { content: '↓' !important; right: auto !important; bottom: -.65rem; } .touch-flow span:last-child::after { content: none !important; } .membership-operations-nav { width: calc(100% - 1rem); justify-content: space-between; } .membership-operations-nav a span:last-child { font-size: .68rem; } .contribution-boundary, .debt-note { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { .membership-operations-deck *, .membership-operations-deck *::before, .membership-operations-deck *::after { animation-duration: .01ms; transition-duration: .01ms; transition-delay: 0ms; } }
 </style>

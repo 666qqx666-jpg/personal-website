@@ -142,3 +142,43 @@ test('deck exposes twelve scenes and four usable chapter links', async ({ page }
   }
   await expect(page.getByRole('link', { name: '返回项目经历' })).toHaveAttribute('href', '/projects/');
 });
+
+test('membership spine and diagrams use explicit semantic labels', async ({ page }) => {
+  await page.goto(route);
+
+  await expect(page.locator('[data-member-node]')).toHaveCount(4);
+  await expect(page.locator('[data-member-node="member"]')).toContainText('会员主线');
+  await expect(page.locator('[data-member-node="identity"]')).toContainText('身份扩展');
+  await expect(page.locator('[data-member-node="growth"]')).toContainText('增长闭环');
+  await expect(page.locator('[data-member-node="risk"]')).toContainText('风险治理');
+  await expect(page.locator('[data-loop="growth"]')).toHaveCount(1);
+  await expect(page.locator('[data-loop="governance"]')).toHaveCount(1);
+  await expect(page.locator('img')).toHaveCount(0);
+  await expect(page.locator('[role="img"]')).toHaveCount(5);
+});
+
+test('desktop keeps DeckLayout snap and mobile preserves all twelve scenes without overflow', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto(route);
+  expect(await page.locator('[data-membership-operations-deck]').evaluate((element) => getComputedStyle(element).scrollSnapType)).toContain('y');
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(route);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1)).toBe(false);
+  const ids = await page.locator('section[data-scene]').evaluateAll((sections) => sections.map((section) => section.id));
+  expect(ids).toEqual(['s1', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10', 's11', 's12']);
+  await expect(page.locator('#s12 [data-governance-step]')).toHaveCount(4);
+});
+
+test('static mode keeps the complete story readable without JavaScript', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  await page.goto(route);
+
+  await expect(page.locator('[data-membership-operations-deck]')).toHaveAttribute('data-motion-mode', 'static');
+  await expect(page.locator('section[data-scene]')).toHaveCount(12);
+  await page.locator('#s12').scrollIntoViewIfNeeded();
+  await expect(page.locator('#s12')).toBeVisible();
+  await expect(page.locator('#s12')).toContainText('身份不是终点');
+  await context.close();
+});
