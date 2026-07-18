@@ -197,3 +197,18 @@ test('native motion observes scenes and retains a static fallback', async ({ pag
   await expect(fallback.locator('section[data-motion-state="visible"]')).toHaveCount(12);
   await context.close();
 });
+
+test('motion controller stays independent from GSAP and ScrollTrigger', async () => {
+  const source = await readFile(new URL('../src/scripts/membership-operations-motion.ts', import.meta.url), 'utf8');
+  expect(source).not.toContain("from 'gsap'");
+  expect(source).not.toContain('ScrollTrigger');
+});
+
+test('projects listing exposes the membership operations case', async ({ page }) => {
+  await page.goto('/projects/');
+  const card = page.locator('.card', { hasText: '多平台会员运营体系' });
+  await expect(card).toBeVisible();
+  await expect(card).toContainText('把分散的平台访客');
+  await expect(card).toContainText('会员关系');
+  await expect(card).toHaveAttribute('href', route);
+});
