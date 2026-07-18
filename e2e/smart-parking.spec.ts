@@ -5,7 +5,7 @@ const route = '/projects/smart-parking/';
 
 test('deck renders eleven scenes and five chapter links', async ({ page }) => {
   await page.goto(route);
-  await expect(page.getByRole('heading', { name: '让一套停车系统，重新拥有演进能力' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: /让一套停车系统，\s*重新拥有演进能力/ })).toBeVisible();
   await expect(page.locator('section[data-scene]')).toHaveCount(11);
 
   const nav = page.getByRole('navigation', { name: '智慧停车案例章节' });

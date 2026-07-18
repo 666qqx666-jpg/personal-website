@@ -30,7 +30,7 @@ const adoptionStats = [
     <section id="s1" data-scene="opening" data-chapter="background">
       <div class="scene-shell hero-shell">
         <p class="chapter">Smart Parking 2.0</p>
-        <h1>让一套停车系统，重新拥有演进能力</h1>
+        <h1><span>让一套停车系统，</span><span>重新拥有演进能力</span></h1>
         <p class="lead">从无文档的外包系统逆向还原，到重新规划产品、接入内部业务体系并持续迭代。</p>
         <div class="opening-road" data-motion-item role="img" aria-label="从停车 1.0 外包黑盒驶向停车 2.0 自有体系"><span>1.0 外包黑盒</span><i></i><strong>2.0 自有体系</strong></div>
         <p class="memory-line">迁回内部的不是一套旧页面，而是停车产品的定义权与演进能力。</p>
@@ -106,6 +106,7 @@ const adoptionStats = [
     --sp-surface: color-mix(in srgb, var(--glass) 92%, transparent);
     --sp-line: color-mix(in srgb, var(--sp-native) 38%, var(--glass-border));
   }
+  .smart-parking-deck h1 span { display: block; }
   .opening-road { display: grid; grid-template-columns: minmax(9rem, 1fr) 2fr minmax(9rem, 1fr); max-width: 820px; margin: 2rem auto 0; border-color: var(--glass-border); background: linear-gradient(110deg, var(--sp-road), var(--sp-road-strong)); padding: 1.2rem; }
   .opening-road span, .opening-road strong, .journey-only span { border: 1px solid var(--glass-border); border-radius: .8rem; padding: .7rem; } .opening-road span { color: var(--sp-lane); } .opening-road strong { color: var(--sp-native); } .opening-road i { height: 2px; background: repeating-linear-gradient(90deg, var(--sp-lane) 0 1.2rem, transparent 1.2rem 2rem); }
   .background-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); } .background-metrics, .legacy-grid, .iteration-grid, .adoption-stats { margin-top: 1.4rem; } .smart-parking-deck article, .blackbox-map, .architecture-notes, .discount-cap, .mixed-version-note { background: var(--sp-surface); }
