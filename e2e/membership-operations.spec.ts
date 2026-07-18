@@ -61,15 +61,20 @@ test('voucher-owner MCU keeps transactions running and exposes the debt', async 
   await expect(scene.locator('[data-identity-debt]')).toContainText('不能可靠自动合并');
 });
 
-test('growth chapter connects reusable infrastructure to touch and attribution', async ({ page }) => {
+test('growth chapter distinguishes shared infrastructure, business reuse, and analytics attribution', async ({ page }) => {
   await page.goto(route);
 
   const foundation = page.locator('#s7');
-  for (const capability of ['customer-list', 'audience-filter', 'audience-pack', 'sms-service']) {
+  for (const capability of ['sms-service', 'audience-filter', 'short-link-management', 'channel-management', 'qr-management']) {
     await expect(foundation.locator(`[data-foundation="${capability}"]`)).toHaveCount(1);
   }
+  await expect(foundation).toContainText('会员运营基建');
 
   const touch = page.locator('#s8');
+  for (const module of ['customer-list', 'sms-plan', 'scenario-marketing', 'questionnaire', 'coupon', 'points', 'orders']) {
+    await expect(touch.locator(`[data-business-module="${module}"]`)).toHaveCount(1);
+  }
+  await expect(touch).toContainText('复用这些基建');
   await expect(touch.locator('[data-touch-step]')).toHaveCount(6);
   for (const label of ['筛选人群', '创建计划', '内容与额度审核', '发送短信', '点击短链', '访问小程序']) {
     await expect(touch).toContainText(label);
@@ -79,6 +84,8 @@ test('growth chapter connects reusable infrastructure to touch and attribution',
   await expect(attribution.locator('[data-channel="short-link"]')).toContainText('线上短链');
   await expect(attribution.locator('[data-channel="qr"]')).toContainText('线下二维码');
   await expect(attribution.locator('[data-loop="growth"]')).toHaveCount(1);
+  await expect(attribution).toContainText('给最上层的数据分析打下基础');
+  await expect(attribution).toContainText('统一沉淀推广渠道与渠道明细');
   await expect(attribution).toContainText('短链点击与小程序访问使用同一页面访问日志');
   for (const behavior of ['开卡', '领券', '核销', '下单']) {
     await expect(attribution).toContainText(behavior);

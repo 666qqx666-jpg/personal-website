@@ -123,21 +123,34 @@ const platformEntries = ['微信', '支付宝', '抖音', '小红书', '快手',
     <section id="s7" data-scene="growth-foundation" data-chapter="growth">
       <div class="scene-shell">
         <p class="eyebrow">Reusable Foundation</p>
-        <h2>认清会员之后，运营能力才能被多个业务复用</h2>
+        <h2>先沉淀会员运营基建，上层业务才能玩得很溜</h2>
+        <p class="lead-copy">这些公共服务围绕同一会员关系建设一次，再由不同营销、交易与服务模块复用。</p>
         <div class="foundation-grid" data-motion-item>
-          <article data-foundation="customer-list"><strong>顾客列表</strong><p>汇总会员资料、平台访问、开卡、积分、卡券和订单。</p></article>
           <article data-foundation="audience-filter"><strong>人群筛选器</strong><p>按会员属性与业务行为定义目标范围。</p></article>
-          <article data-foundation="audience-pack"><strong>定向人群包</strong><p>让不同业务模块复用同一批会员范围。</p></article>
           <article data-foundation="sms-service"><strong>公共短信服务</strong><p>统一模板、计划、执行记录和回调，避免重复建设。</p></article>
+          <article data-foundation="short-link-management"><strong>短链管理</strong><p>把目标小程序页面转换为可触达、可携带参数的入口。</p></article>
+          <article data-foundation="channel-management"><strong>推广渠道管理</strong><p>统一管理来源、渠道明细与跨模块的归因口径。</p></article>
+          <article data-foundation="qr-management"><strong>二维码管理</strong><p>让线下点位也能绑定渠道与渠道明细。</p></article>
         </div>
-        <p class="principle">公共能力只建设一次，后续运营链路围绕同一会员关系展开。</p>
+        <p class="principle">这五项会员运营基建，决定后续模块能否低成本地找到人、触达人与记录来源。</p>
       </div>
     </section>
 
     <section id="s8" data-scene="touch-flow" data-chapter="growth">
       <div class="scene-shell scene-shell-wide">
         <p class="eyebrow">Auditable Outreach</p>
-        <h2>不是“发一条短信”，而是一条可审核、可执行、可追踪的触达链路</h2>
+        <h2>上层业务复用这些基建，把各自的会员运营做得更顺</h2>
+        <div class="business-reuse" data-motion-item role="list" aria-label="复用会员运营基建的业务模块">
+          <span data-business-module="customer-list" role="listitem">顾客列表：用人群筛选器查询目标顾客</span>
+          <span data-business-module="sms-plan" role="listitem">短信计划：组合人群、短信与短链完成触达</span>
+          <span data-business-module="scenario-marketing" role="listitem">场景营销</span>
+          <span data-business-module="questionnaire" role="listitem">问卷表单</span>
+          <span data-business-module="coupon" role="listitem">卡券模块</span>
+          <span data-business-module="points" role="listitem">积分模块</span>
+          <span data-business-module="orders" role="listitem">订单模块</span>
+        </div>
+        <p class="lead-copy">它们不必各自重建找人、短信和链接能力，而是复用这些基建，按自身业务需求服务会员。</p>
+        <h3>短信计划只是其中一条可审核、可执行、可追踪的链路</h3>
         <div class="touch-flow" role="list" aria-label="从筛选人群到访问小程序的六步触达链路">
           <span data-touch-step data-motion-item role="listitem">筛选人群</span>
           <span data-touch-step data-motion-item role="listitem">创建计划</span>
@@ -156,16 +169,16 @@ const platformEntries = ['微信', '支付宝', '抖音', '小红书', '快手',
     <section id="s9" data-scene="channel-attribution" data-chapter="growth">
       <div class="scene-shell">
         <p class="eyebrow">Attribution Loop</p>
-        <h2>线上短链与线下二维码，回到同一条会员行为主线</h2>
+        <h2>推广渠道与二维码管理，为最上层的数据分析沉淀来源</h2>
         <div class="channel-sources" data-motion-item>
           <article data-channel="short-link"><span>线上</span><strong>线上短链</strong><p>短信响应继续携带推广渠道和目标页面。</p></article>
           <article data-channel="qr"><span>线下</span><strong>线下二维码</strong><p>停车场、电梯、门店与具体点位形成渠道明细。</p></article>
         </div>
-        <p class="lead-copy">短链点击与小程序访问使用同一页面访问日志，日志继续携带推广渠道。</p>
+        <p class="lead-copy">短链点击与小程序访问使用同一页面访问日志，统一沉淀推广渠道与渠道明细；线上和线下入口由此进入同一套分析口径。</p>
         <div class="attribution-flow" data-loop="growth" role="img" aria-label="渠道入口关联小程序访问、开卡、领券、核销和下单">
           <span>推广渠道</span><b>→</b><span>小程序访问</span><b>→</b><span>开卡</span><span>领券</span><span>核销</span><span>下单</span><b>→</b><span>MCU 串联行为</span>
         </div>
-        <p class="boundary-note">完整链路不等于增量因果；活动效果仍取决于活动设计和对照口径。</p>
+        <p class="boundary-note">开卡会员、卡券、订单和问卷都可以带上这些来源数据，给最上层的数据分析打下基础；完整链路不等于增量因果。</p>
       </div>
     </section>
 
@@ -282,6 +295,8 @@ const platformEntries = ['微信', '支付宝', '抖音', '小红书', '快手',
   .voucher-paths, .channel-sources { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .foundation-grid, .result-grid, .risk-chain, .governance-loop { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .foundation-grid article, .channel-sources article, .result-grid article { border-color: color-mix(in srgb, var(--mo-growth) 45%, var(--glass-border)); }
+  .business-reuse { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.1rem; }
+  .business-reuse span { border: 1px solid color-mix(in srgb, var(--mo-growth) 45%, var(--glass-border)); border-radius: 999px; background: color-mix(in srgb, var(--mo-growth) 8%, var(--glass)); color: var(--text); padding: .5rem .7rem; }
   .touch-flow { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: .6rem; margin-top: 1.25rem; }
   .touch-flow span { position: relative; display: grid; place-items: center; min-height: 5rem; border: 1px solid color-mix(in srgb, var(--mo-growth) 50%, var(--glass-border)); border-radius: .9rem; padding: .6rem; text-align: center; }
   .touch-flow span:not(:last-child)::after { content: '→'; position: absolute; right: -.55rem; color: var(--mo-growth); }
