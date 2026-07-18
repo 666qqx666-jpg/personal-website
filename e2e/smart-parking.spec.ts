@@ -96,6 +96,11 @@ test('S7 keeps four benefits, one total cap, and member plus vehicle limits expl
 test('S8 closes the payment lifecycle for cash, zero-pay, and failure branches', async ({ page }) => {
   await page.goto(route);
   const scene = page.locator('#s8');
+  const legacy = scene.locator('[data-payment-version="1.0"]');
+  await expect(legacy).toContainText('缴费页查询一次可用优惠');
+  await expect(legacy).toContainText('调用权益接口');
+  await expect(legacy).toContainText('直接通知停车场“优惠已使用”');
+  await expect(scene.locator('[data-payment-version="2.0"]')).toContainText('每一步都有状态与回退');
   for (const state of ['validate', 'freeze', 'pending', 'paid', 'zero', 'release', 'notify']) {
     await expect(scene.locator(`[data-payment-state="${state}"]`)).toHaveCount(1);
   }

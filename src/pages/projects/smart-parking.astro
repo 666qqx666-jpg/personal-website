@@ -76,7 +76,7 @@ const adoptionStats = [
 
     <section id="s7" data-scene="benefits" data-chapter="native"><div class="scene-shell"><p class="eyebrow">Benefit Orchestration</p><h2>四类权益进入同一套可解释的优惠规则</h2><div class="benefit-grid" data-motion-item><article data-benefit="level">会员等级</article><article data-benefit="points">积分抵现</article><article data-benefit="coupon">停车券</article><article data-benefit="consumption">消费减免</article></div><div class="discount-cap" data-discount-cap data-motion-item><strong>单次总减免上限</strong><span>用户选择顺序决定优惠优先级，先选择的权益优先占用额度。</span><small>前端即时展示，后端重新校验资格、限制与总额度。</small></div><div class="limit-grid" data-motion-item><span data-limit-axis="member"><strong>会员限制</strong>日 / 周 / 月使用上限</span><span data-limit-axis="vehicle"><strong>车辆限制</strong>日 / 周 / 月使用上限</span></div><p class="boundary-note">车辆维度来自多人绑定同一车辆、轮流使用会员权益的真实风控问题；任一维度达到上限，本次权益不可使用。消费减免按每名会员每天最多使用一次，不复制低频二次入场的复杂匹配。</p></div></section>
 
-    <section id="s8" data-scene="payment" data-chapter="native"><div class="scene-shell"><p class="eyebrow">Payment Lifecycle</p><h2>从优惠计算到冻结、支付、扣减与回退</h2><div class="payment-flow" data-motion-item><span data-payment-state="validate">重新校验</span><span data-payment-state="freeze">冻结权益</span><span data-payment-state="pending">待支付</span><span data-payment-state="paid">支付成功后扣减 / 核销</span><span data-payment-state="zero">零元缴费直接完成</span><span data-payment-state="release">失败、取消或超时后解冻</span><span data-payment-state="notify">通知停车中台与停车场</span></div><p class="principle">冻结防止同一积分、停车券或使用次数被并发重复占用。</p></div></section>
+    <section id="s8" data-scene="payment" data-chapter="native"><div class="scene-shell"><p class="eyebrow">Payment Lifecycle</p><h2>同一笔优惠，从一次查询到可回退闭环</h2><div class="payment-compare" data-motion-item><article class="payment-version legacy-payment" data-payment-version="1.0"><div class="payment-version-heading"><span>停车 1.0</span><strong>一次查询后直接使用</strong></div><ol class="legacy-payment-flow"><li>缴费页查询一次可用优惠</li><li>调用权益接口</li><li>直接通知停车场“优惠已使用”</li></ol><p>没有冻结、支付结果确认或失败回退的生命周期。</p></article><article class="payment-version native-payment" data-payment-version="2.0"><div class="payment-version-heading"><span>停车 2.0</span><strong>每一步都有状态与回退</strong></div><div class="payment-flow"><span data-payment-state="validate">重新校验</span><span data-payment-state="freeze">冻结权益</span><span data-payment-state="pending">创建待支付缴费单</span><span data-payment-state="paid">支付成功后扣减 / 核销</span><span data-payment-state="zero">零元缴费直接完成</span><span data-payment-state="release">失败、取消或超时后解冻</span><span data-payment-state="notify">通知停车中台与停车场</span></div></article></div><p class="principle">冻结防止同一积分、停车券或使用次数被并发重复占用；支付失败时，权益和订单都能回到可解释的状态。</p></div></section>
 
     <section id="s9" data-scene="evolution" data-chapter="evolution"><div class="scene-shell"><p class="eyebrow">Back to Evolution</p><h2>真实问题开始进入内部迭代闭环</h2><div class="iteration-grid" data-motion-item><article data-iteration="benefits"><strong>权益扩展</strong><p>会员等级、积分抵现、商户停车券、消费减免和便捷出场进入统一体系。</p></article><article data-iteration="vehicle-risk"><strong>车辆风控</strong><p>从仅限制会员升级为会员与车辆双维限制，并增加绑定查询、后台解绑和操作日志。</p></article><article data-iteration="double-pay"><strong>双重支付治理</strong><p>针对 ETC 与小程序结果同步时间差，增加支付后 Loading 与等待出场提示；优化后未再明显发生同类问题。</p></article><article data-iteration="refund"><strong>异常闭环</strong><p>现金与权益同步回退；再次执行只重试失败步骤，以校验时间处理跨日核销，超出宽限时由退款兜底。</p></article></div></div></section>
 
@@ -111,6 +111,24 @@ const adoptionStats = [
   .disconnect-mark { color: var(--sp-risk); font-size: 4.25rem; font-weight: 300; line-height: 1; }
   [data-smart-parking-deck][data-motion-ready='true'][data-motion-mode='observe'] #s5[data-motion-state='pending'] .disconnect-mark { opacity: 0; scale: .72; }
   [data-smart-parking-deck][data-motion-mode='observe'] #s5[data-motion-state='visible'] .disconnect-mark { opacity: 1; scale: 1; transition: opacity .35s ease .12s, scale .35s ease .12s; }
+  .payment-compare { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.35fr); gap: 1rem; margin-top: 1.2rem; }
+  .payment-version { display: grid; gap: 1rem; }
+  .payment-version-heading { display: grid; gap: .35rem; }
+  .payment-version-heading > span { font-size: .78rem; font-weight: 800; letter-spacing: .12em; }
+  .payment-version-heading > strong { font-size: 1.05rem; }
+  .legacy-payment { border-color: color-mix(in srgb, var(--sp-lane) 62%, var(--glass-border)); }
+  .legacy-payment .payment-version-heading > span { color: var(--sp-lane); }
+  .native-payment { border-color: color-mix(in srgb, var(--sp-native) 62%, var(--glass-border)); }
+  .native-payment .payment-version-heading > span { color: var(--sp-native); }
+  .legacy-payment-flow { display: grid; gap: .55rem; list-style: none; counter-reset: payment-step; }
+  .legacy-payment-flow li { position: relative; display: grid; grid-template-columns: auto 1fr; gap: .55rem; align-items: center; color: var(--text); line-height: 1.5; }
+  .legacy-payment-flow li::before { content: counter(payment-step); counter-increment: payment-step; display: grid; place-items: center; width: 1.45rem; height: 1.45rem; border: 1px solid var(--sp-lane); border-radius: 50%; color: var(--sp-lane); font-size: .75rem; font-weight: 800; }
+  .legacy-payment-flow li:not(:last-child)::after { content: '↓'; grid-column: 1; color: var(--sp-lane); text-align: center; }
+  .legacy-payment p { color: var(--text-dim); line-height: 1.6; }
+  .payment-compare .payment-flow { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 0; }
+  .payment-compare .payment-flow span { min-height: 4.5rem; font-size: .9rem; }
+  .payment-compare .payment-flow span::after { display: none; }
+  @media (max-width: 860px) { .payment-compare { grid-template-columns: 1fr; } .payment-compare .payment-flow { grid-template-columns: 1fr; } }
   .opening-road { display: grid; grid-template-columns: minmax(9rem, 1fr) 2fr minmax(9rem, 1fr); max-width: 820px; margin: 2rem auto 0; border-color: var(--glass-border); background: linear-gradient(110deg, var(--sp-road), var(--sp-road-strong)); padding: 1.2rem; }
   .opening-road span, .opening-road strong, .journey-only span { border: 1px solid var(--glass-border); border-radius: .8rem; padding: .7rem; } .opening-road span { color: var(--sp-lane); } .opening-road strong { color: var(--sp-native); } .opening-road i { height: 2px; background: repeating-linear-gradient(90deg, var(--sp-lane) 0 1.2rem, transparent 1.2rem 2rem); }
   .background-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); } .background-metrics, .legacy-grid, .iteration-grid, .adoption-stats { margin-top: 1.4rem; } .smart-parking-deck article, .blackbox-map, .architecture-notes, .discount-cap, .mixed-version-note { background: var(--sp-surface); }
