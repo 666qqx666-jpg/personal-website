@@ -16,10 +16,11 @@ test('deck renders eleven scenes and five chapter links', async ({ page }) => {
 
 test('S1 to S4 establish the business importance and black-box reconstruction', async ({ page }) => {
   await page.goto(route);
-  await expect(page.locator('#s2')).toContainText('停车，是商场体验的第一站与最后一站');
-  await expect(page.locator('#s2')).toContainText('到场');
-  await expect(page.locator('#s2')).toContainText('消费');
-  await expect(page.locator('#s2')).toContainText('缴费离场');
+  await expect(page.locator('#s2')).toContainText('8 个 2.0 商场的月度运行规模');
+  await expect(page.locator('#s2 [data-background-metric="payment-orders"]')).toContainText('约 7.57 万笔');
+  await expect(page.locator('#s2 [data-background-metric="payable-amount"]')).toContainText('约 118.33 万元');
+  await expect(page.locator('#s2 [data-background-metric="unique-plates"]')).toContainText('待补充');
+  await expect(page.locator('#s2')).toContainText('缴费单不等同于进场车次');
   await expect(page.locator('#s3')).toContainText('1.0 仍在运行');
   await expect(page.locator('#s3')).toContainText('外包响应慢');
   await expect(page.locator('#s3')).toContainText('需求迭代慢');
@@ -28,20 +29,16 @@ test('S1 to S4 establish the business importance and black-box reconstruction', 
   await expect(page.locator('#s4')).toContainText('功能覆盖接近原系统');
 });
 
-test('S2 never exposes visual-companion sample numbers', async ({ page }) => {
+test('S2 exposes only scoped operating metrics and never uses sample numbers', async ({ page }) => {
   await page.goto(route);
   const scene = page.locator('#s2');
-  const metricCount = await scene.locator('[data-background-metric]').count();
-  expect([0, 3]).toContain(metricCount);
-
-  if (metricCount === 0) {
-    await expect(scene.locator('[data-metric-state="without-data"]')).toBeVisible();
-  } else {
-    for (const metric of await scene.locator('[data-background-metric]').all()) {
-      await expect(metric).toHaveAttribute('data-scope', /.+/);
-      await expect(metric).toHaveAttribute('data-time-basis', /.+/);
-    }
+  await expect(scene.locator('[data-metric-state="with-data"]')).toBeVisible();
+  await expect(scene.locator('[data-background-metric]')).toHaveCount(3);
+  for (const metric of await scene.locator('[data-background-metric]').all()) {
+    await expect(metric).toHaveAttribute('data-scope', '8 个停车 2.0 商场');
+    await expect(metric).toHaveAttribute('data-time-basis', '现有月均口径');
   }
+  await expect(scene.locator('[data-metric-status="pending"]')).toHaveCount(1);
 
   const body = await page.locator('body').innerText();
   expect(body).not.toMatch(/42\.6 万|¥318 万|12\.8 万/);
@@ -124,7 +121,7 @@ test('S9 and S10 prove continued evolution while preserving migration boundaries
   await expect(page.locator('#s10 [data-adoption-total]')).toContainText('35 个停车商场');
   await expect(page.locator('#s10 [data-version="2.0"]')).toContainText('8 个');
   await expect(page.locator('#s10 [data-version="1.0"]')).toContainText('27 个');
-  await expect(page.locator('#s10 [data-adoption-evidence="volume"]')).toContainText('约 7.57 万笔 / 月');
+  await expect(page.locator('#s10 [data-adoption-evidence="volume"]')).toHaveCount(0);
   await expect(page.locator('#s10 [data-adoption-evidence="migration"]')).toContainText('1 个 2.0 · 18 个 1.0');
   await expect(page.locator('#s10 .adoption-stats')).toHaveCount(0);
   await expect(page.locator('#s10 .version-lanes')).toHaveCount(0);
