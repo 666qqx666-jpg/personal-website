@@ -65,6 +65,52 @@ const platformEntries = ['微信', '支付宝', '抖音', '小红书', '快手',
         <p class="principle">先认清客户主体下的会员关系，后续运营才不是一组彼此断开的动作。</p>
       </div>
     </section>
+
+    <section id="s4" data-scene="identity-foundation" data-chapter="identity">
+      <div class="scene-shell">
+        <p class="eyebrow">Inherited Foundation</p>
+        <h2>继承身份底座，在清楚的贡献边界上继续扩展</h2>
+        <p class="lead-copy">原始微信 / 支付宝模型由其他产品经理规划；我的工作从理解、吸收并扩展这套关系开始。</p>
+        <p class="contribution-boundary" data-contribution-boundary><strong>本人主导范围</strong><span>多平台接入、券主 MCU、会员触达、渠道归因和异常治理的业务建模、方案设计与上线推动；研发团队负责工程实现。</span></p>
+        <div class="identity-model" data-motion-item role="img" aria-label="XCU 通过 ECU 关联客户主体下的 MCU">
+          <article data-identity-entity="xcu"><span>平台访客</span><strong>XCU</strong><p>顾客在某一小程序平台中的访客身份</p></article>
+          <span class="model-link">→</span>
+          <article data-identity-entity="ecu"><span>关系层</span><strong>ECU</strong><p>连接 MCU 与不同平台 XCU 的当前归属</p></article>
+          <span class="model-link">→</span>
+          <article data-identity-entity="mcu"><span>会员主体</span><strong>MCU</strong><p>承载会员卡、积分、卡券、消费和等级资产</p></article>
+        </div>
+        <p class="principle">继承的不是一组缩写，而是一条需要继续尊重的会员资产边界。</p>
+      </div>
+    </section>
+
+    <section id="s5" data-scene="identity-rebind" data-chapter="identity">
+      <div class="scene-shell split-shell">
+        <div>
+          <p class="eyebrow">Decision 01 · Rebinding</p>
+          <h2>迁移当前平台身份，但不合并旧会员资产</h2>
+          <p class="lead-copy">同一 XCU 使用新手机号合法开卡并命中 MCU-B 后，相关平台身份迁移到 ECU-B；MCU-A 及其历史资产继续保留。</p>
+          <p class="principle">重绑定不等于会员资产合并。</p>
+        </div>
+        <div class="rebind-figure" role="img" aria-label="当前平台身份从 ECU-A 重绑定到 ECU-B，MCU-A 资产保持不动">
+          <div class="rebind-before" data-motion-item><span>XCU</span><span>ECU-A</span><span>MCU-A</span></div>
+          <div class="rebind-action" data-rebind="xcu" data-motion-item><strong>当前平台身份迁移</strong><span>XCU → ECU-B → MCU-B</span></div>
+          <div class="asset-boundary" data-assets="preserved" data-motion-item><strong>MCU-A 不迁移</strong><span>积分、卡券、消费和等级保持不动</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="s6" data-scene="voucher-owner" data-chapter="identity">
+      <div class="scene-shell">
+        <p class="eyebrow">Decision 02 · Business Continuity</p>
+        <h2>上游没有手机号时，先让交易链路继续运行</h2>
+        <p class="lead-copy">部分外部平台订单只返回平台会员标识。系统先查找已有身份；无法找到时，再用券主 MCU 兜底。</p>
+        <div class="voucher-paths" data-motion-item role="group" aria-label="有真实会员时复用 MCU，无手机号且无法关联时创建券主 MCU">
+          <article data-voucher-path="reuse"><span>能够关联</span><strong>优先复用真实 MCU</strong><p>XCU / ECU 已经找到客户主体下的会员。</p></article>
+          <article data-voucher-path="fallback"><span>无法关联</span><strong>实例化券主 MCU</strong><p>使用平台会员标识，让订单、投放记录和核销继续运行。</p></article>
+        </div>
+        <div class="debt-note" data-identity-debt><strong>真实边界</strong><span>券主 MCU 与真实 MCU 可能长期并存，不能可靠自动合并。</span></div>
+      </div>
+    </section>
   </main>
 </DeckLayout>
 
