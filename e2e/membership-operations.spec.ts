@@ -14,15 +14,23 @@ test('opening explains why membership is the CRM relationship spine', async ({ p
   await expect(page.locator('#s2 [data-member-asset]')).toHaveCount(6);
 });
 
-test('background connects channel expansion to fragmented member identity', async ({ page }) => {
+test('background connects fragmented platform identities to unified member operations', async ({ page }) => {
   await page.goto(route);
   const scene = page.locator('#s3');
 
-  for (const platform of ['微信', '支付宝', '抖音', '小红书', '快手', '线下二维码']) {
+  for (const platform of ['微信', '支付宝', '抖音', '小红书', '快手', '外部导入']) {
     await expect(scene).toContainText(platform);
   }
+  await expect(scene).not.toContainText('线下二维码');
   await expect(scene).toContainText('同一顾客会以多个平台访客身份进入系统');
   await expect(scene.locator('[data-platform-entry]')).toHaveCount(6);
+  await expect(scene.locator('[data-identity-aggregation]')).toContainText('聚合为同一会员');
+  await expect(scene.locator('[data-operation-funnel]')).toHaveCount(1);
+  for (const operation of ['开卡有礼', '消费有礼', '生日有礼', '营销游戏', '流失挽回']) {
+    await expect(scene.locator('[data-member-operation]').filter({ hasText: operation })).toHaveCount(1);
+  }
+  await expect(scene.locator('[data-member-operation]')).toHaveCount(5);
+  await expect(scene).toContainText('会员运营依赖统一的会员身份');
 
   const body = await page.locator('body').innerText();
   expect(body).not.toContain('跨客户识别同一自然人');
