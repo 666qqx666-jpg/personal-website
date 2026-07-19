@@ -1,0 +1,181 @@
+---
+import type { ResumeDocument as ResumeDocumentData } from '../../data/resume/types';
+import ResumeProject from './ResumeProject.astro';
+
+interface Props {
+  resume: ResumeDocumentData;
+}
+
+const { resume } = Astro.props;
+const compact = resume.mode === 'compact';
+const siteLabel = resume.identity.site.replace(/^https?:\/\//, '');
+const githubLink = resume.identity.links.find(({ label }) => label === 'GitHub');
+---
+
+<div class="resume-shell" data-resume-variant={resume.id}>
+  <nav class="screen-actions" aria-label="简历操作">
+    <a href="/about/">返回个人介绍</a>
+    <button type="button" onclick="window.print()">打印 / 导出 PDF</button>
+  </nav>
+
+  <article class:list={['resume-sheet', { 'is-compact': compact }]} data-one-page={compact ? 'true' : 'false'}>
+    <header class="resume-header">
+      <div>
+        <p class="eyebrow">{resume.label}</p>
+        <h1>{resume.identity.name}</h1>
+        <p class="target">{resume.target}</p>
+      </div>
+      <address class="contact">
+        <a href={`mailto:${resume.identity.email}`}>{resume.identity.email}</a>
+        <a href={resume.identity.site}>{siteLabel}</a>
+        {githubLink && <a href={githubLink.href}>{githubLink.label}</a>}
+      </address>
+    </header>
+
+    <section class="resume-section summary-section">
+      <h2>职业摘要</h2>
+      <p>{resume.summary}</p>
+    </section>
+
+    <section class="resume-section">
+      <h2>核心能力</h2>
+      <div class="capabilities">
+        {resume.capabilities.map((capability) => <span>{capability}</span>)}
+      </div>
+    </section>
+
+    {resume.leadProject && (
+      <section class="resume-section">
+        <h2>AI 产品实践</h2>
+        <ResumeProject project={resume.leadProject} mode={resume.mode} showTags={resume.showTags} />
+      </section>
+    )}
+
+    <section class="resume-section">
+      <h2>工作经历</h2>
+      {resume.jobs.map((job, index) => {
+        const highlights = compact
+          ? job.highlights.slice(0, index === 0 ? 3 : 1)
+          : job.highlights;
+
+        return (
+          <article class="job">
+            <header>
+              <h3>{job.company}｜{job.title}</h3>
+              <span>{job.period}</span>
+            </header>
+            <ul>{highlights.map((highlight) => <li>{highlight}</li>)}</ul>
+          </article>
+        );
+      })}
+    </section>
+
+    <section class="resume-section">
+      <h2>{compact ? '精选项目' : '商业项目经历'}</h2>
+      {resume.projects.map((project) => (
+        <ResumeProject project={project} mode={resume.mode} showTags={resume.showTags} />
+      ))}
+    </section>
+
+    {resume.shortProject && (
+      <section class="resume-section">
+        <h2>AI 产品实践</h2>
+        <ResumeProject
+          project={resume.shortProject}
+          mode={resume.mode}
+          density="short"
+          showTags={resume.showTags}
+        />
+      </section>
+    )}
+
+    <footer class="resume-section footer-section">
+      <section>
+        <h2>教育经历</h2>
+        {resume.education.map((item) => (
+          <p><strong>{item.school}｜{item.major}</strong><span>{item.period}</span></p>
+        ))}
+      </section>
+      <section>
+        <h2>认证</h2>
+        <p>{resume.certifications.join(' · ')}</p>
+      </section>
+      <section>
+        <h2>工具</h2>
+        <p>{resume.tools.join(' · ')}</p>
+      </section>
+    </footer>
+  </article>
+</div>
+
+<style>
+  :global(body.resume-output) { background: #e9eef5; color: #172033; font-family: var(--font); }
+  .resume-shell { min-height: 100vh; padding: 28px 16px 48px; }
+  .screen-actions { width: min(210mm, 100%); margin: 0 auto 12px; display: flex; justify-content: flex-end; gap: 10px; }
+  .screen-actions a, .screen-actions button { border: 1px solid #cad3df; border-radius: 8px; background: #fff; color: #344054; padding: 7px 11px; font: inherit; cursor: pointer; }
+  .resume-sheet { width: 210mm; min-height: 297mm; margin: 0 auto; padding: 13mm 14mm; background: #fff; color: #172033; box-shadow: 0 18px 50px rgba(32, 48, 71, .16); }
+  .resume-sheet.is-compact { height: 297mm; overflow: hidden; padding: 9.5mm 11mm; font-size: 8.5pt; line-height: 1.38; }
+  .resume-header { display: flex; justify-content: space-between; gap: 24px; padding-bottom: 8px; border-bottom: 2px solid #263b5a; }
+  .eyebrow { color: #52647d; font-size: 8pt; letter-spacing: .08em; }
+  h1 { margin-top: 2px; font-size: 24pt; letter-spacing: .02em; }
+  .target { margin-top: 3px; color: #315f8a; font-size: 11pt; font-weight: 700; }
+  .contact { display: flex; flex-direction: column; align-items: flex-end; justify-content: flex-end; font-size: 8.5pt; font-style: normal; }
+  .contact a { color: #344054; }
+  .resume-section { margin-top: 10px; }
+  .is-compact .resume-section { margin-top: 6px; }
+  .resume-section > h2, .footer-section h2 { margin-bottom: 5px; color: #244f78; font-size: 11pt; letter-spacing: .04em; }
+  .is-compact .resume-section > h2, .is-compact .footer-section h2 { margin-bottom: 3px; font-size: 9.5pt; }
+  .summary-section p { font-size: 9.5pt; }
+  .capabilities { display: flex; flex-wrap: wrap; gap: 5px; }
+  .capabilities span { border: 1px solid #cad7e5; border-radius: 999px; padding: 2px 8px; color: #244f78; font-size: 8pt; }
+  .job { margin-top: 6px; break-inside: avoid; }
+  .job header { display: flex; justify-content: space-between; gap: 16px; }
+  .job header span { color: #667085; white-space: nowrap; }
+  ul { margin: 3px 0 0 16px; }
+  li { margin-top: 2px; }
+  .footer-section { display: grid; grid-template-columns: 1.3fr .8fr 1fr; gap: 12px; border-top: 1px solid #d9e1ea; padding-top: 6px; break-inside: avoid; }
+  .footer-section p { display: flex; justify-content: space-between; gap: 8px; font-size: 8pt; }
+  .footer-section p span { color: #667085; white-space: nowrap; }
+  :global(.resume-project) { padding: 7px 0; border-top: 1px solid #e0e6ed; break-inside: avoid; }
+  :global(.resume-project:first-of-type) { border-top: 0; padding-top: 2px; }
+  :global(.project-head) { display: flex; justify-content: space-between; gap: 16px; }
+  :global(.project-head h3) { font-size: 11pt; }
+  :global(.project-role) { color: #52647d; font-size: 8pt; }
+  :global(.project-meta) { display: flex; flex-direction: column; align-items: flex-end; color: #667085; font-size: 8pt; white-space: nowrap; }
+  :global(.project-background) { margin-top: 4px; font-size: 8.8pt; }
+  :global(.project-columns) { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 4px; }
+  :global(.project-block) { margin-top: 4px; }
+  :global(.project-block strong) { color: #244f78; font-size: 8.5pt; }
+  :global(.project-block ul) { font-size: 8.2pt; }
+  :global(.project-tags) { margin-top: 5px; color: #52647d; font-size: 8pt; }
+  :global(.density-short) { display: grid; grid-template-columns: 1.2fr 1fr; gap: 12px; align-items: start; }
+  :global(.density-short .project-head) { grid-column: 1 / -1; }
+  :global(.density-short .project-background), :global(.short-result) { margin-top: 0; font-size: 8pt; }
+  .is-compact :global(.resume-project) { padding: 4px 0; }
+  .is-compact :global(.project-head h3) { font-size: 9.5pt; }
+  .is-compact :global(.project-background) { margin-top: 2px; font-size: 8pt; }
+  .is-compact :global(.project-columns) { gap: 9px; margin-top: 2px; }
+  .is-compact :global(.project-block) { margin-top: 2px; }
+  .is-compact :global(.project-block ul) { margin-top: 1px; font-size: 7.7pt; }
+  .is-compact .job { margin-top: 3px; }
+  .is-compact .job ul { margin-top: 1px; font-size: 7.8pt; }
+  .is-compact .footer-section { margin-top: 5px; padding-top: 4px; }
+
+  @media screen and (max-width: 850px) {
+    .resume-shell { padding: 0; }
+    .screen-actions { width: 100%; margin: 0; padding: 10px 12px; }
+    .resume-sheet, .resume-sheet.is-compact { width: 100%; min-height: 0; height: auto; padding: 24px 18px; overflow: visible; box-shadow: none; }
+    .resume-header, :global(.project-head) { flex-direction: column; }
+    .contact, :global(.project-meta) { align-items: flex-start; }
+    :global(.project-columns), .footer-section, :global(.density-short) { grid-template-columns: 1fr; }
+  }
+
+  @page { size: A4; margin: 0; }
+
+  @media print {
+    :global(body.resume-output) { background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .resume-shell { padding: 0; }
+    .screen-actions { display: none; }
+    .resume-sheet { margin: 0; box-shadow: none; }
+  }
+</style>

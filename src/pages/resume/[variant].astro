@@ -1,0 +1,24 @@
+---
+import ResumeDocument from '../../components/resume/ResumeDocument.astro';
+import ResumeLayout from '../../layouts/ResumeLayout.astro';
+import { getResumeDocument, resumeVariantIds } from '../../data/resume/variants';
+import type { ResumeVariantId } from '../../data/resume/types';
+
+export function getStaticPaths() {
+  return resumeVariantIds.map((variant) => ({
+    params: { variant },
+    props: { variant },
+  }));
+}
+
+interface Props {
+  variant: ResumeVariantId;
+}
+
+const { variant } = Astro.props;
+const resume = getResumeDocument(variant);
+---
+
+<ResumeLayout title={`${resume.label} · ${resume.identity.name}`} description={resume.summary}>
+  <ResumeDocument resume={resume} />
+</ResumeLayout>

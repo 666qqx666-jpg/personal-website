@@ -1,0 +1,64 @@
+---
+import type { ResumeMode, ResumeProject } from '../../data/resume/types';
+
+interface Props {
+  project: ResumeProject;
+  mode: ResumeMode;
+  density?: 'full' | 'compact' | 'short';
+  showTags?: boolean;
+}
+
+const {
+  project,
+  mode,
+  density = mode === 'full' ? 'full' : 'compact',
+  showTags = false,
+} = Astro.props;
+const copy = project.copy[mode === 'full' ? 'master' : 'compact'];
+const isShort = density === 'short';
+---
+
+<article
+  class:list={['resume-project', `density-${density}`]}
+  data-project-id={project.id}
+  data-density={density}
+>
+  <header class="project-head">
+    <div>
+      <h3>{project.name}</h3>
+      <p class="project-role">{project.role}</p>
+    </div>
+    <p class="project-meta">
+      <span>{project.period}</span>
+      <span>{project.state}</span>
+    </p>
+  </header>
+
+  <p class="project-background">{copy.background}</p>
+
+  {density === 'full' && !isShort && (
+    <div class="project-block">
+      <strong>本人职责</strong>
+      <ul>
+        {project.responsibilities.map((responsibility) => <li>{responsibility}</li>)}
+      </ul>
+    </div>
+  )}
+
+  {!isShort && (
+    <div class="project-columns">
+      <div class="project-block">
+        <strong>关键行动</strong>
+        <ul>{copy.actions.map((action) => <li>{action}</li>)}</ul>
+      </div>
+      <div class="project-block">
+        <strong>结果证据</strong>
+        <ul>{copy.results.map((result) => <li>{result}</li>)}</ul>
+      </div>
+    </div>
+  )}
+
+  {isShort && <p class="short-result"><strong>结果证据：</strong>{copy.results[0]}</p>}
+
+  {showTags && <p class="project-tags">{project.tags.join(' · ')}</p>}
+</article>
