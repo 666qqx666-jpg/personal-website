@@ -1,6 +1,19 @@
-import type { ResumeFacts } from './types';
+import type { DeepReadonly, ResumeFacts } from './types';
 
-export const resumeFacts = {
+export function deepFreeze<T>(value: T): DeepReadonly<T> {
+  if (value === null || typeof value !== 'object' || Object.isFrozen(value)) {
+    return value as DeepReadonly<T>;
+  }
+
+  for (const key of Reflect.ownKeys(value)) {
+    const nestedValue: unknown = Reflect.get(value, key);
+    deepFreeze(nestedValue);
+  }
+
+  return Object.freeze(value) as DeepReadonly<T>;
+}
+
+export const resumeFacts = deepFreeze({
   identity: {
     name: 'QQ星',
     email: '666qqx666@gmail.com',
@@ -243,4 +256,4 @@ export const resumeFacts = {
       tags: ['交易系统', '权益编排', '异常处理', '迁移策略'],
     },
   ],
-} satisfies ResumeFacts;
+} satisfies ResumeFacts);

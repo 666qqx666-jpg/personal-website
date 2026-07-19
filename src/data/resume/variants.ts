@@ -1,9 +1,9 @@
-import { resumeFacts } from './facts';
-import type { ResumeDocument, ResumeProjectId, ResumeVariantConfig, ResumeVariantId } from './types';
+import { deepFreeze, resumeFacts } from './facts';
+import type { DeepReadonly, ResumeDocument, ResumeProjectId, ResumeVariantConfig, ResumeVariantId } from './types';
 
-export const resumeVariantIds: ResumeVariantId[] = ['master', 'ai', 'b2b'];
+export const resumeVariantIds = deepFreeze<ResumeVariantId[]>(['master', 'ai', 'b2b']);
 
-const variants: Record<ResumeVariantId, ResumeVariantConfig> = {
+const variants = deepFreeze<Record<ResumeVariantId, ResumeVariantConfig>>({
   master: {
     id: 'master',
     label: '完整版内容母稿',
@@ -40,7 +40,7 @@ const variants: Record<ResumeVariantId, ResumeVariantConfig> = {
     shortProjectId: 'ai',
     showTags: false,
   },
-};
+});
 
 const projectById = new Map(resumeFacts.projects.map((project) => [project.id, project]));
 
@@ -50,9 +50,9 @@ function resolveProject(id: ResumeProjectId) {
   return project;
 }
 
-export function getResumeDocument(id: ResumeVariantId): ResumeDocument {
+export function getResumeDocument(id: ResumeVariantId): DeepReadonly<ResumeDocument> {
   const config = variants[id];
-  return {
+  return deepFreeze({
     ...config,
     identity: resumeFacts.identity,
     jobs: resumeFacts.jobs,
@@ -62,5 +62,5 @@ export function getResumeDocument(id: ResumeVariantId): ResumeDocument {
     leadProject: config.leadProjectId ? resolveProject(config.leadProjectId) : undefined,
     projects: config.projectIds.map(resolveProject),
     shortProject: config.shortProjectId ? resolveProject(config.shortProjectId) : undefined,
-  };
+  } satisfies ResumeDocument);
 }

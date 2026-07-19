@@ -1,7 +1,8 @@
 import { expect, test } from '@playwright/test';
 
+import { education, jobs } from '../src/data/resume';
 import { resumeFacts } from '../src/data/resume/facts';
-import { getResumeDocument } from '../src/data/resume/variants';
+import { getResumeDocument, resumeVariantIds } from '../src/data/resume/variants';
 
 const projectPeriods = {
   permissions: '2022.06–2023.12｜分两期建设',
@@ -26,7 +27,7 @@ test('every project has bounded master and compact background copy', () => {
   }
 });
 
-test('AI facts preserve verified scope and all public facts exclude sensitive or placeholder content', () => {
+test('AI facts preserve verified scope and all public outputs exclude sensitive or placeholder content', () => {
   const aiProject = resumeFacts.projects.find(({ id }) => id === 'ai');
   expect(aiProject).toBeDefined();
 
@@ -45,11 +46,26 @@ test('AI facts preserve verified scope and all public facts exclude sensitive or
   }
   expect(aiJson).not.toMatch(/提升效率|团队提效|团队推广/);
 
-  const publicFacts = JSON.stringify(resumeFacts);
-  expect(publicFacts).not.toMatch(/报价单号|甲方：|联系电话|真实客户名称/);
-  expect(publicFacts).not.toMatch(/1[3-9]\d{9}/);
-  expect(publicFacts).not.toMatch(/智慧校园|汽车数据标注/);
-  expect(publicFacts).not.toMatch(new RegExp(['T' + 'BD', 'TO' + 'DO', '待' + '补', '若' + '干', '等' + '等'].join('|')));
+  const publicOutput = JSON.stringify([
+    resumeFacts,
+    getResumeDocument('master'),
+    getResumeDocument('ai'),
+    getResumeDocument('b2b'),
+  ]);
+  expect(publicOutput).not.toMatch(/报价单号|甲方|联系电话|真实客户名称|详细地址|联系地址|报价金额|合同金额/);
+  expect(publicOutput).not.toMatch(/1[3-9]\d{9}/);
+  expect(publicOutput).not.toMatch(/智慧校园|汽车数据标注/);
+  expect(publicOutput).not.toMatch(/https?:\/\/[^"\\\s]*(?:feishu\.cn|larksuite\.com|\/drive\/|\/folder\/)/i);
+  expect(publicOutput).not.toMatch(new RegExp(['T' + 'BD', 'TO' + 'DO', '待' + '补', '若' + '干', '等' + '等'].join('|')));
+
+  const urls = publicOutput.match(/https?:\/\/[^"\\\s]+/g) ?? [];
+  expect(urls.length).toBeGreaterThan(0);
+  for (const url of urls) {
+    expect(
+      url === 'https://qqx.life' || url === 'https://github.com/666qqx666-jpg',
+      `unexpected public URL: ${url}`,
+    ).toBe(true);
+  }
 });
 
 test('resume variants resolve project facts without duplicating them', () => {
@@ -74,4 +90,68 @@ test('resume variants resolve project facts without duplicating them', () => {
   expect(b2b.mode).toBe('compact');
   expect(b2b.projects.map(({ id }) => id)).toEqual(['sales', 'permissions', 'analytics']);
   expect(b2b.shortProject?.id).toBe('ai');
+});
+
+test('canonical facts, compatibility exports, and resolved documents are deeply immutable', () => {
+  const master = getResumeDocument('master');
+  const ai = getResumeDocument('ai');
+  const b2b = getResumeDocument('b2b');
+  const frozenValues = [
+    resumeFacts,
+    resumeFacts.identity,
+    resumeFacts.identity.links,
+    resumeFacts.identity.links[0],
+    resumeFacts.jobs,
+    resumeFacts.jobs[0],
+    resumeFacts.jobs[0].highlights,
+    resumeFacts.education,
+    resumeFacts.education[0],
+    resumeFacts.certifications,
+    resumeFacts.tools,
+    resumeFacts.projects,
+    resumeFacts.projects[0],
+    resumeFacts.projects[0].responsibilities,
+    resumeFacts.projects[0].copy,
+    resumeFacts.projects[0].copy.master,
+    resumeFacts.projects[0].copy.master.actions,
+    resumeFacts.projects[0].copy.master.results,
+    resumeFacts.projects[0].copy.compact,
+    resumeFacts.projects[0].tags,
+    jobs,
+    education,
+    resumeVariantIds,
+    master,
+    master.capabilities,
+    master.projectIds,
+    master.projects,
+    ai,
+    b2b,
+    b2b.shortProject,
+  ];
+
+  for (const value of frozenValues) {
+    expect(Object.isFrozen(value)).toBe(true);
+  }
+
+  const originalLeadProjectName = master.leadProject?.name;
+  expect(master.leadProject).toBe(resumeFacts.projects[0]);
+  expect(master.projects[0]).toBe(resumeFacts.projects[1]);
+  expect(jobs).toBe(resumeFacts.jobs);
+  expect(education).toBe(resumeFacts.education);
+
+  expect(() => (resumeFacts.tools as unknown as string[]).push('mutated')).toThrow(TypeError);
+  expect(() => {
+    (master.leadProject as unknown as { name: string }).name = 'mutated';
+  }).toThrow(TypeError);
+  expect(() => (master.projectIds as unknown as string[]).push('parking')).toThrow(TypeError);
+  expect(() => {
+    (master as unknown as { summary: string }).summary = 'mutated';
+  }).toThrow(TypeError);
+
+  const refreshedMaster = getResumeDocument('master');
+  expect(refreshedMaster.leadProject?.name).toBe(originalLeadProjectName);
+  expect(refreshedMaster.projectIds).toEqual(['sales', 'permissions', 'analytics', 'membership', 'parking']);
+  expect(refreshedMaster.projectIds).toBe(master.projectIds);
+  expect(refreshedMaster.capabilities).toBe(master.capabilities);
+  expect(resumeFacts.tools).not.toContain('mutated');
 });
