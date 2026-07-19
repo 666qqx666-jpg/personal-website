@@ -14,9 +14,9 @@ for (const variant of ['ai', 'b2b']) for (const s of sizes) {
   test(`resume ${variant} ${s.n}`, async ({ page }) => {
     await page.setViewportSize({ width: s.w, height: s.h });
     await page.goto(`/resume/${variant}/`);
-    const devToolbar = page.locator('astro-dev-toolbar');
-    await devToolbar.waitFor({ state: 'attached' });
-    await devToolbar.evaluate((toolbar) => toolbar.remove());
+    await page.addStyleTag({
+      content: 'astro-dev-toolbar { display: none !important; }',
+    });
     await page.screenshot({ path: `test-results/resume-${variant}-${s.n}.png`, fullPage: true });
   });
 }
