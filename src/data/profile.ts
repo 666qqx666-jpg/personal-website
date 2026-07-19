@@ -1,3 +1,5 @@
+import { resumeFacts } from './resume/facts';
+
 export interface Profile {
   name: string;
   intent: string; // 求职意向（首页 hero）
@@ -6,22 +8,27 @@ export interface Profile {
   email: string;
   links: { label: string; href: string }[];
   resumePdf: string; // PDF 路径（相对 BASE_URL）
+  resumeDownloads: { label: string; href: string }[];
 }
 
 export const profile: Profile = {
-  name: 'QQ星',
+  name: resumeFacts.identity.name,
   intent: '求职意向：AI 产品经理',
   summary:
-    'B 端产品经理，4 年 CRM / 数据分析 / 系统架构设计经验；计算机科班，正动手把 AI 落地到产品工作流。',
+    'B 端产品经理，4 年 CRM / SaaS 与复杂系统经验；已将个人 AI Agent 工作流用于真实产品工作。',
   typewriter: [
-    'B 端产品 → AI 产品 · 动手派',
-    'CRM / 数据分析 / 系统架构',
-    '计算机背景，懂技术能动手',
+    '企业服务产品 → AI 产品实践',
+    '复杂规则 / 权限 / 数据建模',
+    'Agent 工作流，真实业务自用',
   ],
-  email: '666qqx666@gmail.com',
+  email: resumeFacts.identity.email,
   links: [
     { label: 'CSDN', href: 'https://blog.csdn.net/weixin_50178621' },
     { label: 'GitHub', href: 'https://github.com/666qqx666-jpg' },
   ],
   resumePdf: 'resume.pdf',
+  resumeDownloads: [
+    { label: 'AI 产品经理版', href: 'resume.pdf' },
+    { label: 'B2B / SaaS 版', href: 'resume-b2b-saas.pdf' },
+  ],
 };

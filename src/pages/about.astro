@@ -12,7 +12,9 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
       <p class="intent reveal" data-delay="1">{profile.intent}</p>
       <p class="summary reveal" data-delay="1">{profile.summary}</p>
       <div class="cta reveal" data-delay="2">
-        <a class="btn" href={`${base}${profile.resumePdf}`} download>⬇ 下载 PDF 简历</a>
+        {profile.resumeDownloads.map((resume, index) => (
+          <a class:list={['btn', index > 0 && 'ghost']} href={`${base}${resume.href}`} download>{resume.label}</a>
+        ))}
         <a class="btn ghost" href={`mailto:${profile.email}`}>✉ 联系我</a>
       </div>
       <div class="reveal"><Timeline /></div>
