@@ -1,5 +1,15 @@
 import { resumeFacts } from './resume/facts';
 
+export interface ResumeDownload {
+  readonly label: string;
+  readonly href: string;
+}
+
+const primaryResume = {
+  label: 'AI 产品经理版',
+  href: 'resume.pdf',
+} as const satisfies ResumeDownload;
+
 export interface Profile {
   name: string;
   intent: string; // 求职意向（首页 hero）
@@ -8,7 +18,7 @@ export interface Profile {
   email: string;
   links: { label: string; href: string }[];
   resumePdf: string; // PDF 路径（相对 BASE_URL）
-  resumeDownloads: { label: string; href: string }[];
+  readonly resumeDownloads: readonly ResumeDownload[];
 }
 
 export const profile: Profile = {
@@ -26,9 +36,9 @@ export const profile: Profile = {
     { label: 'CSDN', href: 'https://blog.csdn.net/weixin_50178621' },
     { label: 'GitHub', href: 'https://github.com/666qqx666-jpg' },
   ],
-  resumePdf: 'resume.pdf',
+  resumePdf: primaryResume.href,
   resumeDownloads: [
-    { label: 'AI 产品经理版', href: 'resume.pdf' },
+    primaryResume,
     { label: 'B2B / SaaS 版', href: 'resume-b2b-saas.pdf' },
   ],
 };
