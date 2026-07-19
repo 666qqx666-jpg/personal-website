@@ -1,8 +1,57 @@
+import { execFile } from 'node:child_process';
+import { cp, mkdtemp, readFile, realpath, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
+import { promisify } from 'node:util';
+
 import { expect, test } from '@playwright/test';
 
 const A4_WIDTH_PX = 210 / 25.4 * 96;
 const A4_HEIGHT_PX = 297 / 25.4 * 96;
 const A4_TOLERANCE_PX = 2;
+const execFileAsync = promisify(execFile);
+
+test('static resume links honor Astro base path', async () => {
+  const projectRoot = resolve('.');
+  const buildRoot = await realpath(await mkdtemp(join(tmpdir(), 'resume-base-path-')));
+  const outDir = join(buildRoot, 'dist');
+
+  try {
+    await Promise.all([
+      cp(join(projectRoot, 'src'), join(buildRoot, 'src'), { recursive: true }),
+      cp(join(projectRoot, 'public'), join(buildRoot, 'public'), { recursive: true }),
+      cp(join(projectRoot, 'node_modules'), join(buildRoot, 'node_modules'), { recursive: true }),
+      cp(join(projectRoot, 'package.json'), join(buildRoot, 'package.json')),
+      cp(join(projectRoot, 'tsconfig.json'), join(buildRoot, 'tsconfig.json')),
+    ]);
+    await writeFile(join(buildRoot, 'astro.config.mjs'), `export default {
+  site: 'https://qqx.life',
+  cacheDir: './.astro-cache',
+  vite: { cacheDir: './.vite-cache' },
+};
+`);
+
+    await execFileAsync(process.execPath, [
+      join(buildRoot, 'node_modules/astro/astro.js'),
+      'build',
+      '--root',
+      buildRoot,
+      '--base',
+      '/personal-website',
+      '--outDir',
+      outDir,
+      '--silent',
+    ], { cwd: projectRoot });
+
+    for (const variant of ['ai', 'b2b']) {
+      const html = await readFile(join(outDir, 'resume', variant, 'index.html'), 'utf8');
+      expect(html).toContain('href="/personal-website/about/"');
+      expect(html).not.toContain('href="/about/"');
+    }
+  } finally {
+    await rm(buildRoot, { recursive: true, force: true });
+  }
+});
 
 test('master resume renders every project in canonical order', async ({ page }) => {
   await page.goto('/resume/master/');

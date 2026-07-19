@@ -8,13 +8,14 @@ interface Props {
 
 const { resume } = Astro.props;
 const compact = resume.mode === 'compact';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const siteLabel = resume.identity.site.replace(/^https?:\/\//, '');
 const githubLink = resume.identity.links.find(({ label }) => label === 'GitHub');
 ---
 
 <div class="resume-shell" data-resume-variant={resume.id}>
   <nav class="screen-actions" aria-label="简历操作">
-    <a href="/about/">返回个人介绍</a>
+    <a href={`${base}about/`}>返回个人介绍</a>
     <button type="button" onclick="window.print()">打印 / 导出 PDF</button>
   </nav>
 
