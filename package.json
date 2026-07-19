@@ -6,7 +6,10 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "test:e2e": "playwright test",
+    "resume:check": "npm run check && playwright test e2e/resume-data.spec.ts e2e/resume.spec.ts e2e/about.spec.ts e2e/resume-pdf.spec.ts",
+    "resume:export": "node scripts/export-resumes.mjs"
   },
   "dependencies": {
     "astro": "^5",
