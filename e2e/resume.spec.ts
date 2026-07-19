@@ -1,5 +1,9 @@
 import { expect, test } from '@playwright/test';
 
+const A4_WIDTH_PX = 210 / 25.4 * 96;
+const A4_HEIGHT_PX = 297 / 25.4 * 96;
+const A4_TOLERANCE_PX = 2;
+
 test('master resume renders every project in canonical order', async ({ page }) => {
   await page.goto('/resume/master/');
 
@@ -53,12 +57,45 @@ for (const variant of ['ai', 'b2b']) {
     await page.setViewportSize({ width: 794, height: 1123 });
     await page.emulateMedia({ media: 'print' });
     await page.goto(`/resume/${variant}/`);
+    await page.evaluate(async () => {
+      await document.fonts.ready;
+    });
 
     const sheets = page.locator('.resume-sheet');
     await expect(sheets).toHaveCount(1);
     expect(
       await sheets.evaluate((sheet) => sheet.scrollHeight <= sheet.clientHeight + 1),
     ).toBe(true);
+
+    const sheetRect = await sheets.evaluate((sheet) => {
+      const { width, height } = sheet.getBoundingClientRect();
+      return { width, height };
+    });
+    expect(Math.abs(sheetRect.width - A4_WIDTH_PX)).toBeLessThanOrEqual(A4_TOLERANCE_PX);
+    expect(Math.abs(sheetRect.height - A4_HEIGHT_PX)).toBeLessThanOrEqual(A4_TOLERANCE_PX);
+
+    const actions = page.locator('.screen-actions');
+    await expect(actions).toHaveCount(1);
+    expect(await actions.evaluate((element) => getComputedStyle(element).display)).toBe('none');
+
+    const documentHeight = await page.evaluate(() => Math.max(
+      document.documentElement.scrollHeight,
+      document.body.scrollHeight,
+    ));
+    expect(documentHeight).toBeLessThanOrEqual(A4_HEIGHT_PX + A4_TOLERANCE_PX);
+  });
+}
+
+for (const variant of ['master', 'ai', 'b2b']) {
+  test(`${variant} resume uses the standalone output layout`, async ({ page }) => {
+    const response = await page.goto(`/resume/${variant}/`);
+
+    expect(response?.ok()).toBe(true);
+    await expect(page.locator(`[data-resume-variant="${variant}"]`)).toBeVisible();
+    await expect(page.locator('header.nav')).toHaveCount(0);
+    await expect(page.locator('footer.footer')).toHaveCount(0);
+    await expect(page.locator('.screen-actions')).toHaveCount(1);
+    await expect(page.locator('.screen-actions')).toBeVisible();
   });
 }
 
