@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
 
 import { education, jobs } from '../src/data/resume';
@@ -30,6 +31,18 @@ test('public identity and the personal site facts match the approved design', ()
   expect(JSON.stringify(site)).toContain('22 个 Astro 页面');
   expect(JSON.stringify(site)).toContain('16 个 E2E 测试文件');
   expect(JSON.stringify(site)).toContain('GitHub Pages 发布');
+});
+
+test('complete resume markdown contains the approved public facts', () => {
+  const markdown = readFileSync('docs/resume/完整版-简历.md', 'utf8');
+  expect(markdown).toMatch(/^# 钱麒祥$/m);
+  expect(markdown).toContain('2 份正式业务竞品分析');
+  expect(markdown).toContain('### 个人网站｜qqx.life');
+  expect(markdown).toContain('2026.06–至今');
+  expect(markdown).toContain('22 个 Astro 页面');
+  expect(markdown).toContain('16 个 E2E 测试文件');
+  expect(markdown).toContain('2018.09–2022.06');
+  expect(markdown).not.toMatch(/173\s*9571\s*1345|2000\.02/);
 });
 
 test('every project has bounded master and compact background copy', () => {
