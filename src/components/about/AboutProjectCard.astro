@@ -1,0 +1,135 @@
+---
+import type { AboutProjectView } from '../../data/about';
+
+interface Props {
+  item: AboutProjectView;
+  base: string;
+}
+
+const { item, base } = Astro.props;
+const { project } = item;
+const copy = project.copy.master;
+const href = item.external ? item.href : `${base}${item.href}`;
+---
+
+<article class="about-project-card reveal" data-about-project data-project-id={project.id}>
+  <header class="project-head">
+    <div>
+      <p class="project-period">{project.period}</p>
+      <h3>{project.name}</h3>
+      <p class="project-role">{project.role}</p>
+    </div>
+    <span class="project-state">{project.state}</span>
+  </header>
+
+  <dl class="project-fields">
+    <div class="project-field">
+      <dt>项目背景</dt>
+      <dd>{copy.background}</dd>
+    </div>
+    <div class="project-field">
+      <dt>{item.responsibilityLabel}</dt>
+      <dd><ul>{project.responsibilities.map((text) => <li>{text}</li>)}</ul></dd>
+    </div>
+    <div class="project-field">
+      <dt>关键行动</dt>
+      <dd><ul>{copy.actions.map((text) => <li>{text}</li>)}</ul></dd>
+    </div>
+    <div class="project-field evidence-field">
+      <dt>结果证据</dt>
+      <dd><ul>{copy.results.map((text) => <li>{text}</li>)}</ul></dd>
+    </div>
+    <div class="project-field tag-field">
+      <dt>能力关键词</dt>
+      <dd class="project-tags">{project.tags.map((tag) => <span>{tag}</span>)}</dd>
+    </div>
+  </dl>
+
+  <a
+    class="project-link"
+    href={href}
+    target={item.external ? '_blank' : undefined}
+    rel={item.external ? 'noopener' : undefined}
+  >
+    {item.linkLabel}<span aria-hidden="true">→</span>
+  </a>
+</article>
+
+<style>
+  .about-project-card {
+    padding: clamp(22px, 4vw, 34px);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease);
+  }
+  .about-project-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    border-color: color-mix(in srgb, var(--accent) 32%, var(--border));
+  }
+  .project-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .project-period { color: var(--accent); font-size: 13px; font-weight: 700; }
+  .project-head h3 { margin-top: 5px; font-size: clamp(22px, 3vw, 30px); }
+  .project-role { margin-top: 7px; color: var(--muted); }
+  .project-state {
+    align-self: flex-start;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: var(--bg-soft);
+    color: var(--muted);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .project-fields { display: grid; gap: 14px; margin-top: 20px; }
+  .project-field { display: grid; grid-template-columns: 8rem minmax(0, 1fr); gap: 18px; }
+  dt { color: var(--text); font-size: 14px; font-weight: 750; }
+  dd { min-width: 0; max-width: 72ch; color: var(--muted); }
+  ul { padding-left: 1.15rem; }
+  li + li { margin-top: 7px; }
+  .evidence-field {
+    padding: 16px;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+  }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .project-tags span {
+    padding: 5px 10px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--bg-soft);
+    color: var(--text);
+    font-size: 12px;
+  }
+  .project-link {
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 22px;
+    font-weight: 700;
+  }
+  .project-link span { transition: transform .2s var(--ease); }
+  .project-link:hover span { transform: translateX(4px); }
+  .project-link:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent);
+    outline-offset: 5px;
+    border-radius: 4px;
+  }
+  @media (max-width: 760px) {
+    .project-head { flex-direction: column; gap: 12px; }
+    .project-state { white-space: normal; }
+    .project-field { grid-template-columns: 1fr; gap: 5px; }
+    .evidence-field { margin-inline: -4px; padding: 14px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .about-project-card, .project-link span { transition: none; }
+    .about-project-card:hover, .project-link:hover span { transform: none; }
+  }
+</style>
