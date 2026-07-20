@@ -15,7 +15,7 @@ export function deepFreeze<T>(value: T): DeepReadonly<T> {
 
 export const resumeFacts = deepFreeze({
   identity: {
-    name: 'QQ星',
+    name: '钱麒祥',
     email: '666qqx666@gmail.com',
     site: 'https://qqx.life',
     links: [
@@ -43,7 +43,7 @@ export const resumeFacts = deepFreeze({
     },
   ],
   education: [
-    { school: '中国计量大学', major: '计算机科学与技术 · 本科', period: '2018.08–2022.06' },
+    { school: '中国计量大学', major: '计算机科学与技术 · 本科', period: '2018.09–2022.06' },
   ],
   certifications: ['NPDP', 'PMP', '信息系统项目管理师'],
   tools: ['Axure', 'SQL', 'Obsidian', 'Claude', 'Codex', 'OpenClaw'],
@@ -68,7 +68,7 @@ export const resumeFacts = deepFreeze({
           ],
           results: [
             '建成 8 类核心 Agent 工作流，其中 6 类已稳定用于个人真实产品工作。',
-            '累计支撑 9 份真实业务 PRD、6 份蓝图或关键决策等配套材料、1 份正式业务竞品分析及 3 类定制开发报价方案。',
+            '累计支撑 9 份真实业务 PRD、6 份蓝图或关键决策等配套材料、2 份正式业务竞品分析及 3 类定制开发报价方案。',
             '在销售线索与充电业务中跑通“需求澄清—方案拆解—决策沉淀—报价输出”的跨环节闭环。',
             '以付费线索流转为例，将复杂方案拆解为 25 项关键决策和 6 张业务蓝图。',
           ],
@@ -80,7 +80,7 @@ export const resumeFacts = deepFreeze({
             '将需求发现、PRD 写审、竞品分析、报价、复盘和上下文治理沉淀为可复用工作流。',
           ],
           results: [
-            '8 类工作流中 6 类稳定自用，支撑 9 份真实业务 PRD、1 份正式竞品分析和 3 类定制报价。',
+            '8 类工作流中 6 类稳定自用，支撑 9 份真实业务 PRD、2 份正式业务竞品分析和 3 类定制报价。',
             '复杂需求可沉淀为 25 项关键决策与 6 张业务蓝图；结果仅代表个人工作验证。',
           ],
         },
@@ -254,6 +254,40 @@ export const resumeFacts = deepFreeze({
         },
       },
       tags: ['交易系统', '权益编排', '异常处理', '迁移策略'],
+    },
+    {
+      id: 'site',
+      name: '个人网站｜qqx.life',
+      role: '独立产品设计与实践',
+      period: '2026.06–至今',
+      state: '公开运行｜持续迭代',
+      responsibilities: [
+        '独立完成需求、方案、开发、自动化验证与发布，并持续维护项目内容、主题和部署链路。',
+      ],
+      copy: {
+        master: {
+          background:
+            '个人项目、AI 实践和产品思考缺少统一入口，也需要验证 AI 辅助开发能否形成完整、可复用的交付流程。项目因此以公开网站为载体，连接内容沉淀、项目展示、自动化验证和持续发布。',
+          actions: [
+            '按“需求 / Spec → 实施计划 → 编码 → E2E 验证 → GitHub Pages 发布”完成端到端交付。',
+            '沿用统一设计令牌、深浅主题与内容结构，把项目经历、AI 实践和产品思考连接为公开作品档案。',
+            '使用 Playwright 验证核心页面和响应式表现，并通过 GitHub Actions 持续发布。',
+          ],
+          results: [
+            '当前公开项目包含 22 个 Astro 页面和 16 个 E2E 测试文件。',
+            '已具备自动化部署和可复现的简历导出能力。',
+          ],
+        },
+        compact: {
+          background: '个人项目与 AI 实践缺少统一入口，需要验证 AI 辅助开发的端到端交付流程。',
+          actions: [
+            '按需求、Spec、计划、编码、E2E 和 GitHub Pages 发布完成交付。',
+            '统一项目展示、AI 实践、主题和自动化验证入口。',
+          ],
+          results: ['形成 22 个 Astro 页面、16 个 E2E 测试文件和自动化部署链路。'],
+        },
+      },
+      tags: ['AI 辅助开发', '端到端交付', '自动化验证', '持续发布'],
     },
   ],
 } satisfies ResumeFacts);

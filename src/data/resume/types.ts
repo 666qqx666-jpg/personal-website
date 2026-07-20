@@ -1,6 +1,13 @@
 export type ResumeVariantId = 'master' | 'ai' | 'b2b';
 export type ResumeMode = 'full' | 'compact';
-export type ResumeProjectId = 'ai' | 'sales' | 'permissions' | 'analytics' | 'membership' | 'parking';
+export type ResumeProjectId =
+  | 'ai'
+  | 'sales'
+  | 'permissions'
+  | 'analytics'
+  | 'membership'
+  | 'parking'
+  | 'site';
 
 export type DeepReadonly<T> = T extends (...args: never[]) => unknown
   ? T

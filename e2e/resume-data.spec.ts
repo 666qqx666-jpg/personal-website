@@ -11,11 +11,25 @@ const projectPeriods = {
   parking: '2024.07–2026.03',
   sales: '2025.04–至今',
   ai: '2026.04–至今',
+  site: '2026.06–至今',
 };
 
-test('canonical facts contain the exact six projects and periods', () => {
-  expect(resumeFacts.projects).toHaveLength(6);
+test('canonical facts contain the exact seven projects and periods', () => {
+  expect(resumeFacts.projects).toHaveLength(7);
   expect(Object.fromEntries(resumeFacts.projects.map(({ id, period }) => [id, period]))).toEqual(projectPeriods);
+});
+
+test('public identity and the personal site facts match the approved design', () => {
+  expect(resumeFacts.identity.name).toBe('钱麒祥');
+  expect(resumeFacts.education[0].period).toBe('2018.09–2022.06');
+
+  const site = resumeFacts.projects.find(({ id }) => id === 'site');
+  expect(site).toBeDefined();
+  expect(site?.role).toBe('独立产品设计与实践');
+  expect(site?.state).toBe('公开运行｜持续迭代');
+  expect(JSON.stringify(site)).toContain('22 个 Astro 页面');
+  expect(JSON.stringify(site)).toContain('16 个 E2E 测试文件');
+  expect(JSON.stringify(site)).toContain('GitHub Pages 发布');
 });
 
 test('every project has bounded master and compact background copy', () => {
@@ -36,7 +50,7 @@ test('AI facts preserve verified scope and all public outputs exclude sensitive 
     '8 类核心 Agent 工作流',
     '6 类已稳定',
     '9 份真实业务 PRD',
-    '1 份正式业务竞品分析',
+    '2 份正式业务竞品分析',
     '3 类定制开发报价方案',
     '25 项关键决策',
     '6 张业务蓝图',
@@ -90,6 +104,10 @@ test('resume variants resolve project facts without duplicating them', () => {
   expect(b2b.mode).toBe('compact');
   expect(b2b.projects.map(({ id }) => id)).toEqual(['sales', 'permissions', 'analytics']);
   expect(b2b.shortProject?.id).toBe('ai');
+
+  expect(master.projects.map(({ id }) => id)).not.toContain('site');
+  expect(ai.projects.map(({ id }) => id)).not.toContain('site');
+  expect(b2b.projects.map(({ id }) => id)).not.toContain('site');
 });
 
 test('canonical facts, compatibility exports, and resolved documents are deeply immutable', () => {
