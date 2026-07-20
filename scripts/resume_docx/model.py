@@ -11,7 +11,7 @@ MIN_FONT_HALF_POINTS = 19
 PAGE_1_REGIONS_MM = {
     "education": (12.0, 33.0),
     "summary": (38.0, 59.0),
-    "capabilities": (64.0, 82.0),
+    "capabilities": (64.0, 84.0),
     "employment": (88.0, 156.0),
     "project_preview": (162.0, 238.0),
     "certificates": (248.0, 285.0),
