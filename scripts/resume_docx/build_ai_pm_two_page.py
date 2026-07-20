@@ -126,9 +126,12 @@ def _place_title_group(
     *,
     clone: bool,
     allocate: Callable[[], int],
+    title_width_emu: int | None = None,
+    icon_text: str = "•",
 ) -> None:
     geometries = [component_geometry(component_by_docpr_id(root, item)) for item in template_ids]
     source_top = min(geometry[1] for geometry in geometries)
+    icon_background_geometry: tuple[int, int, int, int] | None = None
     for source_id, suffix, geometry in zip(
         template_ids, TITLE_SUFFIXES, geometries, strict=True
     ):
@@ -140,7 +143,12 @@ def _place_title_group(
             clone=clone,
             allocate=allocate,
         )
+        if suffix == "ICON":
+            output.getparent().remove(output)
+            continue
         x_emu, y_emu, cx_emu, cy_emu = geometry
+        if suffix == "TITLE" and title_width_emu is not None:
+            cx_emu = title_width_emu
         target_y = absolute_y_emu(top_mm) + (y_emu - source_top)
         if suffix == "DIVIDER":
             target_y = absolute_y_emu(top_mm + 10.5)
@@ -151,10 +159,39 @@ def _place_title_group(
             cx_emu=cx_emu,
             cy_emu=cy_emu,
         )
+        if suffix == "ICON_BG":
+            icon_background_geometry = (x_emu, target_y, cx_emu, cy_emu)
         if suffix == "TITLE":
             set_component_paragraphs(
                 output, (title,), font_half_points=28, line_twips=320, bold_first=True
             )
+    if icon_background_geometry is None:
+        raise ValueError("title group has no icon background")
+    icon_label = _materialize(
+        root,
+        paragraph,
+        template_ids[0],
+        f"{prefix}_ICON_TEXT",
+        clone=True,
+        allocate=allocate,
+    )
+    x_emu, y_emu, cx_emu, cy_emu = icon_background_geometry
+    set_component_geometry(
+        icon_label,
+        x_emu=x_emu,
+        y_emu=y_emu,
+        cx_emu=cx_emu,
+        cy_emu=cy_emu,
+    )
+    set_component_paragraphs(
+        icon_label,
+        (icon_text,),
+        font_half_points=20,
+        line_twips=240,
+        bold_first=True,
+        color="FFFFFF",
+        alignment="center",
+    )
 
 
 def _place_section(
@@ -173,6 +210,9 @@ def _place_section(
     allocate: Callable[[], int],
     bold_labels: bool = False,
     bold_first: bool = False,
+    title_width_emu: int | None = None,
+    icon_text: str = "•",
+    clone_body: bool | None = None,
 ) -> None:
     top_mm, bottom_mm = region
     _place_title_group(
@@ -184,13 +224,15 @@ def _place_section(
         title,
         clone=clone,
         allocate=allocate,
+        title_width_emu=title_width_emu,
+        icon_text=icon_text,
     )
     body = _materialize(
         root,
         paragraph,
         body_id,
         f"{prefix}_BODY",
-        clone=clone,
+        clone=clone if clone_body is None else clone_body,
         allocate=allocate,
     )
     x_emu, _, cx_emu, _ = component_geometry(body)
@@ -249,10 +291,19 @@ def _clone_sidebar_box(
     return output
 
 
-def _repair_page_one_sidebar(root: etree._Element) -> None:
+def _repair_page_one_sidebar(
+    root: etree._Element,
+    paragraph: etree._Element,
+    allocate: Callable[[], int],
+) -> None:
     role = component_by_docpr_id(root, 10)
     labels = component_by_docpr_id(root, 11)
     values = component_by_docpr_id(root, 12)
+    label_x, _, _, _ = component_geometry(labels)
+    for identifier in (2, 26, 27, 28, 29, 30, 31, 37, 38, 39, 40, 41, 42):
+        component = component_by_docpr_id(root, identifier)
+        component.getparent().remove(component)
+    labels.getparent().remove(labels)
     set_component_paragraphs(
         role,
         ("求职意向：AI 产品经理",),
@@ -260,142 +311,84 @@ def _repair_page_one_sidebar(root: etree._Element) -> None:
         line_twips=280,
         bold_first=True,
     )
-    set_component_paragraphs(
-        labels,
-        ("生日：", "现居：", "学历：", "专业：", "手机：", "邮箱：", "网站：", "GitHub："),
-        font_half_points=20,
-        line_twips=480,
+    rows = (
+        "生日：2000.02",
+        "现居：浙江杭州",
+        "学历：大学本科",
+        "专业：计算机科学与技术",
+        "手机：173 9571 1345",
+        "邮箱：666qqx666@gmail.com",
+        "网站：qqx.life",
+        "GitHub：666qqx666-jpg",
     )
-    set_component_paragraphs(
-        values,
-        (
-            "2000.02",
-            "浙江杭州",
-            "大学本科",
-            "计算机科学与技术",
-            "173 9571 1345",
-            "666qqx666@gmail.com",
-            "qqx.life",
-            "666qqx666-jpg",
-        ),
-        font_half_points=19,
-        line_twips=480,
-    )
+    for index, row in enumerate(rows):
+        component = values if index == 0 else _materialize(
+            root,
+            paragraph,
+            12,
+            f"P1_CONTACT_{index + 1}",
+            clone=True,
+            allocate=allocate,
+        )
+        if index == 0:
+            rename_component(component, "P1_CONTACT_1")
+        set_component_geometry(
+            component,
+            x_emu=label_x,
+            y_emu=absolute_y_emu(82.5 + index * 10.6),
+            cx_emu=1_850_000,
+            cy_emu=round(9.0 * EMU_PER_MM),
+        )
+        set_component_paragraphs(
+            component,
+            (row,),
+            font_half_points=19,
+            line_twips=240,
+            bold_labels=True,
+        )
 
 
 def _build_page_one(
     root: etree._Element, paragraph: etree._Element, allocate: Callable[[], int]
 ) -> None:
-    _repair_page_one_sidebar(root)
-    sections = (
-        (
-            (48, 54, 61, 66),
-            45,
-            "P1_SUMMARY",
-            PAGE_1_REGIONS_MM["summary"],
-            "职业摘要",
-            (RESUME.summary,),
-            21,
-            240,
-            True,
-            False,
-            False,
-        ),
-        (
-            (48, 54, 61, 66),
-            45,
-            "P1_CAPABILITIES",
-            PAGE_1_REGIONS_MM["capabilities"],
-            "核心能力",
-            (RESUME.capabilities,),
-            20,
-            230,
-            True,
-            False,
-            False,
-        ),
-        (
-            (46, 53, 60, 65),
-            45,
-            "P1_EDUCATION",
-            PAGE_1_REGIONS_MM["education"],
-            "教育背景",
-            (RESUME.education,),
-            22,
-            260,
-            False,
-            False,
-            False,
-        ),
-        (
-            (48, 54, 61, 66),
-            47,
-            "P1_EMPLOYMENT",
-            PAGE_1_REGIONS_MM["employment"],
-            "工作经历",
-            RESUME.employment,
-            20,
-            245,
-            False,
-            False,
-            True,
-        ),
-        (
-            (50, 55, 62, 67),
-            49,
-            "P1_PROJECTS",
-            PAGE_1_REGIONS_MM["project_preview"],
-            "代表项目",
-            RESUME.previews,
-            20,
-            250,
-            False,
-            False,
-            True,
-        ),
-        (
-            (52, 56, 63, 68),
-            51,
-            "P1_CERTIFICATES",
-            PAGE_1_REGIONS_MM["certificates"],
-            "证书奖励",
-            RESUME.certificates,
-            20,
-            240,
-            False,
-            False,
-            False,
-        ),
+    _repair_page_one_sidebar(root, paragraph, allocate)
+    _place_section(
+        root, paragraph, title_ids=(48, 54, 61, 66), body_id=45,
+        prefix="P1_SUMMARY", region=PAGE_1_REGIONS_MM["summary"], title="职业摘要",
+        lines=(RESUME.summary,), body_font_half_points=21, body_line_twips=240,
+        clone=True, allocate=allocate, icon_text="摘",
     )
-    for (
-        title_ids,
-        body_id,
-        prefix,
-        region,
-        title,
-        lines,
-        font_size,
-        line_twips,
-        clone,
-        bold_labels,
-        bold_first,
-    ) in sections:
-        _place_section(
-            root,
-            paragraph,
-            title_ids=title_ids,
-            body_id=body_id,
-            prefix=prefix,
-            region=region,
-            title=title,
-            lines=lines,
-            body_font_half_points=font_size,
-            body_line_twips=line_twips,
-            clone=clone,
-            allocate=allocate,
-            bold_labels=bold_labels,
-            bold_first=bold_first,
-        )
+    _place_section(
+        root, paragraph, title_ids=(48, 54, 61, 66), body_id=45,
+        prefix="P1_CAPABILITIES", region=PAGE_1_REGIONS_MM["capabilities"],
+        title="核心能力", lines=(RESUME.capabilities,), body_font_half_points=20,
+        body_line_twips=230, clone=True, allocate=allocate, icon_text="能",
+    )
+    _place_section(
+        root, paragraph, title_ids=(46, 53, 60, 65), body_id=45,
+        prefix="P1_EDUCATION", region=PAGE_1_REGIONS_MM["education"], title="教育背景",
+        lines=(RESUME.education,), body_font_half_points=22, body_line_twips=260,
+        clone=False, allocate=allocate, icon_text="学",
+    )
+    _place_section(
+        root, paragraph, title_ids=(48, 54, 61, 66), body_id=47,
+        prefix="P1_EMPLOYMENT", region=PAGE_1_REGIONS_MM["employment"], title="工作经历",
+        lines=RESUME.employment, body_font_half_points=20, body_line_twips=245,
+        clone=False, allocate=allocate, bold_first=True, icon_text="职",
+    )
+    _place_section(
+        root, paragraph, title_ids=(50, 55, 62, 67), body_id=47,
+        prefix="P1_PROJECTS", region=PAGE_1_REGIONS_MM["project_preview"], title="代表项目",
+        lines=RESUME.previews, body_font_half_points=20, body_line_twips=250,
+        clone=False, clone_body=True, allocate=allocate, bold_first=True, icon_text="项",
+    )
+    component_by_docpr_id(root, 49).getparent().remove(component_by_docpr_id(root, 49))
+    _place_section(
+        root, paragraph, title_ids=(52, 56, 63, 68), body_id=51,
+        prefix="P1_CERTIFICATES", region=PAGE_1_REGIONS_MM["certificates"], title="证书奖励",
+        lines=RESUME.certificates, body_font_half_points=20, body_line_twips=240,
+        clone=False, allocate=allocate, icon_text="证",
+    )
 
 
 def _build_page_two(
@@ -416,8 +409,7 @@ def _build_page_two(
         font_half_points=30,
         line_twips=360,
     )
-    label_x, _, _, _ = component_geometry(component_by_docpr_id(root, 11))
-    _, _, value_width, _ = component_geometry(component_by_docpr_id(root, 12))
+    label_x, _, value_width, _ = component_geometry(component_by_docpr_id(root, 12))
     _clone_sidebar_box(
         root,
         paragraph,
@@ -441,6 +433,8 @@ def _build_page_two(
         "项目经历",
         clone=True,
         allocate=allocate,
+        title_width_emu=4_140_000,
+        icon_text="项",
     )
     for key, prefix, project in zip(
         ("knowledge_harness", "sales_leads", "personal_site"),
@@ -452,7 +446,7 @@ def _build_page_two(
             root,
             paragraph,
             title_ids=(50, 55, 62, 67),
-            body_id=49,
+            body_id=47,
             prefix=prefix,
             region=PAGE_2_REGIONS_MM[key],
             title=project.title,
@@ -463,6 +457,12 @@ def _build_page_two(
             allocate=allocate,
             bold_labels=True,
             bold_first=True,
+            title_width_emu=4_140_000,
+            icon_text={
+                "knowledge_harness": "AI",
+                "sales_leads": "销",
+                "personal_site": "站",
+            }[key],
         )
 
 
@@ -478,9 +478,9 @@ def build_resume(source: Path, target: Path) -> None:
     if len(paragraphs) != 1:
         raise ValueError(f"expected one source anchor paragraph, found {len(paragraphs)}")
     allocate = _allocator(root)
-    _build_page_one(root, paragraphs[0], allocate)
     page_two = append_second_page(root)
     _build_page_two(root, page_two, allocate)
+    _build_page_one(root, paragraphs[0], allocate)
     normalize_object_ids(root)
     write_package_atomic(
         source,

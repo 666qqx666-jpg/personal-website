@@ -122,6 +122,13 @@ def set_component_geometry(
     extent.set("cx", str(cx_emu))
     extent.set("cy", str(cy_emu))
 
+    # Keep the shape's internal DrawingML transform in sync with the Word
+    # anchor. Quick Look uses this extent when scaling text inside a shape;
+    # leaving the template dimensions here can squash otherwise-correct text.
+    for inner_extent in component.xpath(".//a:xfrm/a:ext", namespaces=NS):
+        inner_extent.set("cx", str(cx_emu))
+        inner_extent.set("cy", str(cy_emu))
+
     for graphic in component.xpath(VML_GRAPHICS_XPATH, namespaces=NS):
         style = graphic.get("style", "")
         for key, raw in (
@@ -143,10 +150,20 @@ def _set_run_size(run_properties: etree._Element, font_half_points: int) -> None
 
 
 def _set_run_bold(run_properties: etree._Element, bold: bool) -> None:
-    for old in run_properties.findall("w:b", namespaces=NS):
-        run_properties.remove(old)
+    for tag in ("b", "bCs"):
+        for old in run_properties.findall(f"w:{tag}", namespaces=NS):
+            run_properties.remove(old)
     if bold:
         etree.SubElement(run_properties, f"{W}b")
+
+
+def _set_run_color(run_properties: etree._Element, color: str | None) -> None:
+    if color is None:
+        return
+    for old in run_properties.findall("w:color", namespaces=NS):
+        run_properties.remove(old)
+    node = etree.SubElement(run_properties, f"{W}color")
+    node.set(f"{W}val", color)
 
 
 def _new_run(
@@ -155,6 +172,7 @@ def _new_run(
     font_half_points: int,
     *,
     bold: bool,
+    color: str | None,
 ) -> etree._Element:
     run = etree.Element(f"{W}r")
     run_properties = (
@@ -164,6 +182,7 @@ def _new_run(
     )
     _set_run_size(run_properties, font_half_points)
     _set_run_bold(run_properties, bold)
+    _set_run_color(run_properties, color)
     run.append(run_properties)
     text_node = etree.SubElement(run, f"{W}t")
     text_node.set(XML_SPACE, "preserve")
@@ -179,21 +198,19 @@ def _new_paragraph(
     line_twips: int | None,
     bold_label: bool,
     bold_all: bool,
+    color: str | None,
+    alignment: str,
 ) -> etree._Element:
     paragraph = etree.Element(f"{W}p")
-    paragraph_properties = template.find("w:pPr", namespaces=NS)
-    if paragraph_properties is not None:
-        paragraph_properties = deepcopy(paragraph_properties)
-    else:
-        paragraph_properties = etree.Element(f"{W}pPr")
+    paragraph_properties = etree.Element(f"{W}pPr")
     if line_twips is not None:
-        spacing = paragraph_properties.find("w:spacing", namespaces=NS)
-        if spacing is None:
-            spacing = etree.SubElement(paragraph_properties, f"{W}spacing")
+        spacing = etree.SubElement(paragraph_properties, f"{W}spacing")
         spacing.set(f"{W}before", "0")
         spacing.set(f"{W}after", "0")
         spacing.set(f"{W}line", str(line_twips))
         spacing.set(f"{W}lineRule", "exact")
+    justification = etree.SubElement(paragraph_properties, f"{W}jc")
+    justification.set(f"{W}val", alignment)
     paragraph.append(paragraph_properties)
 
     template_run = template.find("w:r", namespaces=NS)
@@ -203,14 +220,32 @@ def _new_paragraph(
     if bold_label and "：" in text:
         label, value = text.split("：", 1)
         paragraph.append(
-            _new_run(template_run_properties, f"{label}：", font_half_points, bold=True)
+            _new_run(
+                template_run_properties,
+                f"{label}：",
+                font_half_points,
+                bold=True,
+                color=color,
+            )
         )
         paragraph.append(
-            _new_run(template_run_properties, value, font_half_points, bold=False)
+            _new_run(
+                template_run_properties,
+                value,
+                font_half_points,
+                bold=False,
+                color=color,
+            )
         )
     else:
         paragraph.append(
-            _new_run(template_run_properties, text, font_half_points, bold=bold_all)
+            _new_run(
+                template_run_properties,
+                text,
+                font_half_points,
+                bold=bold_all,
+                color=color,
+            )
         )
     return paragraph
 
@@ -223,6 +258,8 @@ def set_component_paragraphs(
     line_twips: int | None = None,
     bold_labels: bool = False,
     bold_first: bool = False,
+    color: str | None = None,
+    alignment: str = "left",
 ) -> None:
     line_values = tuple(lines)
     boxes = component.xpath(".//w:txbxContent", namespaces=NS)
@@ -244,6 +281,8 @@ def set_component_paragraphs(
                     line_twips=line_twips,
                     bold_label=bold_labels,
                     bold_all=bold_first and index == 0,
+                    color=color,
+                    alignment=alignment,
                 )
             )
 

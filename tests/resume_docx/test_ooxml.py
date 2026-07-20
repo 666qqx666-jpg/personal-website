@@ -18,11 +18,12 @@ from scripts.resume_docx.ooxml import (
 )
 
 XML = """<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+ xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"
  xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"
  xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing"
  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
  xmlns:v="urn:schemas-microsoft-com:vml"><w:body><w:p><w:r><mc:AlternateContent>
- <mc:Choice Requires="w"><w:drawing><wp:anchor><wp:positionH relativeFrom="column"><wp:posOffset>10</wp:posOffset></wp:positionH><wp:positionV relativeFrom="paragraph"><wp:posOffset>20</wp:posOffset></wp:positionV><wp:extent cx="30" cy="40"/><wp:docPr id="7" name="source"/><w:txbxContent><w:p><w:r><w:rPr><w:rFonts w:ascii="微软雅黑"/></w:rPr><w:t>old</w:t></w:r></w:p></w:txbxContent></wp:anchor></w:drawing></mc:Choice>
+ <mc:Choice Requires="w"><w:drawing><wp:anchor><wp:positionH relativeFrom="column"><wp:posOffset>10</wp:posOffset></wp:positionH><wp:positionV relativeFrom="paragraph"><wp:posOffset>20</wp:posOffset></wp:positionV><wp:extent cx="30" cy="40"/><a:xfrm><a:off x="0" y="0"/><a:ext cx="30" cy="40"/></a:xfrm><wp:docPr id="7" name="source"/><w:txbxContent><w:p><w:r><w:rPr><w:rFonts w:ascii="微软雅黑"/></w:rPr><w:t>old</w:t></w:r></w:p></w:txbxContent></wp:anchor></w:drawing></mc:Choice>
  <mc:Fallback><w:pict><v:shape id="duplicate" style="position:absolute;margin-left:0pt;margin-top:0pt;width:1pt;height:1pt"><v:textbox><w:txbxContent><w:p><w:r><w:rPr><w:rFonts w:ascii="微软雅黑"/></w:rPr><w:t>old</w:t></w:r></w:p></w:txbxContent></v:textbox></v:shape></w:pict></mc:Fallback>
  </mc:AlternateContent></w:r></w:p><w:sectPr/></w:body></w:document>""".encode("utf-8")
 
@@ -53,6 +54,13 @@ class OoxmlTest(unittest.TestCase):
             self.component, x_emu=12700, y_emu=25400, cx_emu=38100, cy_emu=50800
         )
         self.assertEqual((12700, 25400, 38100, 50800), component_geometry(self.component))
+        self.assertEqual(
+            ("38100", "50800"),
+            tuple(
+                self.component.xpath(".//a:xfrm/a:ext", namespaces=NS)[0].get(key)
+                for key in ("cx", "cy")
+            ),
+        )
         style = self.component.xpath("string(.//v:shape/@style)", namespaces=NS)
         self.assertIn("margin-left:1.000000pt", style)
         self.assertIn("margin-top:2.000000pt", style)
