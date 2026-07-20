@@ -14,7 +14,7 @@ const links = [
   <div class="container nav-inner">
     <a class="brand" href={base}>{profile.name}</a>
     <nav class="links">
-      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+      {links.map((l) => <a class={l.label === '关于' ? 'mobile-primary' : undefined} href={l.href}>{l.label}</a>)}
       <a class="resume" href={`${base}${profile.resumePdf}`} download>简历 PDF</a>
       <ThemeToggle />
     </nav>
@@ -36,6 +36,6 @@ const links = [
   .resume { border: 1px solid var(--accent); border-radius: 999px; padding: 4px 12px; color: var(--accent) !important; }
   @media (max-width: 640px) {
     .links { gap: 10px; font-size: 13px; }
-    .links a:not(.resume):not(:last-child) { display: none; }
+    .links a:not(.resume):not(.mobile-primary) { display: none; }
   }
 </style>
