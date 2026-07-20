@@ -9,7 +9,6 @@ const port = 4322;
 const baseURL = `http://${host}:${port}`;
 const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 const outputs = [
-  { route: '/resume/ai/', variant: 'ai', file: 'public/resume.pdf' },
   { route: '/resume/b2b/', variant: 'b2b', file: 'public/resume-b2b-saas.pdf' },
 ];
 

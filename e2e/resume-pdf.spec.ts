@@ -2,13 +2,17 @@ import { readFileSync } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { spawn } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import { expect, test } from '@playwright/test';
 
 test('AI product manager resume PDF is a real exported document', () => {
   const pdf = readFileSync('public/resume.pdf');
 
   expect(pdf.subarray(0, 5).toString()).toBe('%PDF-');
-  expect(pdf.byteLength).toBeGreaterThan(20_000);
+  expect(pdf.byteLength).toBe(278_828);
+  expect(createHash('sha256').update(pdf).digest('hex')).toBe(
+    '5e3f51bb2fb5a63452581c49e7286b7dd880da72dbb0582a2848fcc585371cad',
+  );
 });
 
 test('B2B / SaaS resume PDF is a real exported document', () => {
