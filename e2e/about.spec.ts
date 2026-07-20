@@ -70,3 +70,15 @@ test('about page removes motion when the visitor requests it', async ({ page }) 
   expect(motion.transitionDuration).toBe('0s');
   expect(motion.transform).toBe('none');
 });
+
+test('about content remains visible without JavaScript', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  await page.goto('/about/');
+  await expect(page.getByRole('heading', { level: 1, name: '钱麒祥' })).toBeVisible();
+  await expect(page.locator('[data-about-project]')).toHaveCount(7);
+  await expect(page.locator('[data-project-id="sales"]')).toBeVisible();
+  expect(await page.locator('.hero-copy.reveal').evaluate((element) => getComputedStyle(element).opacity)).toBe('1');
+  expect(await page.locator('[data-project-id="sales"]').evaluate((element) => getComputedStyle(element).opacity)).toBe('1');
+  await context.close();
+});

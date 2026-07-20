@@ -757,6 +757,7 @@ git commit -m "feat: rebuild about page as project profile"
 - Modify: `src/layouts/BaseLayout.astro`
 - Modify: `src/styles/global.css`
 - Modify: `e2e/about.spec.ts`
+- Modify: `e2e/visual.spec.ts`
 
 - [ ] **Step 1: 增加无 JavaScript 失败测试**
 
@@ -838,6 +839,14 @@ else document.addEventListener('DOMContentLoaded', runReveal, { once: true });
 
 - [ ] **Step 5: 运行动效降级和站点回归**
 
+在 `e2e/visual.spec.ts` 的站点和简历截图循环中，于 `page.goto()` 前调用：
+
+```ts
+await page.emulateMedia({ reducedMotion: 'reduce' });
+```
+
+这保证完整页截图不会因为 IntersectionObserver 尚未滚动而留下空白区域。
+
 Run:
 
 ```bash
@@ -851,7 +860,8 @@ Expected: PASS；无 JS 与减少动效模式内容可见，首页现有 reveal 
 Run:
 
 ```bash
-git add -- src/layouts/BaseLayout.astro src/styles/global.css e2e/about.spec.ts
+git add -- src/layouts/BaseLayout.astro src/styles/global.css e2e/about.spec.ts e2e/visual.spec.ts \
+  docs/superpowers/plans/2026-07-21-about-resume.md
 git diff --cached --check
 git commit -m "fix: make reveal motion progressive"
 ```
