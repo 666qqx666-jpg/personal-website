@@ -14,14 +14,14 @@ type BackgroundMetric = {
   id: 'payment-orders' | 'payable-amount' | 'unique-plates';
   value: string;
   label: string;
-  status: 'verified' | 'pending';
+  status: 'verified';
   scope: string;
   timeBasis: string;
 };
 const backgroundMetrics: BackgroundMetric[] = [
   { id: 'payment-orders', value: '约 7.57 万笔', label: '月停车缴费单', status: 'verified', scope: '8 个停车 2.0 商场', timeBasis: '现有月均口径' },
   { id: 'payable-amount', value: '约 118.33 万元', label: '月停车应付金额', status: 'verified', scope: '8 个停车 2.0 商场', timeBasis: '现有月均口径' },
-  { id: 'unique-plates', value: '待补充', label: '月独立车牌数', status: 'pending', scope: '8 个停车 2.0 商场', timeBasis: '现有月均口径' },
+  { id: 'unique-plates', value: '约 6.64 万辆', label: '月独立车牌数', status: 'verified', scope: '8 个停车 2.0 商场', timeBasis: '现有月均口径' },
 ];
 
 ---
@@ -42,11 +42,10 @@ const backgroundMetrics: BackgroundMetric[] = [
       <div class="scene-shell">
         <p class="eyebrow">Business Scale</p>
         <h2>8 个 2.0 商场的月度运行规模</h2>
-        <p class="lead-copy">先用同一范围内已经确认的业务数据说明停车承载的真实体量，再明确仍待补齐的数据口径。</p>
         <div class="background-metrics" data-metric-state="with-data" role="group" aria-label="8 个停车 2.0 商场的月度运行规模">
           {backgroundMetrics.map((metric, index) => (
             <article data-background-metric={metric.id} data-metric-status={metric.status} data-scope={metric.scope} data-time-basis={metric.timeBasis}>
-              <small class="metric-index">{String(index + 1).padStart(2, '0')} / {metric.status === 'verified' ? '已确认' : '数据缺口'}</small>
+              <small class="metric-index">{String(index + 1).padStart(2, '0')}</small>
               <strong>{metric.value}</strong>
               <span>{metric.label}</span>
               <small>{metric.scope} · {metric.timeBasis}</small>
@@ -57,7 +56,6 @@ const backgroundMetrics: BackgroundMetric[] = [
           <p><strong>单量口径</strong><span>缴费单不等同于进场车次，页面不将两者混用。</span></p>
           <p><strong>金额口径</strong><span>应付金额为优惠抵扣前的原始停车费用，不是现金实收。</span></p>
         </div>
-        <p class="principle">现有数据已经回答 2.0 承载了多少月度交易与金额；月独立车牌数仍需研发按同一范围补充。</p>
       </div>
     </section>
 
@@ -177,13 +175,10 @@ const backgroundMetrics: BackgroundMetric[] = [
   .opening-road { display: grid; grid-template-columns: minmax(9rem, 1fr) 2fr minmax(9rem, 1fr); max-width: 820px; margin: 2rem auto 0; border-color: var(--glass-border); background: linear-gradient(110deg, var(--sp-road), var(--sp-road-strong)); padding: 1.2rem; }
   .opening-road span, .opening-road strong, .journey-only span { border: 1px solid var(--glass-border); border-radius: .8rem; padding: .7rem; } .opening-road span { color: var(--sp-lane); } .opening-road strong { color: var(--sp-native); } .opening-road i { height: 2px; background: repeating-linear-gradient(90deg, var(--sp-lane) 0 1.2rem, transparent 1.2rem 2rem); }
   .background-metrics { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; margin-top: 1.4rem; }
-  .background-metrics::before { content: ''; position: absolute; top: -1.4rem; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, var(--sp-native) 0 66.66%, var(--sp-lane) 66.66% 100%); }
+  .background-metrics::before { content: ''; position: absolute; top: -1.4rem; left: 0; width: 100%; height: 2px; background: var(--sp-native); }
   .background-metrics article { position: relative; display: grid; gap: .35rem; min-height: 10.5rem; overflow: hidden; border-top: 3px solid var(--sp-native); }
   .background-metrics article::after { content: ''; position: absolute; right: -1.1rem; bottom: -2.6rem; width: 6.5rem; height: 6.5rem; border: 1px solid color-mix(in srgb, var(--sp-native) 32%, transparent); border-radius: 50%; }
-  .background-metrics [data-metric-status='pending'] { border-style: dashed; border-top-style: solid; border-color: color-mix(in srgb, var(--sp-lane) 62%, var(--glass-border)); }
-  .background-metrics [data-metric-status='pending']::after { border-color: color-mix(in srgb, var(--sp-lane) 42%, transparent); }
   .background-metrics .metric-index { align-self: start; color: var(--sp-native); font-size: .7rem; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
-  .background-metrics [data-metric-status='pending'] .metric-index { color: var(--sp-lane); }
   .background-metrics article > strong { align-self: end; color: var(--text); font-size: clamp(1.65rem, 3vw, 2.5rem); line-height: 1.05; }
   .background-metrics article > span { color: var(--text); font-weight: 800; }
   .background-metrics article > small:last-child { position: relative; z-index: 1; align-self: end; line-height: 1.45; }
@@ -201,6 +196,6 @@ const backgroundMetrics: BackgroundMetric[] = [
   .payment-flow { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: .5rem; margin-top: 1.2rem; } .payment-flow span { position: relative; display: grid; place-items: center; min-height: 5.4rem; border: 1px solid var(--sp-line); border-radius: .8rem; background: var(--sp-surface); padding: .6rem; text-align: center; } .payment-flow span:not(:last-child)::after { content: '→'; position: absolute; right: -.55rem; color: var(--sp-lane); z-index: 2; } .payment-flow [data-payment-state='release'] { border-color: color-mix(in srgb, var(--sp-risk) 55%, var(--glass-border)); } .payment-flow [data-payment-state='paid'], .payment-flow [data-payment-state='zero'], .payment-flow [data-payment-state='notify'] { border-color: color-mix(in srgb, var(--sp-native) 55%, var(--glass-border)); }
   .iteration-grid article { border-top: 3px solid var(--sp-native); } .iteration-grid [data-iteration='double-pay'], .iteration-grid [data-iteration='refund'] { border-top-color: var(--sp-lane); } .version-lanes { grid-template-columns: repeat(2, 1fr); margin-top: 1rem; } .version-lanes [data-version='2.0'] { border-color: color-mix(in srgb, var(--sp-native) 60%, var(--glass-border)); } .version-lanes [data-version='1.0'] { border-color: color-mix(in srgb, var(--sp-lane) 60%, var(--glass-border)); } .mixed-version-note { margin-top: 1rem; color: var(--text-dim); line-height: 1.65; }
   .conclusion-points { justify-content: center; } .conclusion-points span { border: 1px solid var(--sp-line); border-radius: 999px; padding: .55rem .8rem; } .back-projects { border: 1px solid var(--glass-border); border-radius: 999px; padding: .7rem 1rem; text-decoration: none; } .back-projects:focus-visible, .smart-parking-nav a:focus-visible { outline: 3px solid var(--sp-native); outline-offset: 3px; } #s11 { padding-bottom: 9rem; }
-  @media (max-width: 860px) { .split-shell, .legacy-grid, .iteration-grid, .adoption-stats, .background-metrics, .metric-definitions, .identity-road, .benefit-grid, .limit-grid, .version-lanes, .architecture-notes { grid-template-columns: 1fr; } .background-metrics::before { background: linear-gradient(90deg, var(--sp-native) 0 66.66%, var(--sp-lane) 66.66% 100%); } .background-metrics article { min-height: 8.5rem; } .opening-road, .journey-only { grid-template-columns: 1fr; } .opening-road i { width: 2px; height: 2.5rem; justify-self: center; background: repeating-linear-gradient(180deg, var(--sp-lane) 0 .65rem, transparent .65rem 1rem); } .journey-only i { width: 2px; height: 1rem; justify-self: center; } .gate { width: 100%; min-height: 3rem; } .gate b { left: 50%; bottom: .2rem; translate: -50% 0; } .gate i { left: 50%; bottom: 1.2rem; width: .3rem; height: 3rem; } .architecture-stack article, .discount-cap { grid-template-columns: 1fr; } .discount-cap small { grid-column: auto; } .payment-flow { grid-template-columns: 1fr; } .payment-flow span { min-height: auto; } .payment-flow span:not(:last-child)::after { content: '↓'; right: auto; bottom: -.8rem; } .smart-parking-nav { width: calc(100% - 1rem); justify-content: space-between; } .smart-parking-nav a { padding-inline: .42rem; } .smart-parking-nav a span:last-child { font-size: .67rem; } }
+  @media (max-width: 860px) { .split-shell, .legacy-grid, .iteration-grid, .adoption-stats, .background-metrics, .metric-definitions, .identity-road, .benefit-grid, .limit-grid, .version-lanes, .architecture-notes { grid-template-columns: 1fr; } .background-metrics article { min-height: 8.5rem; } .opening-road, .journey-only { grid-template-columns: 1fr; } .opening-road i { width: 2px; height: 2.5rem; justify-self: center; background: repeating-linear-gradient(180deg, var(--sp-lane) 0 .65rem, transparent .65rem 1rem); } .journey-only i { width: 2px; height: 1rem; justify-self: center; } .gate { width: 100%; min-height: 3rem; } .gate b { left: 50%; bottom: .2rem; translate: -50% 0; } .gate i { left: 50%; bottom: 1.2rem; width: .3rem; height: 3rem; } .architecture-stack article, .discount-cap { grid-template-columns: 1fr; } .discount-cap small { grid-column: auto; } .payment-flow { grid-template-columns: 1fr; } .payment-flow span { min-height: auto; } .payment-flow span:not(:last-child)::after { content: '↓'; right: auto; bottom: -.8rem; } .smart-parking-nav { width: calc(100% - 1rem); justify-content: space-between; } .smart-parking-nav a { padding-inline: .42rem; } .smart-parking-nav a span:last-child { font-size: .67rem; } }
   @media (prefers-reduced-motion: reduce) { .smart-parking-deck *, .smart-parking-deck *::before, .smart-parking-deck *::after { scroll-behavior: auto; animation-duration: .01ms; animation-iteration-count: 1; transition-duration: .01ms; transition-delay: 0ms; } }
 </style>
