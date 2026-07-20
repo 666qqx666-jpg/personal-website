@@ -2,9 +2,13 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+import sys
 from typing import Callable
 
 from lxml import etree
+
+if __package__ in (None, ""):
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from scripts.resume_docx.model import (
     EMU_PER_MM,
@@ -409,8 +413,8 @@ def _build_page_two(
         275.0,
         allocate,
         lines=("PROJECT PORTFOLIO",),
-        font_half_points=18,
-        line_twips=240,
+        font_half_points=30,
+        line_twips=360,
     )
     label_x, _, _, _ = component_geometry(component_by_docpr_id(root, 11))
     _, _, value_width, _ = component_geometry(component_by_docpr_id(root, 12))

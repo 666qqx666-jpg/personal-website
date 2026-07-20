@@ -318,7 +318,7 @@ def cleaned_metadata_parts(source: Path) -> dict[str, bytes]:
     for xpath in ("./dc:creator", "./cp:lastModifiedBy"):
         for node in core.xpath(xpath, namespaces=NS):
             node.text = ""
-    for xpath in ("./ep:Application", "./ep:AppVersion"):
+    for xpath in ("./ep:Template", "./ep:Application", "./ep:AppVersion"):
         for node in app.xpath(xpath, namespaces=NS):
             node.text = ""
     return {

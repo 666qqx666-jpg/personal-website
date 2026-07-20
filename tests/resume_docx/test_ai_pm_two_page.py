@@ -8,6 +8,7 @@ from lxml import etree
 from scripts.resume_docx.build_ai_pm_two_page import build_resume
 from scripts.resume_docx.model import FORBIDDEN_PUBLIC_TEXT, REQUIRED_PUBLIC_TEXT
 from scripts.resume_docx.ooxml import NS, file_sha256
+from scripts.resume_docx.validate_ai_pm_two_page import validate
 
 SOURCE = Path("/Users/qqx/Desktop/个人/AI产品经理-钱麒祥.docx")
 
@@ -42,6 +43,35 @@ class AiPmTwoPageBuildTest(unittest.TestCase):
                 self.assertNotIn("666qqx666@gmail.com", page_two_text)
                 self.assertNotIn("666qqx666-jpg", page_two_text)
         self.assertEqual(before, file_sha256(SOURCE))
+
+    def test_validator_closes_structure_privacy_and_geometry(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "resume.docx"
+            build_resume(SOURCE, target)
+            report = validate(SOURCE, target, expected_source_sha256=file_sha256(SOURCE))
+        expected_true = {
+            "source_unchanged",
+            "package_integrity",
+            "preserve_only_parts_unchanged",
+            "a4_portrait",
+            "unique_docpr_ids",
+            "unique_vml_ids",
+            "unique_anchor_ids",
+            "compatibility_text_matches",
+            "required_content_present",
+            "forbidden_content_absent",
+            "page_two_privacy_clean",
+            "metadata_clean",
+        }
+        for key in expected_true:
+            self.assertIs(report[key], True)
+        self.assertEqual(1, report["explicit_page_breaks"])
+        self.assertEqual(2, report["anchor_paragraphs"])
+        self.assertEqual(9.5, report["minimum_font_pt"])
+        self.assertEqual(
+            ["docProps/app.xml", "docProps/core.xml", "word/document.xml"],
+            report["changed_parts"],
+        )
 
 
 if __name__ == "__main__":
