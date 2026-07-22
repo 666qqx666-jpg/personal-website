@@ -15,7 +15,7 @@ const links = [
     <a class="brand" href={base}>{profile.name}</a>
     <nav class="links">
       {links.map((l) => <a class={l.label === '关于' ? 'mobile-primary' : undefined} href={l.href}>{l.label}</a>)}
-      <a class="resume" href={`${base}${profile.resumePdf}`} download>简历 PDF</a>
+      <a class="resume" href={`${base}${profile.resumePdf}`} download={profile.resumeDownloads[0].fileName}>简历 PDF</a>
       <ThemeToggle />
     </nav>
   </div>

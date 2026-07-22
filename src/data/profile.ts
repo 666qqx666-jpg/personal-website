@@ -3,11 +3,13 @@ import { resumeFacts } from './resume/facts';
 export interface ResumeDownload {
   readonly label: string;
   readonly href: string;
+  readonly fileName?: string;
 }
 
 const primaryResume = {
   label: 'AI 产品经理版',
   href: 'resume.pdf',
+  fileName: '钱麒祥-AI产品经理.pdf',
 } as const satisfies ResumeDownload;
 
 export interface Profile {

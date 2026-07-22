@@ -40,6 +40,13 @@ test('about links are explicit and public copy excludes private fields', async (
   const basePath = new URL(page.url()).pathname.replace(/about\/?$/, '');
   await expect(page.getByRole('link', { name: '下载 AI 产品经理简历' }).first())
     .toHaveAttribute('href', `${basePath}resume.pdf`);
+  const primaryResumeLinks = page.getByRole('link', { name: '下载 AI 产品经理简历' });
+  await expect(primaryResumeLinks).toHaveCount(2);
+  expect(await primaryResumeLinks.evaluateAll((links) =>
+    links.map((link) => link.getAttribute('download')),
+  )).toEqual(['钱麒祥-AI产品经理.pdf', '钱麒祥-AI产品经理.pdf']);
+  await expect(page.getByRole('link', { name: '简历 PDF' }))
+    .toHaveAttribute('download', '钱麒祥-AI产品经理.pdf');
   await expect(page.getByRole('link', { name: 'B2B / SaaS 版' }))
     .toHaveAttribute('href', `${basePath}resume-b2b-saas.pdf`);
   await expect(page.locator('[data-project-id="ai"] a'))
