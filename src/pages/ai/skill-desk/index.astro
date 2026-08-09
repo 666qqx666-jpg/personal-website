@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { deskTabs, productLanes, skillDeskItems, skillLabItems } from '../../../data/skillDesk';
+import { agentHarnessEvidence, agentHarnessStages, deskTabs, productLanes, skillDeskItems, skillLabItems } from '../../../data/skillDesk';
 
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const stableCount = skillDeskItems.filter((item) => item.maturity === 'stable').length;
@@ -29,6 +29,27 @@ const hrefFor = (href?: string) => href ? `${base}${href.replace(/^\//, '')}` : 
       <nav class="desk-tabs reveal" aria-label="Skill categories">
         {deskTabs.map((tab) => <a href={`#${tab === '全部' ? 'all' : tab}`}>{tab}</a>)}
       </nav>
+
+      <section class="agent-harness reveal" data-agent-harness>
+        <div class="harness-intro">
+          <p class="eyebrow">Enterprise Product Delivery Agent Harness</p>
+          <h2>把独立 Skill 连接成可交付工作流</h2>
+          <p>Skill 负责流程、角色和质量门禁；Enterprise Knowledge Harness 按任务提供规则、经验与项目记忆。</p>
+        </div>
+        <div class="harness-stages">
+          {agentHarnessStages.map((stage, index) => (
+            <article>
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <h3>{stage.label}</h3>
+              <p>{stage.detail}</p>
+              {'href' in stage && stage.href && <a href={`${base}${stage.href.replace(/^\//, '')}`}>查看模块</a>}
+            </article>
+          ))}
+        </div>
+        <div class="harness-evidence">
+          {agentHarnessEvidence.map((item) => <p>{item}</p>)}
+        </div>
+      </section>
 
       <div id="all" class="desk-grid">
         {skillDeskItems.map((item, index) => {
@@ -105,7 +126,7 @@ const hrefFor = (href?: string) => href ? `${base}${href.replace(/^\//, '')}` : 
         </div>
       </section>
 
-      <a class="harness-link reveal" href={`${base}ai/knowledge-harness/`}>这些 skill 最终进入 Personal Knowledge Harness</a>
+      <a class="harness-link reveal" href={`${base}ai/knowledge-harness/`}>Skill Desk 是应用层；Enterprise Knowledge Harness 提供知识与上下文基础层</a>
     </div>
   </section>
 
@@ -308,6 +329,34 @@ const hrefFor = (href?: string) => href ? `${base}${href.replace(/^\//, '')}` : 
       color: var(--text);
       background: rgba(34, 211, 238, 0.1);
     }
+    .agent-harness {
+      display: grid;
+      gap: 1.25rem;
+      margin: 2.5rem 0 2rem;
+      padding: clamp(1.25rem, 3vw, 2rem);
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+    .harness-intro { display: grid; gap: .65rem; max-width: 52rem; }
+    .harness-intro p:last-child { color: var(--muted); line-height: 1.75; }
+    .harness-stages { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; }
+    .harness-stages article {
+      display: grid;
+      align-content: start;
+      gap: .45rem;
+      min-width: 0;
+      border: 1px solid var(--border);
+      border-radius: .9rem;
+      background: var(--bg-soft);
+      padding: 1rem;
+    }
+    .harness-stages article > span { color: var(--accent); font-size: .75rem; font-weight: 800; }
+    .harness-stages article p { color: var(--muted); line-height: 1.65; }
+    .harness-stages article a { color: var(--accent); font-weight: 750; }
+    .harness-evidence { display: grid; gap: .5rem; }
+    .harness-evidence p { border-left: 3px solid var(--accent); background: var(--bg-soft); padding: .65rem .8rem; line-height: 1.6; }
     .desk-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -526,6 +575,7 @@ const hrefFor = (href?: string) => href ? `${base}${href.replace(/^\//, '')}` : 
       .skill-lab {
         grid-template-columns: 1fr;
       }
+      .harness-stages { grid-template-columns: 1fr; }
       .desk-hero h1 {
         font-size: 3.4rem;
       }

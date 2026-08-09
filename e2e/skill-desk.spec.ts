@@ -18,7 +18,16 @@ test('AI listing links to Skill Desk', async ({ page }) => {
 test('Skill Desk homepage shows skill cards and detail entries', async ({ page }) => {
   await page.goto('/ai/skill-desk/');
   await expect(page.getByRole('heading', { name: 'Skill Desk' })).toBeVisible();
-  await expect(page.locator('.skill-card')).toHaveCount(8);
+  const agentHarness = page.locator('[data-agent-harness]');
+  await expect(agentHarness).toBeVisible();
+  for (const label of ['需求发现', 'PRD Writer', '冷启动 Reviewer', '原型生成', 'PRD 同步', '结构化报价']) {
+    await expect(agentHarness).toContainText(label);
+  }
+  await expect(agentHarness).toContainText('Enterprise Knowledge Harness');
+  await expect(page.locator('.skill-card')).toHaveCount(9);
+  await expect(page.locator('.skill-card', { hasText: '原型设计工作流' })).toContainText('已规划并验证');
+  await expect(page.locator('.skill-lab .lab-item')).toHaveCount(1);
+  await expect(page.locator('.harness-link')).toContainText('应用层');
   await expect(page.locator('.desk-tabs')).toContainText('阅读与沉淀');
   await expect(page.locator('.desk-tabs')).toContainText('PRD / Spec');
   await expect(page.locator('.desk-tabs')).toContainText('交付与报价');
@@ -88,15 +97,12 @@ test('Skill Desk homepage and detail pages share the selected theme state', asyn
 
 test('Skill Desk homepage separates unvalidated skills into Lab', async ({ page }) => {
   await page.goto('/ai/skill-desk/');
-  await expect(page.locator('.skill-card')).toHaveCount(8);
+  await expect(page.locator('.skill-card')).toHaveCount(9);
   const lab = page.locator('.skill-lab');
   await expect(lab).toBeVisible();
   await expect(lab).toContainText('Skill Lab');
   await expect(lab).toContainText('待实战验证');
-  await expect(lab.locator('.lab-item')).toHaveCount(2);
-  await expect(lab).toContainText('原型设计工作流');
-  await expect(lab).toContainText('暂不单独做详情页');
-  await expect(lab).toContainText('下一次基于 PRD、旧页面、截图或竞品参考做原型');
+  await expect(lab.locator('.lab-item')).toHaveCount(1);
   await expect(lab).toContainText('多 Agent 协作协议');
   await expect(lab).toContainText('Mode Gate');
   await expect(lab).toContainText('Judge 裁决');
@@ -210,6 +216,9 @@ test('prd-skill detail page explains the PRD workflow evolution', async ({ page 
   await expect(page.locator('#s10')).toContainText('Blocker');
   await expect(page.locator('#s10')).toContainText('实现门禁');
   await expect(page.locator('#s11')).toContainText('交付更稳');
+  await expect(page.locator('#s11')).toContainText('渗透率 100%');
+  await expect(page.locator('#s11')).toContainText('近 1 个月缩短至约 2 周');
+  await expect(page.locator('#s11')).toContainText('节省 50% 时长');
 });
 
 test('prd-skill detail page exposes timeline labels and links', async ({ page }) => {
@@ -277,6 +286,7 @@ test('requirement-discovery detail page explains demand discovery before solutio
   await expect(page.locator('#s5')).toContainText('技术包装');
   await expect(page.locator('#s6')).toContainText('风险承担者');
   await expect(page.locator('#s7')).toContainText('证据缺口');
+  await expect(page.locator('#s7')).toContainText('历史代码、文档和项目决策');
   await expect(page.locator('#s8')).toContainText('V0 收敛');
   await expect(page.locator('#s9')).toContainText('PRD Skill');
   await expect(page.locator('#s9')).toContainText('competitive-analysis');
@@ -318,6 +328,8 @@ test('quotation detail page explains customer-readable quote generation', async 
   await expect(page.locator('#s8')).toContainText('产品、UI、前端、后端、测试');
   await expect(page.locator('#s9')).toContainText('先预览确认，再生成报价书');
   await expect(page.locator('#s10')).toContainText('需求共识工具');
+  await expect(page.locator('#s10')).toContainText('企业交付工作包');
+  await expect(page.locator('#s10')).toContainText('产品经理、项目经理和销售');
 });
 
 test('quotation detail page exposes timeline labels and links', async ({ page }) => {

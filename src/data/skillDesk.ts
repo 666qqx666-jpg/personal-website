@@ -109,6 +109,21 @@ export interface MemoryLoaderSection {
 
 export const deskTabs = ['全部', '阅读与沉淀', '复盘', 'PRD / Spec', '研究与分析', '交付与报价', '记忆控制', '产品化候选'];
 
+export const agentHarnessStages = [
+  { label: '需求发现', detail: '识别需求来源、角色、证据与存量项目依赖', href: '/ai/skill-desk/requirement-discovery/' },
+  { label: 'PRD Writer', detail: '按企业模板、业务规则和项目记忆形成正文', href: '/ai/skill-desk/prd-skill/' },
+  { label: '冷启动 Reviewer', detail: '隔离写作假设，关键问题未关闭时阻止后续交付', href: '/ai/skill-desk/prd-skill/' },
+  { label: '原型生成', detail: '基于封口 PRD 与真实页面基线生成高保真原型' },
+  { label: 'PRD 同步', detail: '原型结束后同步产品级变化，拒绝静默覆盖 PRD' },
+  { label: '结构化报价', detail: '按需求蓝图、功能边界和交付范围生成报价单', href: '/ai/skill-desk/quotation/' },
+] as const;
+
+export const agentHarnessEvidence = [
+  'PRD Writer 与独立 Reviewer 覆盖产品部门所有同事，渗透率 100%',
+  'PRD 达到可交付状态的周期由近 1 个月缩短至约 2 周',
+  'PRD 审查环节节省 50% 时长',
+] as const;
+
 export const skillDeskItems: SkillDeskItem[] = [
   {
     slug: 'reading-dialogue',
@@ -209,6 +224,19 @@ export const skillDeskItems: SkillDeskItem[] = [
     href: '/ai/skill-desk/memory-loader/',
   },
   {
+    slug: 'prototype-design-workflow',
+    name: 'prototype-design-workflow',
+    title: '原型设计工作流',
+    problem: '高保真原型需要继承封口 PRD 与真实页面基线，并把产品级变化同步回 PRD。',
+    category: '交付与报价',
+    useCases: ['真实页面基线', '高保真原型', '产品级变化裁决', 'PRD 同步门'],
+    outputs: ['高保真原型', '原型裁决同步表', 'PRD 回写清单', 'prototype-sync'],
+    maturity: 'iterating',
+    maturityLabel: '已规划并验证',
+    productization: 'enterprise-candidate',
+    productizationLabel: '企业工作包',
+  },
+  {
     slug: 'digest',
     name: 'digest',
     title: 'Digest 方法组件',
@@ -228,16 +256,6 @@ export const skillDeskItems: SkillDeskItem[] = [
 ];
 
 export const skillLabItems: SkillLabItem[] = [
-  {
-    slug: 'prototype-design-workflow',
-    name: 'prototype-design-workflow',
-    title: '原型设计工作流',
-    category: 'Lab / 待验证 skill',
-    statusLabel: '待实战验证',
-    summary: '已从过往原型经验中抽象出模式判断与门禁，但尚未经过完整真实项目打磨；暂不单独做详情页。',
-    validationTrigger: '下一次基于 PRD、旧页面、截图或竞品参考做原型时，记录实际偏差、返工点和新增规则，再决定是否升级为 Skill Desk。',
-    signals: ['模式判断', '三表门禁', '真实页面基线', '等待项目验证'],
-  },
   {
     slug: 'multi-agent-collaboration',
     name: 'multi-agent-collaboration',
@@ -657,8 +675,8 @@ export const prdSkillSections: PrdSkillSection[] = [
     label: '11 · 收束',
     chapter: 'From Draft To Delivery',
     heading: '最终价值：不是写得更快，而是交付更稳',
-    insight: 'prd-skill 的价值不是让 AI 写一篇漂亮文档，而是把“我有一个需求”推进成团队可以评审、开发可以拆、测试可以验、后续可以复盘的交付资产。',
-    points: ['当前形态是个人 PRD 生产与审查 workflow。', '团队复用潜力在于把需求写作、冷启动审查、spec-readiness 和实现门禁变成 SOP。', '企业级潜力在于把 PRD、审查报告、决策记录、实施计划和知识库沉淀打通。'],
+    insight: 'PRD Writer 与冷启动 Reviewer 让需求从写作、审查到进入交付都具备清晰质量门禁。',
+    points: ['PRD Writer 与冷启动 Reviewer 已覆盖产品部门所有同事，渗透率 100%。', 'PRD 从写作到通过独立审查、达到可交付状态的周期由近 1 个月缩短至约 2 周。', 'PRD 审查环节节省 50% 时长；关键问题未关闭时阻止进入原型、报价或实施。'],
     visualTitle: '产品化判断',
     visualItems: ['个人 workflow', '团队 SOP', '审查分工', '计划门禁', '企业知识流'],
   },
@@ -812,9 +830,9 @@ export const requirementDiscoverySections: RequirementDiscoverySection[] = [
     id: 's7',
     label: '07 · 证据缺口',
     chapter: 'Evidence Gaps',
-    heading: '第三层判断：哪些只是感觉，哪些必须先核实',
+    heading: '第三层判断：证据和项目依赖是否足够',
     insight: '需求发现要把“感觉像需求”转成可验证事实：当前流程、数据证据、角色链路、替代方案、约束条件和成功指标。',
-    points: ['频次、耗时、损失、投诉、工单和人工成本比抽象痛点更能判断真假。', '现有替代方案能说明用户到底愿意为问题付出多少成本。', '证据不足时，下一步是调研或补材料，不是让 AI 补完方案。'],
+    points: ['核对当前流程、数据证据、角色链路、替代方案、约束条件和成功指标。', '涉及存量系统时，先识别历史代码、文档和项目决策依赖。', '再由 Enterprise Knowledge Harness 的项目记忆按任务加载，缺失时显式标记而不是让模型补全。'],
     visualTitle: '证据清单',
     visualItems: ['流程', '数据', '角色', '替代方案', '约束', '指标'],
   },
@@ -936,8 +954,8 @@ export const quotationSections: QuotationSection[] = [
     label: '10 · 收束',
     chapter: 'From Quote To Consensus',
     heading: '最终价值：报价书变成需求共识工具',
-    insight: 'quotation 的价值不是省下几分钟填表，而是把模糊需求压成客户能理解、团队能交付、金额能解释的报价结构。',
-    points: ['当前形态是个人报价生成 workflow。', '团队复用潜力在于统一售前、产品、研发和商务之间的报价口径。', '产品化方向可以是团队报价 SOP、项目交付估算助手或飞书报价生成器。'],
+    insight: '结构化报价是企业产品交付 Agent Harness 的工作包，用可读的范围与角色工时连接需求和商务交付。',
+    points: ['当前形态是企业产品交付 Agent Harness 中的企业交付工作包。', '根据需求蓝图、功能边界和交付范围组织客户可读模块、角色工时与报价单。', '减少产品经理、项目经理和销售的人工拆分与反复核对，不扩写未经验证的效率比例。'],
     visualTitle: '产品化判断',
     visualItems: ['客户共识', '交付估算', '团队 SOP', '飞书生成器'],
   },
@@ -959,7 +977,7 @@ export const memoryLoaderSections: MemoryLoaderSection[] = [
     label: '03 · 新问题',
     chapter: 'Context Explosion',
     heading: '新问题：skill 越多，沉淀越勤，上下文越爆炸',
-    insight: 'Personal Knowledge Harness 解决了记忆分散，但也带来新的控制问题：当 skill、知识卡和原文材料都在增长时，AI 如果一股脑读取，反而会被上下文淹没。',
+    insight: 'Enterprise Knowledge Harness 将工作流与企业知识解耦；当 Skill、知识卡和项目记忆增长时，memory-loader 负责避免全量加载。',
     points: ['上下文不是越多越好，弱相关材料会稀释当前任务主线。', '旧经验如果没有边界，容易把已经过期的口径带进新任务。', '记忆系统必须有控制层，否则“沉淀越勤”会变成“召回越乱”。'],
     visualTitle: '增长压力',
     visualItems: ['skill 增长', '卡片增长', '原文增长', '上下文污染'],
@@ -1029,8 +1047,8 @@ export const memoryLoaderSections: MemoryLoaderSection[] = [
     label: '10 · 收束',
     chapter: 'Memory Control Layer',
     heading: '最终价值：给 AI 记忆加控制层',
-    insight: 'memory-loader 的价值不是让 AI 记住更多，而是让 AI 在正确时间读取正确记忆。它把 Personal Knowledge Harness 从“有很多知识”推进到“知识能被稳定调用”。',
-    points: ['当前形态是个人 AI 记忆控制 workflow。', '团队复用潜力在于把知识库、skill 和多 agent 入口变成可治理的加载协议。', '产品化方向可以是组织级 AI 记忆路由器、上下文包生成器或知识库召回控制台。'],
+    insight: 'Enterprise Knowledge Harness 为产品工作流提供可审查、最小充分的企业规则、经验和项目记忆。',
+    points: ['当前形态是 Enterprise Knowledge Harness 向产品工作流提供上下文的加载接口。', '按任务类型、项目范围、权威性、时效性和上下文预算生成最小充分上下文。', '它不替代 PRD、原型或报价，只负责让这些工作流读取正确的企业规则、经验和项目记忆。'],
     visualTitle: '产品化判断',
     visualItems: ['记忆路由', '上下文预算', '多 agent 共用', '组织控制台'],
   },
