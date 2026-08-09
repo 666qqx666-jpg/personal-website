@@ -6,7 +6,7 @@
 >
 > 事实母稿：`docs/resume/完整版-简历.md`
 >
-> 投递文件：`/Users/qqx/Desktop/个人/AI产品经理-钱麒祥.pdf`
+> 投递文件：`/Users/qqx/Desktop/个人/钱麒祥-AI产品经理.pdf`
 
 ## 1. 背景
 
