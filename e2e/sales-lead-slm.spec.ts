@@ -4,7 +4,7 @@ const route = '/projects/sales-lead-slm/';
 
 test('projects listing exposes the sales lead flagship case', async ({ page }) => {
   await page.goto('/projects/');
-  const card = page.locator('.card', { hasText: '全域销售线索管理系统' });
+  const card = page.locator('.card', { hasText: '全渠道销售线索管理系统' });
 
   await expect(card).toBeVisible();
   await expect(card).toContainText('让线索真正到达合适的门店');
@@ -27,10 +27,10 @@ test('deck renders eleven scenes and five chapter links', async ({ page }) => {
 test('deck preserves verified facts and contribution boundary', async ({ page }) => {
   await page.goto(route);
 
-  await expect(page.locator('#s1')).toContainText('10+');
-  await expect(page.locator('#s1')).toContainText('15k+');
-  await expect(page.locator('#s1')).toContainText('5 类来源');
-  await expect(page.locator('#s2')).toContainText('前任 PM 已经搭建采集接入底座');
+  await expect(page.locator('#s1')).toContainText('7 个平台');
+  await expect(page.locator('#s1')).toContainText('从 0 到 1');
+  await expect(page.locator('#s2')).toContainText('抖音、快手、美团、小红书、高德、微信和支付宝');
+  await expect(page.locator('#s2')).toContainText('整套销售线索系统建设');
   await expect(page.locator('#s3')).toContainText('最近 180 天');
   await expect(page.locator('#s3')).toContainText('探索过但未上线');
   await expect(page.locator('#s5')).toContainText('3 公里');
@@ -40,9 +40,13 @@ test('deck preserves verified facts and contribution boundary', async ({ page })
   await expect(page.locator('#s6')).toContainText('超过 12.3 个百分点');
   await expect(page.locator('#s6')).toContainText('卡券核销计为成交');
 
+  await expect(page.locator('#s9 [data-status]')).toHaveText('模式设计完成');
+  await expect(page.locator('#s10 [data-status]')).toHaveText('兼容既有链路');
+  await expect(page.locator('#s11 [data-status]')).toHaveText('持续商业化演进');
+  await expect(page.locator('#s10')).toContainText('避免另建一套孤立购买系统');
+
   const body = await page.locator('body').innerText();
-  expect(body).not.toContain('从零建设');
-  expect(body).not.toContain('独立完成整套系统');
+  expect(body).not.toMatch(/前任 PM|已排期|方案规划中|尚未进入详细 PRD/);
 });
 
 test('deck explains the business chain and demand origin for first-time readers', async ({ page }) => {
@@ -62,14 +66,13 @@ test('deck explains the business chain and demand origin for first-time readers'
   await expect(page.locator('#s6')).toContainText('在这个客户的业务里，卡券核销计为成交');
 });
 
-test('future work keeps visible and accurate status labels', async ({ page }) => {
+test('commercialization evolution keeps visible and accurate status labels', async ({ page }) => {
   await page.goto(route);
 
-  await expect(page.locator('#s9 [data-status]')).toHaveText('已排期');
-  await expect(page.locator('#s10 [data-status]')).toHaveText('方案规划中');
-  await expect(page.locator('#s11 [data-status]')).toHaveText('待验证');
-  await expect(page.locator('#s10')).toContainText('平台不经手资金');
-  await expect(page.locator('#s10')).toContainText('尚未进入详细 PRD');
+  await expect(page.locator('#s9 [data-status]')).toHaveText('模式设计完成');
+  await expect(page.locator('#s10 [data-status]')).toHaveText('兼容既有链路');
+  await expect(page.locator('#s11 [data-status]')).toHaveText('持续商业化演进');
+  await expect(page.locator('#s10')).toContainText('避免另建一套孤立购买系统');
 });
 
 test('deck replaces inherited snap scrolling with document scrolling', async ({ page }) => {
@@ -94,7 +97,7 @@ test('static mode keeps every scene readable without JavaScript', async ({ brows
   for (let index = 1; index <= 11; index += 1) await expect(page.locator(`#s${index}`)).toBeAttached();
   await page.locator('#s11').scrollIntoViewIfNeeded();
   await expect(page.locator('#s11')).toBeVisible();
-  await expect(page.locator('#s11')).toContainText('投诉与退款边界');
+  await expect(page.locator('#s11')).toContainText('争议边界');
   await context.close();
 });
 
@@ -133,7 +136,7 @@ test('reduced motion renders final content without ScrollTrigger pinning', async
   await expect(root).toHaveAttribute('data-motion-trigger-count', '0');
   await expect(root).toHaveAttribute('data-motion-pin-count', '0');
   await expect(page.locator('.pin-spacer')).toHaveCount(0);
-  await expect(page.locator('#s11')).toContainText('待验证');
+  await expect(page.locator('#s11')).toContainText('持续商业化演进');
   await context.close();
 });
 

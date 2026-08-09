@@ -10,26 +10,26 @@ const chapters = [
   { href: '#s9', label: '重构' },
 ];
 const scale = [
-  ['10+', '付费品牌'],
-  ['15k+', '覆盖门店'],
-  ['5 类来源', '平台线索接入'],
+  ['约 10 个', '付费品牌'],
+  ['约 15,000 家', '上线门店'],
+  ['7 个平台', '线索接入'],
 ];
 ---
 
 <DeckLayout
-  title="全域销售线索管理系统｜QQ星"
-  description="从动态匹配到责任链重构：让线索真正到达合适的门店。"
+  title="全渠道销售线索管理系统｜QQ星"
+  description="从多平台接入到可回收的门店责任闭环。"
 >
   <main id="sales-lead-deck" class="sales-lead-deck" data-sales-lead-deck data-motion-mode="static">
     <section id="s1" data-scene="origin" data-chapter="origin">
       <div class="scene-shell hero-shell">
         <p class="chapter">Sales Lead Management</p>
         <h1>让线索真正到达合适的门店</h1>
-        <p class="lead">全域销售线索管理系统：从动态匹配到责任链重构</p>
+        <p class="lead">全渠道销售线索管理系统：从多平台接入到可回收的门店责任闭环</p>
         <div class="scale-grid">
           {scale.map(([value, label]) => <div class="metric"><strong>{value}</strong><span>{label}</span></div>)}
         </div>
-        <p class="role-line">我从报表与分配问题进入，推动智能分发、任务、公海池、隐私外呼、自动回收与门店经营能力持续演进。</p>
+        <p class="role-line">我作为产品线负责人，从 0 到 1 负责整套销售线索系统建设，覆盖采集整合、任务生命周期、智能分发、公海池、自动回收和商业化演进。</p>
       </div>
     </section>
 
@@ -61,7 +61,7 @@ const scale = [
           </article>
         </div>
         <p class="bridge-note">所以我们先从最难的一问开始：什么才是“合适的门店”？</p>
-        <p class="boundary-note"><strong>贡献边界：</strong>前任 PM 已经搭建采集接入底座；我的核心贡献从报表、分配与经营问题进入，继续推动分发、任务、公海池、隐私外呼、自动回收与门店经营模块。</p>
+        <p class="boundary-note"><strong>本人职责：</strong>从 0 到 1 主导整套销售线索系统建设，覆盖抖音、快手、美团、小红书、高德、微信和支付宝七个平台接入，统一线索来源、门店和状态口径，并将采集数据接入销售线索任务生命周期。</p>
       </div>
     </section>
 
@@ -170,42 +170,41 @@ const scale = [
     <div class="responsibility-stage" data-motion="responsibility-stage">
       <section id="s9" data-scene="cleaning" data-chapter="rebuild">
         <div class="scene-shell">
-          <span class="status status-scheduled" data-status>已排期</span>
-          <h2>先建立清洗层，再把正确责任交给门店</h2>
+          <span class="status status-scheduled" data-status>模式设计完成</span>
+          <h2>门店动力不足，不能只靠继续加重分发规则</h2>
           <ol class="responsibility-flow">
-            <li data-motion="responsibility-node">确认本人</li>
-            <li data-motion="responsibility-node">确认地理位置与最近门店</li>
-            <li data-motion="responsibility-node">确认初步意向，约定由专业人员继续跟进</li>
-            <li data-motion="responsibility-node">补充客户意向门店</li>
-            <li data-motion="responsibility-node">选择直接分发给意向门店或进入付费公海池</li>
+            <li data-motion="responsibility-node">品牌治理可参与采购的门店范围</li>
+            <li data-motion="responsibility-node">门店获取可用于认领线索的采购资格</li>
+            <li data-motion="responsibility-node">候选门店继续经过资格筛选和排序</li>
+            <li data-motion="responsibility-node">认领后形成明确跟进责任</li>
           </ol>
         </div>
       </section>
 
       <section id="s10" data-scene="points" data-chapter="rebuild">
         <div class="scene-shell">
-          <span class="status status-planning" data-status>方案规划中</span>
-          <h2>用线索点连接门店付费意愿与抢单责任</h2>
+          <span class="status status-planning" data-status>兼容既有链路</span>
+          <h2>把付费认领放回智能分发、任务和回收生命周期</h2>
           <ol class="responsibility-flow">
-            <li data-motion="responsibility-node">门店自行线下充值</li>
-            <li data-motion="responsibility-node">后台提交并审核工单</li>
-            <li data-motion="responsibility-node">审核通过后增加对应门店线索点</li>
-            <li data-motion="responsibility-node">门店抢单后获得线索并扣减线索点</li>
+            <li data-motion="responsibility-node">资格筛选与候选门店排序</li>
+            <li data-motion="responsibility-node">保护期与阶段扩圈</li>
+            <li data-motion="responsibility-node">公海池认领并建立任务</li>
+            <li data-motion="responsibility-node">超时回收并再次分发</li>
           </ol>
-          <p class="boundary-note">平台不经手资金；当前仅有方案索引，尚未进入详细 PRD。</p>
+          <p class="boundary-note">门店采购模式兼容既有智能分发、任务和回收生命周期，避免另建一套孤立购买系统。</p>
         </div>
       </section>
 
       <section id="s11" data-scene="validation" data-chapter="rebuild">
         <div class="scene-shell">
-          <span class="status status-validation" data-status>待验证</span>
-          <h2>下一步不是继续加功能，而是证明责任重构成立</h2>
+          <span class="status status-validation" data-status>持续商业化演进</span>
+          <h2>商业化是否成立，仍要回到门店承接结果</h2>
           <div class="validation-grid">
-            <article data-motion="responsibility-node"><strong>跟进时效</strong><p>清洗后到首次有效跟进是否缩短。</p></article>
-            <article data-motion="responsibility-node"><strong>有效联系率</strong><p>本人、位置与意向确认是否提升可联系性。</p></article>
-            <article data-motion="responsibility-node"><strong>抢单后回收率</strong><p>付费抢单是否减少占单不跟进。</p></article>
-            <article data-motion="responsibility-node"><strong>点数消耗</strong><p>门店是否愿意持续为可承接线索付费。</p></article>
-            <article data-motion="responsibility-node"><strong>投诉与退款边界</strong><p>清洗错误或线索争议如何被识别和处理。</p></article>
+            <article data-motion="responsibility-node"><strong>认领率</strong><p>具备资格的门店是否愿意主动承接。</p></article>
+            <article data-motion="responsibility-node"><strong>首次跟进时效</strong><p>认领后是否更快进入有效联系。</p></article>
+            <article data-motion="responsibility-node"><strong>超时回收率</strong><p>付费认领是否减少占单不跟进。</p></article>
+            <article data-motion="responsibility-node"><strong>核销与成交</strong><p>门店责任改善是否继续反映到业务结果。</p></article>
+            <article data-motion="responsibility-node"><strong>争议边界</strong><p>错误线索、重复线索和责任争议如何处理。</p></article>
           </div>
           <a class="back-projects" href={`${base}projects/`}>返回项目经历</a>
         </div>
