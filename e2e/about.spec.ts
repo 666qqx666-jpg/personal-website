@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 
 const expectedProjectOrder = [
   'ai',
+  'knowledge',
   'site',
   'sales',
   'permissions',
@@ -50,12 +51,17 @@ test('about links are explicit and public copy excludes private fields', async (
   await expect(page.getByRole('link', { name: 'B2B / SaaS 版' }))
     .toHaveAttribute('href', `${basePath}resume-b2b-saas.pdf`);
   await expect(page.locator('[data-project-id="ai"] a'))
+    .toHaveAttribute('href', `${basePath}ai/skill-desk/`);
+  await expect(page.locator('[data-project-id="knowledge"] a'))
     .toHaveAttribute('href', `${basePath}ai/knowledge-harness/`);
+  await expect(page.locator('[data-project-id="ai"]')).toContainText('近 1 个月缩短至约 2 周');
+  await expect(page.locator('[data-project-id="knowledge"]')).toContainText('渗透率 100%');
   await expect(page.locator('[data-project-id="site"] a'))
     .toHaveAttribute('href', 'https://github.com/666qqx666-jpg/personal-website');
   const mainText = await page.locator('main').innerText();
   expect(mainText).not.toContain('173 9571 1345');
   expect(mainText).not.toContain('2000.02');
+  expect(mainText).not.toMatch(/个人稳定自用|尚未推广给团队/);
 });
 
 test('about page stays within the mobile viewport', async ({ page }) => {
@@ -64,7 +70,7 @@ test('about page stays within the mobile viewport', async ({ page }) => {
   expect(await page.evaluate(() =>
     document.documentElement.scrollWidth - window.innerWidth <= 1,
   )).toBe(true);
-  await expect(page.locator('[data-about-project]')).toHaveCount(7);
+  await expect(page.locator('[data-about-project]')).toHaveCount(8);
 });
 
 test('about page removes motion when the visitor requests it', async ({ page }) => {
@@ -83,7 +89,7 @@ test('about content remains visible without JavaScript', async ({ browser }) => 
   const page = await context.newPage();
   await page.goto('/about/');
   await expect(page.getByRole('heading', { level: 1, name: '钱麒祥' })).toBeVisible();
-  await expect(page.locator('[data-about-project]')).toHaveCount(7);
+  await expect(page.locator('[data-about-project]')).toHaveCount(8);
   await expect(page.locator('[data-project-id="sales"]')).toBeVisible();
   expect(await page.locator('.hero-copy.reveal').evaluate((element) => getComputedStyle(element).opacity)).toBe('1');
   expect(await page.locator('[data-project-id="sales"]').evaluate((element) => getComputedStyle(element).opacity)).toBe('1');

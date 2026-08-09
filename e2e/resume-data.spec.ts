@@ -12,11 +12,12 @@ const projectPeriods = {
   parking: '2024.07–2026.03',
   sales: '2025.04–至今',
   ai: '2026.04–至今',
+  knowledge: '2026.04–至今',
   site: '2026.06–至今',
 };
 
-test('canonical facts contain the exact seven projects and periods', () => {
-  expect(resumeFacts.projects).toHaveLength(7);
+test('canonical facts contain the exact eight projects and periods', () => {
+  expect(resumeFacts.projects).toHaveLength(8);
   expect(Object.fromEntries(resumeFacts.projects.map(({ id, period }) => [id, period]))).toEqual(projectPeriods);
 });
 
@@ -36,13 +37,14 @@ test('public identity and the personal site facts match the approved design', ()
 test('complete resume markdown contains the approved public facts', () => {
   const markdown = readFileSync('docs/resume/完整版-简历.md', 'utf8');
   expect(markdown).toMatch(/^# 钱麒祥$/m);
-  expect(markdown).toContain('2 份正式业务竞品分析');
-  expect(markdown).toContain('### 个人网站｜qqx.life');
-  expect(markdown).toContain('2026.06–至今');
-  expect(markdown).toContain('22 个 Astro 页面');
-  expect(markdown).toContain('16 个 E2E 测试文件');
+  expect(markdown).toContain('### 企业产品交付 Agent Harness');
+  expect(markdown).toContain('### Enterprise Knowledge Harness｜企业知识与上下文平台');
+  expect(markdown).toContain('### 全渠道销售线索管理系统');
+  expect(markdown).toContain('近 1 个月缩短至约 2 周');
+  expect(markdown).toContain('PRD审查环节节省50%时长');
   expect(markdown).toContain('2018.09–2022.06');
-  expect(markdown).not.toMatch(/173\s*9571\s*1345|2000\.02/);
+  expect(markdown).not.toContain('### 个人网站｜qqx.life');
+  expect(markdown).not.toContain('### Personal Knowledge Harness｜个人 AI 产品工作台');
 });
 
 test('every project has bounded master and compact background copy', () => {
@@ -54,24 +56,18 @@ test('every project has bounded master and compact background copy', () => {
   }
 });
 
-test('AI facts preserve verified scope and all public outputs exclude sensitive or placeholder content', () => {
-  const aiProject = resumeFacts.projects.find(({ id }) => id === 'ai');
-  expect(aiProject).toBeDefined();
-
-  const aiJson = JSON.stringify(aiProject);
-  for (const claim of [
-    '8 类核心 Agent 工作流',
-    '6 类已稳定',
-    '9 份真实业务 PRD',
-    '2 份正式业务竞品分析',
-    '3 类定制开发报价方案',
-    '25 项关键决策',
-    '6 张业务蓝图',
-    '尚未推广给团队',
-  ]) {
-    expect(aiJson).toContain(claim);
-  }
-  expect(aiJson).not.toMatch(/提升效率|团队提效|团队推广/);
+test('AI facts separate delivery workflows from the enterprise knowledge platform', () => {
+  const agent = resumeFacts.projects.find(({ id }) => id === 'ai');
+  const knowledge = resumeFacts.projects.find(({ id }) => id === 'knowledge');
+  expect(agent?.name).toBe('企业产品交付 Agent Harness');
+  expect(agent?.state).toBe('内部复用｜持续完善工作包');
+  expect(JSON.stringify(agent)).toContain('Writer 与冷启动 Reviewer');
+  expect(JSON.stringify(agent)).toContain('近 1 个月缩短至约 2 周');
+  expect(JSON.stringify(agent)).toContain('PRD 审查环节节省 50% 时长');
+  expect(knowledge?.name).toBe('Enterprise Knowledge Harness｜企业知识与上下文平台');
+  expect(knowledge?.state).toBe('企业复用｜持续演进');
+  expect(JSON.stringify(knowledge)).toContain('材料快照—内容切分—证据片段—候选知识卡—人工裁决—正式知识');
+  expect(JSON.stringify(knowledge)).toContain('渗透率 100%');
 
   const publicOutput = JSON.stringify([
     resumeFacts,
@@ -101,6 +97,7 @@ test('resume variants resolve project facts without duplicating them', () => {
   expect(master.leadProject?.id).toBe('ai');
   expect([master.leadProject?.id, ...master.projects.map(({ id }) => id)]).toEqual([
     'ai',
+    'knowledge',
     'sales',
     'permissions',
     'analytics',
@@ -111,7 +108,7 @@ test('resume variants resolve project facts without duplicating them', () => {
   const ai = getResumeDocument('ai');
   expect(ai.mode).toBe('compact');
   expect(ai.leadProject?.id).toBe('ai');
-  expect([ai.leadProject?.id, ...ai.projects.map(({ id }) => id)]).toEqual(['ai', 'sales', 'permissions']);
+  expect([ai.leadProject?.id, ...ai.projects.map(({ id }) => id)]).toEqual(['ai', 'knowledge', 'sales']);
 
   const b2b = getResumeDocument('b2b');
   expect(b2b.mode).toBe('compact');
@@ -181,7 +178,7 @@ test('canonical facts, compatibility exports, and resolved documents are deeply 
 
   const refreshedMaster = getResumeDocument('master');
   expect(refreshedMaster.leadProject?.name).toBe(originalLeadProjectName);
-  expect(refreshedMaster.projectIds).toEqual(['sales', 'permissions', 'analytics', 'membership', 'parking']);
+  expect(refreshedMaster.projectIds).toEqual(['knowledge', 'sales', 'permissions', 'analytics', 'membership', 'parking']);
   expect(refreshedMaster.projectIds).toBe(master.projectIds);
   expect(refreshedMaster.capabilities).toBe(master.capabilities);
   expect(resumeFacts.tools).not.toContain('mutated');

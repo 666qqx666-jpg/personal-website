@@ -9,11 +9,11 @@ const variants = deepFreeze<Record<ResumeVariantId, ResumeVariantConfig>>({
     label: '完整版内容母稿',
     target: 'AI 产品经理 / B2B SaaS 产品经理',
     summary:
-      '4 年企业服务产品经验，覆盖 CRM、权限、数据、交易与营销场景；具备计算机背景，并已将个人 AI Agent 工作台用于真实产品交付。',
+      '4 年企业服务产品经验，覆盖 CRM、权限、数据、交易与营销场景；具备计算机背景，并已将企业 Agent 工作流、RAG 与上下文治理用于真实产品交付。',
     capabilities: ['AI Agent 工作流', '复杂业务建模', 'B2B / SaaS 产品规划', '数据与技术协作'],
     mode: 'full',
     leadProjectId: 'ai',
-    projectIds: ['sales', 'permissions', 'analytics', 'membership', 'parking'],
+    projectIds: ['knowledge', 'sales', 'permissions', 'analytics', 'membership', 'parking'],
     showTags: true,
   },
   ai: {
@@ -25,7 +25,7 @@ const variants = deepFreeze<Record<ResumeVariantId, ResumeVariantConfig>>({
     capabilities: ['Agent 工作流设计', '复杂业务建模', 'PRD / Spec 交付', '技术与数据协作'],
     mode: 'compact',
     leadProjectId: 'ai',
-    projectIds: ['sales', 'permissions'],
+    projectIds: ['knowledge', 'sales'],
     showTags: false,
   },
   b2b: {

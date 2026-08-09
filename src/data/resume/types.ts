@@ -2,6 +2,7 @@ export type ResumeVariantId = 'master' | 'ai' | 'b2b';
 export type ResumeMode = 'full' | 'compact';
 export type ResumeProjectId =
   | 'ai'
+  | 'knowledge'
   | 'sales'
   | 'permissions'
   | 'analytics'

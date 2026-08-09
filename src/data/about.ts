@@ -68,13 +68,13 @@ export const aboutData = deepFreeze({
     {
       id: 'ai',
       eyebrow: 'AI 产品实践',
-      title: 'Agent 工作台已进入真实交付',
-      description: '需求、PRD、竞品、决策与报价',
+      title: '企业 Agent 工作流已进入真实交付',
+      description: '交付工作流与企业知识平台协同',
       metrics: [
-        { value: '6 / 8', label: '工作流稳定自用' },
-        { value: '9 份', label: '真实业务 PRD' },
-        { value: '6 份', label: '蓝图 / 决策材料' },
-        { value: '2 + 3', label: '竞品分析 + 报价类型' },
+        { value: '100%', label: '产品部门工作流覆盖' },
+        { value: '约 2 周', label: 'PRD 达到可交付状态' },
+        { value: '50%', label: 'PRD 审查时长节省' },
+        { value: '2 层', label: '交付工作流 + 知识平台' },
       ],
     },
   ] satisfies AboutOverview[],
@@ -83,9 +83,10 @@ export const aboutData = deepFreeze({
       id: 'ai-practice',
       eyebrow: '01 · AI 产品实践',
       title: 'AI 能力如何进入真实工作',
-      description: '从知识与工作流系统，到端到端 AI 辅助交付。',
+      description: '从企业产品交付工作流，到企业知识与上下文平台。',
       projects: [
-        view('ai', 'ai/knowledge-harness/'),
+        view('ai', 'ai/skill-desk/', '查看产品交付工作流'),
+        view('knowledge', 'ai/knowledge-harness/'),
         view(
           'site',
           'https://github.com/666qqx666-jpg/personal-website',
