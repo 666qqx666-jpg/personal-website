@@ -9,9 +9,9 @@ test('AI product manager resume PDF is a real exported document', () => {
   const pdf = readFileSync('public/resume.pdf');
 
   expect(pdf.subarray(0, 5).toString()).toBe('%PDF-');
-  expect(pdf.byteLength).toBe(278_835);
+  expect(pdf.byteLength).toBe(1_004_081);
   expect(createHash('sha256').update(pdf).digest('hex')).toBe(
-    'b3bef0977bde3b89c6b2ec6fe8baf23e645e8099ca4d230dc028eff838cfc8d3',
+    '7ac1cd36e29c67379846c7dc7015e1176bae9c4ace1ee1d58d93a942454a6418',
   );
 });
 
