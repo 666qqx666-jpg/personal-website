@@ -8,6 +8,11 @@ test('AI listing links to Skill Desk', async ({ page }) => {
   await expect(card).toContainText('可产品化');
   await expect(card).toHaveAttribute('href', '/ai/skill-desk/');
   await expect(page.locator('.card', { hasText: 'reading-dialogue Skill' })).toHaveCount(0);
+
+  const harness = page.locator('.card', { hasText: 'Enterprise Knowledge Harness' });
+  await expect(harness).toBeVisible();
+  await expect(harness).toContainText('企业知识');
+  await expect(harness).toHaveAttribute('href', '/ai/knowledge-harness/');
 });
 
 test('Skill Desk homepage shows skill cards and detail entries', async ({ page }) => {

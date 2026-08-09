@@ -28,10 +28,27 @@ test('Claude Code architecture deck exposes timeline labels', async ({ page }) =
 
 test('method deck links to Knowledge Harness practice deck', async ({ page }) => {
   await page.goto('/ai/claude-code-architecture/');
-  await expect(page.locator('#s10 a', { hasText: '查看 Personal Knowledge Harness' })).toHaveAttribute(
+  await expect(page.locator('#s10 a', { hasText: '查看 Enterprise Knowledge Harness' })).toHaveAttribute(
     'href',
     '/ai/knowledge-harness/'
   );
+});
+
+test('Enterprise Knowledge Harness tells the complete enterprise platform story', async ({ page }) => {
+  await page.goto('/ai/knowledge-harness/');
+  await expect(page.getByRole('heading', { name: 'Enterprise Knowledge Harness' })).toBeVisible();
+  await expect(page.locator('main#deck section')).toHaveCount(10);
+  await expect(page.locator('#s2')).toContainText('企业规范、历史项目经验和业务文档');
+  await expect(page.locator('#s3')).toContainText('原始材料');
+  await expect(page.locator('#s3')).toContainText('企业能力包');
+  await expect(page.locator('#s4')).toContainText('候选知识卡');
+  await expect(page.locator('#s5')).toContainText('领域索引');
+  await expect(page.locator('#s6')).toContainText('最小充分上下文');
+  await expect(page.locator('#s7')).toContainText('权威性');
+  await expect(page.locator('#s8')).toContainText('降级或人工确认');
+  await expect(page.locator('#s9')).toContainText('灰度发布');
+  await expect(page.locator('#s10')).toContainText('渗透率 100%');
+  expect(await page.locator('body').innerText()).not.toContain('Personal Knowledge Harness');
 });
 
 test('Knowledge Harness origin slide links back to method deck', async ({ page }) => {
