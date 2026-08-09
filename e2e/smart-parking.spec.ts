@@ -18,7 +18,7 @@ test('S1 to S4 establish the business importance and black-box reconstruction', 
   await page.goto(route);
   await expect(page.locator('#s2')).toContainText('8 个 2.0 商场的月度运行规模');
   await expect(page.locator('#s2 [data-background-metric="payment-orders"]')).toContainText('约 7.57 万笔');
-  await expect(page.locator('#s2 [data-background-metric="payable-amount"]')).toContainText('约 118.33 万元');
+  await expect(page.locator('#s2 [data-background-metric="payable-amount"]')).toContainText('约 118.3 万元');
   await expect(page.locator('#s2 [data-background-metric="unique-plates"]')).toContainText('约 6.64 万辆');
   await expect(page.locator('#s2')).toContainText('缴费单不等同于进场车次');
   await expect(page.locator('#s3')).toContainText('1.0 仍在运行');
@@ -270,7 +270,7 @@ test('projects listing exposes smart parking as the fourth public case', async (
   const cards = page.locator('.card');
   const firstFourTitles = await cards.locator('h3').evaluateAll((headings) => headings.slice(0, 4).map((heading) => heading.textContent?.trim()));
   expect(firstFourTitles).toEqual([
-    '全域销售线索管理系统',
+    '全渠道销售线索管理系统',
     '多业务线企业权限体系',
     '集团经营数据分析体系',
     '智慧停车 2.0',

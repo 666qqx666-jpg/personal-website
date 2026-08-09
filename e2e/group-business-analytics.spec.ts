@@ -7,7 +7,7 @@ test('projects listing exposes the group business analytics case as the third ca
   await page.goto('/projects/');
   const cards = page.locator('.card');
   expect(await cards.count()).toBeGreaterThanOrEqual(3);
-  await expect(cards.nth(0)).toContainText('全域销售线索管理系统');
+  await expect(cards.nth(0)).toContainText('全渠道销售线索管理系统');
   await expect(cards.nth(1)).toContainText('多业务线企业权限体系');
 
   const card = cards.nth(2);
