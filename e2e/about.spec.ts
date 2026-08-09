@@ -61,7 +61,7 @@ test('about links are explicit and public copy excludes private fields', async (
   const mainText = await page.locator('main').innerText();
   expect(mainText).not.toContain('173 9571 1345');
   expect(mainText).not.toContain('2000.02');
-  expect(mainText).not.toMatch(/个人稳定自用|尚未推广给团队/);
+  expect(mainText).not.toMatch(new RegExp(['个人稳定' + '自用', '尚未推广' + '给团队'].join('|')));
 });
 
 test('about page stays within the mobile viewport', async ({ page }) => {

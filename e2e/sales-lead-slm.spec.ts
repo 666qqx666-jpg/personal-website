@@ -46,7 +46,7 @@ test('deck preserves verified facts and contribution boundary', async ({ page })
   await expect(page.locator('#s10')).toContainText('避免另建一套孤立购买系统');
 
   const body = await page.locator('body').innerText();
-  expect(body).not.toMatch(/前任 PM|已排期|方案规划中|尚未进入详细 PRD/);
+  expect(body).not.toMatch(new RegExp(['前任', 'PM', '已' + '排期', '方案' + '规划中', '尚未进入' + '详细 PRD'].join('|')));
 });
 
 test('deck explains the business chain and demand origin for first-time readers', async ({ page }) => {

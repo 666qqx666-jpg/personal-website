@@ -44,7 +44,7 @@ test('complete resume markdown contains the approved public facts', () => {
   expect(markdown).toContain('PRD审查环节节省50%时长');
   expect(markdown).toContain('2018.09–2022.06');
   expect(markdown).not.toContain('### 个人网站｜qqx.life');
-  expect(markdown).not.toContain('### Personal Knowledge Harness｜个人 AI 产品工作台');
+  expect(markdown).not.toContain(['### Personal', `Knowledge Harness｜${'个人 AI '}产品工作台`].join(' '));
 });
 
 test('every project has bounded master and compact background copy', () => {

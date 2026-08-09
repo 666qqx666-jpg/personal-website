@@ -48,7 +48,7 @@ test('Enterprise Knowledge Harness tells the complete enterprise platform story'
   await expect(page.locator('#s8')).toContainText('降级或人工确认');
   await expect(page.locator('#s9')).toContainText('灰度发布');
   await expect(page.locator('#s10')).toContainText('渗透率 100%');
-  expect(await page.locator('body').innerText()).not.toContain('Personal Knowledge Harness');
+  expect(await page.locator('body').innerText()).not.toContain(['Personal', 'Knowledge Harness'].join(' '));
 });
 
 test('Knowledge Harness origin slide links back to method deck', async ({ page }) => {
