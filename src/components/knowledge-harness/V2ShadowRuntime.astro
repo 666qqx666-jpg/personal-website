@@ -1,0 +1,28 @@
+---
+import DiagramFrame from './DiagramFrame.astro';
+const legend = [
+  { tone: 'shadow', label: 'V2：Shadow 实验' },
+  { tone: 'gate', label: '确定性选择与质量门' },
+] as const;
+const budgets = [['Envelope', '300'], ['Current Task', '1,400'], ['Control', '800'], ['Formal + Legacy', '2,600'], ['Evidence', '900']] as const;
+---
+<DiagramFrame visualId="v2-shadow-runtime" title="查找与审查组装的影子链路" ariaLabel="V2 由 Query Planner 和 RoleRetriever 查找，经 RRF 与重排后由 Selector、Quality Gate、Composer 和 Renderer 组装，并受六千 Token 五区预算约束" caption="最终字符串硬上限为 6,000 Token；RetrievalTrace 记录候选、排序、门禁与选择结果。" {legend}>
+  <div class="v2-runtime">
+    <div class="phase"><b>查找</b><div class="kh-node shadow">Query Planner</div><div class="kh-node shadow">RoleRetriever<small>Exact · Lexical · Metadata</small></div><div class="kh-node shadow">RRF · Reranker</div></div>
+    <div class="kh-arrow">→</div>
+    <div class="phase"><b>审查组装</b><div class="kh-node gate">去重 · 冲突分组</div><div class="kh-node gate">Selector · Quality Gate</div><div class="kh-node shadow">Composer · Renderer</div></div>
+    <div class="trace">RetrievalTrace</div>
+    <div class="budget-grid">{budgets.map(([name, value]) => <div><span>{name}</span><b>{value}</b></div>)}<div class="total"><span>硬上限</span><b>6,000 Token</b></div></div>
+  </div>
+</DiagramFrame>
+<style>
+  .v2-runtime { display: grid; grid-template-columns: 1fr auto 1fr; gap: .5rem; align-items: center; }
+  .phase { display: grid; gap: .32rem; }
+  .phase > b, .trace { color: var(--text-dim); font-size: .62rem; letter-spacing: .08em; }
+  .trace { grid-column: 1 / -1; text-align: center; border-bottom: 1px dashed var(--c-cyan); padding: .2rem; }
+  .budget-grid { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(6, 1fr); gap: .3rem; }
+  .budget-grid div { display: grid; gap: .12rem; padding: .34rem; border: 1px solid var(--glass-border); border-radius: .5rem; text-align: center; }
+  .budget-grid span { color: var(--text-dim); font-size: .52rem; } .budget-grid b { font-size: .64rem; }
+  .budget-grid .total { border-color: #f59e0b; }
+  @media (max-width: 620px) { .v2-runtime { grid-template-columns: 1fr; } .v2-runtime > .kh-arrow { transform: rotate(90deg); } .trace, .budget-grid { grid-column: 1; } .budget-grid { grid-template-columns: repeat(2, 1fr); } }
+</style>

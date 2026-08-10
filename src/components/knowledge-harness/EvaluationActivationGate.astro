@@ -1,0 +1,25 @@
+---
+import DiagramFrame from './DiagramFrame.astro';
+const legend = [
+  { tone: 'stable', label: 'V1：stable baseline' },
+  { tone: 'shadow', label: 'V2：shadow' },
+  { tone: 'gate', label: '激活门：未通过' },
+] as const;
+---
+<DiagramFrame visualId="evaluation-activation-gate" title="同题盲评决定是否切流" ariaLabel="二十组同题盲评中 V1 工作价值十八、V2 工作价值十六，因此激活门为 false，V2 保持 Shadow 而不进入 canary" caption="安全门与规模门通过，不等于工作价值门通过；该结果不能推出 V1.5 的 Token 或价值结论。" {legend}>
+  <div class="evaluation">
+    <div class="sample">20 组同题盲评</div>
+    <div class="scores"><div class="score stable"><span>V1 工作价值</span><b>18</b></div><div class="score shadow"><span>V2 工作价值</span><b>16</b></div></div>
+    <div class="kh-node gate">activation=false<small>production_enabled=false</small></div>
+    <div class="decision-row"><div class="kh-node shadow">V2 保持 Shadow</div><div class="kh-node muted">canary 未进入</div></div>
+  </div>
+</DiagramFrame>
+<style>
+  .evaluation { display: grid; gap: .55rem; justify-items: center; }
+  .sample { color: var(--text-dim); font-size: .68rem; }
+  .scores, .decision-row { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
+  .score { display: grid; justify-items: center; padding: .65rem; border: 1px solid var(--glass-border); border-radius: .75rem; }
+  .score span { color: var(--text-dim); font-size: .64rem; } .score b { font-size: 2.2rem; line-height: 1.1; }
+  .score.stable { border-color: #34d399; } .score.shadow { border: 1px dashed var(--c-cyan); }
+  .muted { opacity: .48; }
+</style>

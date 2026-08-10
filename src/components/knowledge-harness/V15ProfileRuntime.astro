@@ -1,0 +1,27 @@
+---
+import DiagramFrame from './DiagramFrame.astro';
+const legend = [
+  { tone: 'stable', label: '保留：V1 有效性' },
+  { tone: 'shadow', label: '吸收：V2 可扩展接口' },
+  { tone: 'gate', label: '待同题评测：预算下调门' },
+] as const;
+const quality = [['弱相关', '不加载'], ['冲突', '保留冲突组'], ['过期', '标记复核'], ['关键缺失', 'insufficient / escalation']] as const;
+---
+<DiagramFrame visualId="v15-profile-runtime" title="Profile 驱动的两阶段 V1.5" ariaLabel="任务先由 Profile 判断角色和知识边界，再经过候选查找与审查冲突组装两阶段生成 Context-Pack，并在同题评测后才决定是否降低六千 Token 安全上限" caption="V1.5 是当前收敛设计，保留 6,000 Token 安全硬上限；3,500 不是硬门，生产切流与同口径结果均待验证。" {legend}>
+  <div class="v15-runtime">
+    <div class="main-flow"><div class="kh-node orchestrator">Task</div><div class="kh-arrow">→</div><div class="kh-node verified">Profile<small>任务 · 角色 · 知识边界</small></div><div class="kh-arrow">→</div><div class="kh-node shadow">阶段一：查找候选<small>可替换检索接口</small></div><div class="kh-arrow">→</div><div class="kh-node gate">阶段二：审查与组装<small>RetrievalTrace</small></div><div class="kh-arrow">→</div><div class="kh-node verified">Context-Pack</div></div>
+    <div class="quality-grid">{quality.map(([input, output]) => <div><b>{input}</b><span>{output}</span></div>)}</div>
+    <div class="budget-gate"><span>6,000 Token 安全硬上限</span><b>同题评测：工作价值不降低 · 中位数低于 V2 · P90 低于 V2</b><em>满足后再决定是否下调</em></div>
+  </div>
+</DiagramFrame>
+<style>
+  .v15-runtime { display: grid; gap: .5rem; }
+  .main-flow { display: grid; grid-template-columns: .6fr auto .8fr auto 1fr auto 1fr auto .8fr; gap: .3rem; align-items: stretch; }
+  .main-flow .kh-node { display: grid; place-content: center; padding: .45rem .3rem; }
+  .quality-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .32rem; }
+  .quality-grid div { display: grid; gap: .1rem; padding: .35rem; border: 1px solid var(--glass-border); border-radius: .5rem; text-align: center; }
+  .quality-grid b { font-size: .6rem; } .quality-grid span { color: var(--text-dim); font-size: .52rem; }
+  .budget-gate { display: grid; gap: .14rem; padding: .45rem; border: 1px dashed #f59e0b; border-radius: .65rem; text-align: center; }
+  .budget-gate span, .budget-gate em { color: var(--text-dim); font-size: .55rem; font-style: normal; } .budget-gate b { font-size: .62rem; }
+  @media (max-width: 650px) { .main-flow { grid-template-columns: 1fr; } .main-flow > .kh-arrow { transform: rotate(90deg); } .quality-grid { grid-template-columns: repeat(2, 1fr); } }
+</style>

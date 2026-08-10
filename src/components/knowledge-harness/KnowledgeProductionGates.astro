@@ -1,0 +1,28 @@
+---
+import DiagramFrame from './DiagramFrame.astro';
+const legend = [
+  { tone: 'stable', label: '候选：可追加证据' },
+  { tone: 'gate', label: '门禁：正式入库五问' },
+  { tone: 'verified', label: '已裁决：进入唯一知识层' },
+] as const;
+const triggers = ['任务内语义信号', '用户显式 digest', '复现 / 周度复盘'] as const;
+const outcomes = ['新增', '追加', '合并', '暂缓', '丢弃', '留原文层'] as const;
+---
+<DiagramFrame visualId="knowledge-production-gates" title="候选捕获与正式入库是两道门" ariaLabel="三类触发先进入可去重和追加证据的候选队列，再由复审与入库五问决定六种去向" caption="即时捕获由 Agent 语义规则触发并由确定性脚本持久化；它不是宿主生命周期 Hook。" {legend}>
+  <div class="production-gates">
+    <div class="trigger-row">{triggers.map((item) => <div class="kh-node">{item}</div>)}</div>
+    <div class="kh-arrow">↓</div>
+    <div class="kh-node orchestrator">候选队列<small>去重 · 追加证据 · 不要求立即转正</small></div>
+    <div class="kh-arrow">↓ 显式沉淀 / 复现 / 周度复盘</div>
+    <div class="kh-node gate">入库五问<small>复用 · 判断改变 · 可路由 · 可承接 · 不污染</small></div>
+    <div class="outcome-row">{outcomes.map((item) => <span>{item}</span>)}</div>
+    <div class="destination-row"><div class="kh-node verified">原文层</div><div class="kh-node verified">正式知识域</div><div class="kh-node verified">能力层 / shared Skill</div></div>
+  </div>
+</DiagramFrame>
+<style>
+  .production-gates { display: grid; gap: .42rem; justify-items: stretch; }
+  .trigger-row, .destination-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: .42rem; }
+  .outcome-row { display: flex; flex-wrap: wrap; justify-content: center; gap: .32rem; }
+  .outcome-row span { padding: .25rem .48rem; border: 1px solid var(--glass-border); border-radius: 999px; color: var(--text-dim); font-size: .61rem; }
+  @media (max-width: 560px) { .trigger-row, .destination-row { grid-template-columns: 1fr; } }
+</style>

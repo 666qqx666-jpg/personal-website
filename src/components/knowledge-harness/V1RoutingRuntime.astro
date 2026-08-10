@@ -1,0 +1,17 @@
+---
+import DiagramFrame from './DiagramFrame.astro';
+const legend = [{ tone: 'stable', label: 'V1：首个稳定基线' }] as const;
+---
+<DiagramFrame visualId="v1-routing-runtime" title="人工权威索引的稳定路径" ariaLabel="任务依次经过根领域索引、任务索引和项目记忆索引，最多选择五个文件后组成 Context-Pack" caption="V1 控制文件数量而不是 Token：最多 5 个文件，没有 Token 硬上限。" {legend}>
+  <div class="v1-flow">
+    <div class="kh-node orchestrator">Task</div><div class="kh-arrow">→</div>
+    <div class="index-stack"><div class="kh-node">根 / 领域索引</div><div class="kh-node">任务索引</div><div class="kh-node">项目记忆索引</div></div>
+    <div class="kh-arrow">→</div><div class="kh-node gate">最多 5 个文件<small>文件长度仍可能波动</small></div>
+    <div class="kh-arrow">→</div><div class="kh-node verified">Context-Pack</div>
+  </div>
+</DiagramFrame>
+<style>
+  .v1-flow { display: grid; grid-template-columns: .7fr auto 1.25fr auto 1fr auto 1fr; gap: .42rem; align-items: center; }
+  .index-stack { display: grid; gap: .32rem; }
+  @media (max-width: 620px) { .v1-flow { grid-template-columns: 1fr; } .v1-flow > .kh-arrow { transform: rotate(90deg); } }
+</style>
