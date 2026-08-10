@@ -16,7 +16,7 @@
 
 **Stage evidence checkpoint:** Task 7 后执行 `npm run check && npx playwright test e2e/knowledge-harness.spec.ts e2e/claude-code-architecture.spec.ts`，随后执行 `shasum -a 256 src/data/knowledgeHarness.ts src/pages/ai/knowledge-harness.astro e2e/knowledge-harness.spec.ts` 并把测试结果与哈希写入运行时状态；该检查点不请求用户批准。
 
-**Recovery entry:** `/Users/qqx/my_code_cursor/personal-website/docs/superpowers/plans/2026-08-10-enterprise-knowledge-harness-visual-repair.md`；恢复时先读运行时状态，再从本文件第一个未完成 Task 继续。
+**Recovery entry:** `/Users/qqx/my_code_cursor/personal-website/tmp/plan-runtime/enterprise-knowledge-harness-visual-repair.plan-runtime.json`；恢复时先读该运行时状态，再回到本计划第一个未完成 Task 继续。
 
 **Plan runtime state file:** `/Users/qqx/my_code_cursor/personal-website/tmp/plan-runtime/enterprise-knowledge-harness-visual-repair.plan-runtime.json`
 
