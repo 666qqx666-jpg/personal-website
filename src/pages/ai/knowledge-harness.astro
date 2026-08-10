@@ -1,26 +1,22 @@
 ---
 import DeckLayout from '../../layouts/DeckLayout.astro';
 import ProblemMap from '../../components/knowledge-harness/ProblemMap.astro';
-import LayeredArchitecture from '../../components/knowledge-harness/LayeredArchitecture.astro';
-import KnowledgePipeline from '../../components/knowledge-harness/KnowledgePipeline.astro';
-import RoutingIndexMap from '../../components/knowledge-harness/RoutingIndexMap.astro';
-import ContextAssembly from '../../components/knowledge-harness/ContextAssembly.astro';
-import RankingMechanism from '../../components/knowledge-harness/RankingMechanism.astro';
-import FailureBoundary from '../../components/knowledge-harness/FailureBoundary.astro';
-import ReleaseRollback from '../../components/knowledge-harness/ReleaseRollback.astro';
+import KnowledgeProductionGates from '../../components/knowledge-harness/KnowledgeProductionGates.astro';
+import V1RoutingRuntime from '../../components/knowledge-harness/V1RoutingRuntime.astro';
+import V2ShadowRuntime from '../../components/knowledge-harness/V2ShadowRuntime.astro';
+import EvaluationActivationGate from '../../components/knowledge-harness/EvaluationActivationGate.astro';
+import V15ProfileRuntime from '../../components/knowledge-harness/V15ProfileRuntime.astro';
 import WorkflowImpact from '../../components/knowledge-harness/WorkflowImpact.astro';
 import { harnessSections, timelineLabels } from '../../data/knowledgeHarness';
 
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 const visualById = {
   'problem-map': ProblemMap,
-  'layered-architecture': LayeredArchitecture,
-  'knowledge-pipeline': KnowledgePipeline,
-  'routing-index-map': RoutingIndexMap,
-  'context-assembly': ContextAssembly,
-  'ranking-mechanism': RankingMechanism,
-  'failure-boundary': FailureBoundary,
-  'release-rollback': ReleaseRollback,
+  'knowledge-production-gates': KnowledgeProductionGates,
+  'v1-routing-runtime': V1RoutingRuntime,
+  'v2-shadow-runtime': V2ShadowRuntime,
+  'evaluation-activation-gate': EvaluationActivationGate,
+  'v15-profile-runtime': V15ProfileRuntime,
   'workflow-impact': WorkflowImpact,
 } as const;
 const toneClass = { problem: 'p', thinking: 't', decision: 'd', result: 'd', status: 't' } as const;
@@ -30,8 +26,9 @@ const toneClass = { problem: 'p', thinking: 't', decision: 'd', result: 'd', sta
     <section id="s1">
       <div class="chapter">AI 落地实战 · 企业知识基础层</div>
       <h1>Enterprise Knowledge Harness</h1>
-      <p class="sub">企业知识与上下文平台——让多个 Agent 与产品经理基于同一事实工作</p>
-      <p class="sub signal-line">知识生产 · 权威治理 · 最小上下文 · 版本发布与回滚</p>
+      <p class="sub value-line">让企业经验成为 Agent 可复用的判断力</p>
+      <p class="sub">让多个 Agent 与产品经理基于同一事实工作</p>
+      <p class="sub signal-line">知识产生 · 按任务交付 · 评测演进 · 工作流结果</p>
       <p class="cover-meta">产品设计与架构负责人 · 2026.04–至今 · 企业复用 / 持续演进</p>
       <div class="scroll-hint">↓ 滚动进入平台</div>
     </section>
@@ -97,23 +94,20 @@ const toneClass = { problem: 'p', thinking: 't', decision: 'd', result: 'd', sta
       .narrative-copy { gap: .68rem; }
       .narrative-copy .ptd-row p { font-size: .87rem; line-height: 1.58; }
       .cover-meta { max-width: 290px; line-height: 1.6; }
-      #s6, #s9 { padding-top: 3.2rem; padding-bottom: 3.6rem; justify-content: flex-start; }
-      #s6 .enterprise-split, #s9 .enterprise-split { gap: .7rem; }
-      #s6 .narrative-copy, #s9 .narrative-copy { gap: .38rem; }
-      #s6 .narrative-copy .ptd-row, #s9 .narrative-copy .ptd-row { gap: .55rem; }
-      #s6 .narrative-copy .ptd-row p, #s9 .narrative-copy .ptd-row p { font-size: .75rem; line-height: 1.42; }
-      #s6 .chapter { margin-bottom: .45rem; font-size: .7rem; }
-      #s6 h2 { margin-bottom: .55rem; font-size: 1.2rem; }
-      #s6 :global(.kh-frame), #s9 :global(.kh-frame) { padding: .75rem; }
-      #s6 :global(.kh-title), #s9 :global(.kh-title) { font-size: .76rem; margin-bottom: .5rem; }
-      #s6 :global(.kh-node), #s9 :global(.kh-node) { padding: .38rem .42rem; font-size: .66rem; line-height: 1.25; }
-      #s6 :global(.kh-node small), #s9 :global(.kh-node small) { font-size: .54rem; margin-top: .08rem; }
-      #s6 :global(.kh-legend), #s9 :global(.kh-legend) { margin-top: .42rem; gap: .28rem .5rem; }
-      #s6 :global(.kh-legend-item), #s9 :global(.kh-legend-item), #s6 :global(.figcap), #s9 :global(.figcap) { font-size: .57rem; }
-      #s6 :global(.figcap), #s9 :global(.figcap) { margin-top: .42rem; line-height: 1.35; }
-      #s6 :global(.swimlanes) { gap: .28rem; }
-      #s6 :global(.lane) { gap: .15rem; padding: .4rem; }
-      #s6 :global(.lane .kh-arrow) { font-size: .75rem; line-height: .5; }
+      #s5, #s6, #s7 { padding-top: 3.2rem; padding-bottom: 3.6rem; justify-content: flex-start; }
+      #s5 .enterprise-split, #s6 .enterprise-split, #s7 .enterprise-split { gap: .7rem; }
+      #s5 .narrative-copy, #s6 .narrative-copy, #s7 .narrative-copy { gap: .38rem; }
+      #s5 .narrative-copy .ptd-row, #s6 .narrative-copy .ptd-row, #s7 .narrative-copy .ptd-row { gap: .55rem; }
+      #s5 .narrative-copy .ptd-row p, #s6 .narrative-copy .ptd-row p, #s7 .narrative-copy .ptd-row p { font-size: .75rem; line-height: 1.42; }
+      #s5 .chapter, #s6 .chapter, #s7 .chapter { margin-bottom: .45rem; font-size: .7rem; }
+      #s5 h2, #s6 h2, #s7 h2 { margin-bottom: .55rem; font-size: 1.2rem; }
+      #s5 :global(.kh-frame), #s6 :global(.kh-frame), #s7 :global(.kh-frame) { padding: .75rem; }
+      #s5 :global(.kh-title), #s6 :global(.kh-title), #s7 :global(.kh-title) { font-size: .76rem; margin-bottom: .5rem; }
+      #s5 :global(.kh-node), #s6 :global(.kh-node), #s7 :global(.kh-node) { padding: .38rem .42rem; font-size: .66rem; line-height: 1.25; }
+      #s5 :global(.kh-node small), #s6 :global(.kh-node small), #s7 :global(.kh-node small) { font-size: .54rem; margin-top: .08rem; }
+      #s5 :global(.kh-legend), #s6 :global(.kh-legend), #s7 :global(.kh-legend) { margin-top: .42rem; gap: .28rem .5rem; }
+      #s5 :global(.kh-legend-item), #s6 :global(.kh-legend-item), #s7 :global(.kh-legend-item), #s5 :global(.figcap), #s6 :global(.figcap), #s7 :global(.figcap) { font-size: .57rem; }
+      #s5 :global(.figcap), #s6 :global(.figcap), #s7 :global(.figcap) { margin-top: .42rem; line-height: 1.35; }
     }
   </style>
 </DeckLayout>

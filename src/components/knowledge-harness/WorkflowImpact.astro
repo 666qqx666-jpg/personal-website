@@ -2,7 +2,7 @@
 import DiagramFrame from './DiagramFrame.astro';
 const legend = [{ tone: 'verified', label: '已验证：工作流接入与团队结果' }] as const;
 ---
-<DiagramFrame visualId="workflow-impact" title="企业知识进入真实产品交付" ariaLabel="Enterprise Knowledge Harness 向 PRD Writer 和独立 Reviewer 提供规则、案例与项目记忆，覆盖产品部门所有同事并达到百分之百渗透率" caption="这里仅展示已验证的工作流接入和团队覆盖，不把 V2 技术门指标当业务结果。" {legend}>
+<DiagramFrame visualId="workflow-impact" title="企业知识进入真实产品交付" ariaLabel="Enterprise Knowledge Harness 向 PRD Writer 和独立 Reviewer 提供规则、案例与项目记忆，覆盖产品部门所有同事并达到百分之百渗透率" caption="这里仅展示已验证的工作流接入和团队覆盖；历史文档缺失的产品优化需求除外，不把 V2 技术门指标当业务结果。" {legend}>
   <div class="impact-map">
     <div class="knowledge-supply">
       <span>企业规则</span><span>历史案例</span><span>项目记忆</span>

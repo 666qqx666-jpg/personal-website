@@ -1,10 +1,10 @@
 ---
-import type { HarnessVisualId, NextHarnessVisualId } from '../../data/knowledgeHarness';
+import type { HarnessVisualId } from '../../data/knowledgeHarness';
 
 type LegendTone = 'stable' | 'shadow' | 'gate' | 'verified';
 type LegendItem = { tone: LegendTone; label: string };
 interface Props {
-  visualId: HarnessVisualId | NextHarnessVisualId;
+  visualId: HarnessVisualId;
   title: string;
   ariaLabel: string;
   caption: string;
