@@ -17,14 +17,14 @@ async function prepare(page: import('@playwright/test').Page, id: string, viewpo
 
 for (const id of desktopSections) {
   test(`Knowledge Harness ${id} desktop visual`, async ({ page }) => {
-    const section = await prepare(page, id, { width: 1280, height: 800 });
-    await expect(section).toHaveScreenshot(`knowledge-harness-${id}-desktop.png`, { animations: 'disabled' });
+    await prepare(page, id, { width: 1280, height: 800 });
+    await expect(page).toHaveScreenshot(`knowledge-harness-${id}-desktop.png`, { animations: 'disabled' });
   });
 }
 
 for (const id of mobileSections) {
   test(`Knowledge Harness ${id} mobile visual`, async ({ page }) => {
-    const section = await prepare(page, id, { width: 390, height: 844 });
-    await expect(section).toHaveScreenshot(`knowledge-harness-${id}-mobile.png`, { animations: 'disabled' });
+    await prepare(page, id, { width: 390, height: 844 });
+    await expect(page).toHaveScreenshot(`knowledge-harness-${id}-mobile.png`, { animations: 'disabled' });
   });
 }
