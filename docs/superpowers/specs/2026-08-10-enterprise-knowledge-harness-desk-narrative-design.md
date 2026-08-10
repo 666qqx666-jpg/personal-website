@@ -1,7 +1,7 @@
 ---
 title: Enterprise Knowledge Harness Desk 叙事重构设计
 date: 2026-08-10
-status: draft-for-review
+status: approved
 route: /ai/knowledge-harness/
 project: personal-website
 mode: existing-system-increment
@@ -62,8 +62,8 @@ mode: existing-system-increment
 - **模式：** 既有系统增量。
 - **是否快速通道：** 否。信息架构和状态表达发生产品级变化，已通过低保真方案比较和逐段确认收敛。
 - **baseline-evidence：** PASS。
-- **high-fidelity-readiness：** 本 Spec 经用户复核后可转为 PASS。
-- **当前可进入阶段：** 正式设计 Spec 与实施计划准备。
+- **high-fidelity-readiness：** PASS。
+- **当前可进入阶段：** 实施计划与正式页面实现准备。
 - **尚未进入：** 正式页面实现。
 
 ## 4. 真实页面基线证据包
