@@ -11,6 +11,16 @@ export const harnessVisualIds = [
 ] as const;
 
 export type HarnessVisualId = (typeof harnessVisualIds)[number];
+export const nextHarnessVisualIds = [
+  'problem-map',
+  'knowledge-production-gates',
+  'v1-routing-runtime',
+  'v2-shadow-runtime',
+  'evaluation-activation-gate',
+  'v15-profile-runtime',
+  'workflow-impact',
+] as const;
+export type NextHarnessVisualId = (typeof nextHarnessVisualIds)[number];
 export type NarrativeTone = 'problem' | 'thinking' | 'decision' | 'result' | 'status';
 export type HarnessSectionId = 's2' | 's3' | 's4' | 's5' | 's6' | 's7' | 's8' | 's9' | 's10';
 
