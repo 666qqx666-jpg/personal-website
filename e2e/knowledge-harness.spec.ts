@@ -82,6 +82,8 @@ test('deck interactions and source bridge remain available', async ({ page }) =>
     await page.locator(`nav.timeline a[data-t="s${index}"]`).click();
     await expect(page).toHaveURL(new RegExp(`#s${index}$`));
   }
+  await page.locator('nav.timeline a[data-t="s6"]').click();
+  await expect(page).toHaveURL(/#s6$/);
   await expect(page.locator('nav.timeline a[data-t="s6"]')).toHaveClass(/active/);
   await page.locator('#deck-theme-toggle').click();
   await expect(page.locator('html')).toHaveAttribute('data-theme', /light|dark/);
