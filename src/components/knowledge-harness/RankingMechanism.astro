@@ -1,0 +1,39 @@
+---
+import DiagramFrame from './DiagramFrame.astro';
+const legend = [
+  { tone: 'shadow', label: 'V2 影子检索与排序' },
+  { tone: 'gate', label: '门禁：确定性质量检查' },
+] as const;
+---
+<DiagramFrame visualId="ranking-mechanism" title="按角色召回、融合、重排与截断" ariaLabel="Query Planner 规划角色，RoleRetriever 通过 Exact、Lexical 和 Metadata 召回，再经 RRF、Reranker、去重、Selector 与 Quality Gate 形成最小上下文" caption="候选池可以更大，交付给模型的上下文仍受角色覆盖与预算约束。" {legend}>
+  <div class="ranking">
+    <div class="kh-node shadow planner">Query Planner<small>任务 · 约束 · 查询角色</small></div>
+    <div class="kh-arrow">↓</div>
+    <div class="retrieval">
+      <div class="kh-node shadow">Exact</div><div class="kh-node shadow">Lexical</div><div class="kh-node shadow">Metadata</div>
+    </div>
+    <div class="kh-arrow">↓ RoleRetriever</div>
+    <div class="funnel">
+      <div class="kh-node shadow">角色内 RRF</div>
+      <div class="kh-node shadow">Role-aware Reranker</div>
+      <div class="kh-node shadow">去重与冲突分组</div>
+      <div class="kh-node gate">Selector + Quality Gate</div>
+      <div class="kh-node orchestrator">Composer / Renderer</div>
+    </div>
+    <div class="trace">RetrievalTrace · 记录候选、排序、门禁与选择结果</div>
+    <div class="budget">最小充分上下文 · 最终预算</div>
+  </div>
+</DiagramFrame>
+<style>
+  .ranking { display: grid; justify-items: center; gap: .35rem; }
+  .planner { width: 58%; }
+  .retrieval { width: 88%; display: grid; grid-template-columns: repeat(3, 1fr); gap: .45rem; }
+  .funnel { width: 96%; display: grid; grid-template-columns: repeat(5, 1fr); gap: .34rem; }
+  .funnel > :nth-child(2) { margin-inline: .18rem; }
+  .funnel > :nth-child(3) { margin-inline: .35rem; }
+  .funnel > :nth-child(4) { margin-inline: .52rem; }
+  .funnel > :nth-child(5) { margin-inline: .68rem; }
+  .trace { color: var(--text-dim); font-size: .63rem; border-bottom: 1px dashed var(--c-cyan); padding: .25rem .8rem; }
+  .budget { width: 48%; padding: .45rem; border-radius: 999px; background: rgba(139,92,246,.13); color: var(--text); text-align: center; font-size: .68rem; }
+  @media (max-width: 600px) { .planner, .retrieval, .funnel, .budget { width: 100%; } .funnel { grid-template-columns: 1fr; } .funnel > * { margin-inline: 0 !important; } }
+</style>
