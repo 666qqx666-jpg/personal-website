@@ -1,0 +1,23 @@
+---
+import DiagramFrame from './DiagramFrame.astro';
+const legend = [{ tone: 'gate', label: '门禁：显式失败与人工边界' }] as const;
+const rows = [
+  ['弱相关', '不加载'],
+  ['来源冲突', '保留冲突组'],
+  ['材料过期', '标记复核'],
+  ['关键缺失', 'insufficient / escalation'],
+] as const;
+---
+<DiagramFrame visualId="failure-boundary" title="四类异常，四种可观察结果" ariaLabel="弱相关映射不加载，来源冲突映射冲突组，材料过期映射复核，关键缺失映射 insufficient 或 escalation" caption="质量门不替用户裁决高风险事实；它负责阻止静默错误进入上下文。" {legend}>
+  <div class="boundary-grid">
+    <div class="grid-head">输入状态</div><div class="grid-head">系统行为</div>
+    {rows.map(([input, output]) => <><div class="kh-node gate">{input}</div><div class="mapping">→</div><div class="kh-node">{output}</div></>)}
+  </div>
+</DiagramFrame>
+<style>
+  .boundary-grid { display: grid; grid-template-columns: 1fr auto 1.25fr; gap: .45rem; align-items: stretch; }
+  .grid-head { color: var(--text-dim); font-size: .65rem; font-weight: 700; text-align: center; }
+  .grid-head:first-child { grid-column: 1; }
+  .grid-head:nth-child(2) { grid-column: 3; }
+  .mapping { display: grid; place-content: center; color: #f59e0b; }
+</style>

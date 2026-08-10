@@ -1,0 +1,32 @@
+---
+import DiagramFrame from './DiagramFrame.astro';
+const legend = [{ tone: 'verified', label: '已验证：工作流接入与团队结果' }] as const;
+---
+<DiagramFrame visualId="workflow-impact" title="企业知识进入真实产品交付" ariaLabel="Enterprise Knowledge Harness 向 PRD Writer 和独立 Reviewer 提供规则、案例与项目记忆，覆盖产品部门所有同事并达到百分之百渗透率" caption="这里仅展示已验证的工作流接入和团队覆盖，不把 V2 技术门指标当业务结果。" {legend}>
+  <div class="impact-map">
+    <div class="knowledge-supply">
+      <span>企业规则</span><span>历史案例</span><span>项目记忆</span>
+    </div>
+    <div class="kh-arrow">↓</div>
+    <div class="kh-node orchestrator hub">Enterprise Knowledge Harness</div>
+    <div class="branches" aria-hidden="true"><i></i><i></i></div>
+    <div class="workflows">
+      <div class="kh-node verified">PRD Writer</div>
+      <div class="kh-node verified">独立 Reviewer</div>
+    </div>
+    <div class="result-strip"><b>产品部门全员覆盖 · 渗透率 100%</b><span>规则、案例与项目记忆独立维护并按任务加载</span></div>
+  </div>
+</DiagramFrame>
+<style>
+  .impact-map { display: grid; justify-items: center; gap: .4rem; }
+  .knowledge-supply { display: flex; gap: .45rem; flex-wrap: wrap; justify-content: center; }
+  .knowledge-supply span { padding: .32rem .6rem; border: 1px solid var(--glass-border); border-radius: 999px; color: var(--text-dim); font-size: .66rem; }
+  .hub { width: 66%; }
+  .branches { width: 52%; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .branches i { height: 1rem; border-left: 1px solid #34d399; border-bottom: 1px solid #34d399; }
+  .branches i:last-child { border-left: 0; border-right: 1px solid #34d399; }
+  .workflows { width: 72%; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .result-strip { width: 88%; display: grid; gap: .2rem; border-top: 1px solid rgba(52,211,153,.45); padding-top: .65rem; text-align: center; color: #34d399; font-size: .72rem; }
+  .result-strip span { color: var(--text-dim); font-size: .64rem; }
+  @media (max-width: 520px) { .hub, .workflows, .result-strip { width: 100%; } }
+</style>
