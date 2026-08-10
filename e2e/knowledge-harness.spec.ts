@@ -89,6 +89,7 @@ test('diagrams expose captions, labels and non-color state legends', async ({ pa
 
 test('deck interactions and source bridge remain available', async ({ page }) => {
   await page.goto('/ai/knowledge-harness/#s2');
+  await page.addStyleTag({ content: 'astro-dev-toolbar { display: none !important; }' });
   await expect(page.locator('#s2 .source-link')).toHaveAttribute('href', '/ai/claude-code-architecture/');
   await page.locator('nav.timeline a[data-t="s6"]').click();
   await expect(page).toHaveURL(/#s6$/);
