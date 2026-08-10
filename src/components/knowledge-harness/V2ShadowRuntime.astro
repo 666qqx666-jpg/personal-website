@@ -1,7 +1,7 @@
 ---
 import DiagramFrame from './DiagramFrame.astro';
 const legend = [
-  { tone: 'shadow', label: 'V2：Shadow 实验' },
+  { tone: 'shadow', label: 'V2：影子实验' },
   { tone: 'gate', label: '确定性选择与质量门' },
 ] as const;
 const budgets = [['Envelope', '300'], ['Current Task', '1,400'], ['Control', '800'], ['Formal + Legacy', '2,600'], ['Evidence', '900']] as const;
@@ -24,5 +24,5 @@ const budgets = [['Envelope', '300'], ['Current Task', '1,400'], ['Control', '80
   .budget-grid div { display: grid; gap: .12rem; padding: .34rem; border: 1px solid var(--glass-border); border-radius: .5rem; text-align: center; }
   .budget-grid span { color: var(--text-dim); font-size: .52rem; } .budget-grid b { font-size: .64rem; }
   .budget-grid .total { border-color: #f59e0b; }
-  @media (max-width: 620px) { .v2-runtime { grid-template-columns: 1fr; } .v2-runtime > .kh-arrow { transform: rotate(90deg); } .trace, .budget-grid { grid-column: 1; } .budget-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 620px) { .v2-runtime { grid-template-columns: 1fr; } .v2-runtime > .kh-arrow { transform: rotate(90deg); } .trace, .budget-grid { grid-column: 1; } .budget-grid { grid-template-columns: repeat(3, 1fr); } }
 </style>

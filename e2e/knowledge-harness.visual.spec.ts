@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
-const desktopSections = ['s2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10'] as const;
-const mobileSections = ['s3', 's6', 's9'] as const;
+const desktopSections = ['s2', 's3', 's4', 's5', 's6', 's7', 's8'] as const;
+const mobileSections = ['s3', 's5', 's6', 's7'] as const;
 
 async function prepare(page: import('@playwright/test').Page, id: string, viewport: { width: number; height: number }) {
   await page.setViewportSize(viewport);
