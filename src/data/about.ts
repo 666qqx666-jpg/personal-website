@@ -103,10 +103,10 @@ export const aboutData = deepFreeze({
       description: '针对大型企业的定制开发。',
       projects: [
         view('sales', 'projects/sales-lead-slm/'),
-        view('permissions', 'projects/enterprise-permissions/'),
-        view('analytics', 'projects/group-business-analytics/'),
-        view('membership', 'projects/membership-operations/'),
         view('parking', 'projects/smart-parking/'),
+        view('membership', 'projects/membership-operations/'),
+        view('analytics', 'projects/group-business-analytics/'),
+        view('permissions', 'projects/enterprise-permissions/'),
       ],
     },
   ] satisfies AboutProjectGroup[],

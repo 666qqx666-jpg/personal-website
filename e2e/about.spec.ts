@@ -5,10 +5,10 @@ const expectedProjectOrder = [
   'knowledge',
   'site',
   'sales',
-  'permissions',
-  'analytics',
-  'membership',
   'parking',
+  'membership',
+  'analytics',
+  'permissions',
 ];
 
 test('about page is a complete recruiter-first profile', async ({ page }) => {

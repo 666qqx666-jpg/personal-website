@@ -3,14 +3,19 @@ import { test, expect } from '@playwright/test';
 
 const route = '/projects/group-business-analytics/';
 
-test('projects listing exposes the group business analytics case as the third card', async ({ page }) => {
+test('projects listing orders public cases by time and exposes group business analytics as the fourth card', async ({ page }) => {
   await page.goto('/projects/');
   const cards = page.locator('.card');
-  expect(await cards.count()).toBeGreaterThanOrEqual(3);
-  await expect(cards.nth(0)).toContainText('全渠道销售线索管理系统');
-  await expect(cards.nth(1)).toContainText('多业务线企业权限体系');
+  const titles = await cards.locator('h3').evaluateAll((headings) => headings.map((heading) => heading.textContent?.trim()));
+  expect(titles).toEqual([
+    '全渠道销售线索管理系统',
+    '智慧停车 2.0',
+    '多平台会员运营体系',
+    '集团经营数据分析体系',
+    '多业务线企业权限体系',
+  ]);
 
-  const card = cards.nth(2);
+  const card = cards.nth(3);
   await expect(card).toContainText('集团经营数据分析体系');
   await expect(card).toContainText('集团考核需求');
   await expect(card).toContainText('指标建模');
