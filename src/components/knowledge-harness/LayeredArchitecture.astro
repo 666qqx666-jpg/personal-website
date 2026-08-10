@@ -1,0 +1,25 @@
+---
+import DiagramFrame from './DiagramFrame.astro';
+const legend = [{ tone: 'stable', label: '当前稳定架构' }] as const;
+---
+<DiagramFrame visualId="layered-architecture" title="稳定三层知识架构与工作流消费者" ariaLabel="原始材料、正式知识和企业能力包构成三层知识架构，Agent 工作流作为上层消费者" caption="Agent 工作流消费三层知识能力，但不成为第四层知识真值。" {legend}>
+  <div class="layer-stack">
+    <div class="kh-node layer workflow"><b>Agent 工作流 · 消费层</b><small>流程 · 角色 · 质量门禁</small></div>
+    <div class="connector">按任务调用</div>
+    <div class="kh-node layer capability"><b>企业能力包</b><small>任务入口 · 组织规则 · 共享能力</small></div>
+    <div class="connector">路由正式知识</div>
+    <div class="kh-node layer knowledge"><b>正式知识</b><small>已裁决规则 · 案例 · 复用单元</small></div>
+    <div class="connector">可追溯到证据</div>
+    <div class="kh-node layer source"><b>原始材料</b><small>动态事实真值 · 文档 · 项目记录</small></div>
+  </div>
+</DiagramFrame>
+<style>
+  .layer-stack { width: min(100%, 480px); margin: 0 auto; display: grid; justify-items: stretch; }
+  .layer { padding: .7rem 1rem; }
+  .workflow { border-color: var(--c-violet); background: rgba(139,92,246,.11); }
+  .capability { border-color: #34d399; background: rgba(52,211,153,.08); }
+  .knowledge { border-color: var(--c-blue); }
+  .source { border-color: var(--c-cyan); background: rgba(34,211,238,.06); }
+  .connector { color: var(--text-dim); font-size: .63rem; text-align: center; padding: .23rem 0; }
+  .connector::before, .connector::after { content: ''; display: inline-block; height: .55rem; border-left: 1px solid var(--text-dim); vertical-align: middle; margin: 0 .5rem; opacity: .55; }
+</style>

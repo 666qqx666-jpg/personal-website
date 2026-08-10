@@ -1,0 +1,26 @@
+---
+import DiagramFrame from './DiagramFrame.astro';
+const legend = [{ tone: 'gate', label: '门禁：需要治理的风险' }] as const;
+---
+<DiagramFrame visualId="problem-map" title="分散知识进入 Agent 前的系统风险" ariaLabel="企业规范、项目经验和业务文档汇入上下文膨胀、来源冲突与 Skill 耦合三类风险" caption="多来源不是问题；缺少权威、预算与解耦规则才会让 Agent 失控。" {legend}>
+  <div class="problem-topology">
+    <div class="sources">
+      <div class="kh-node">企业规范</div>
+      <div class="kh-node">历史项目经验</div>
+      <div class="kh-node">业务文档</div>
+    </div>
+    <div class="converge"><span></span><b>未经治理的输入</b><span></span></div>
+    <div class="risks">
+      <div class="kh-node gate">上下文膨胀</div>
+      <div class="kh-node gate">来源冲突</div>
+      <div class="kh-node gate">Skill 耦合</div>
+    </div>
+  </div>
+</DiagramFrame>
+<style>
+  .problem-topology { display: grid; gap: 1rem; }
+  .sources, .risks { display: grid; grid-template-columns: repeat(3, 1fr); gap: .65rem; }
+  .converge { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: .6rem; color: var(--text-dim); font-size: .67rem; }
+  .converge span { height: 1px; background: linear-gradient(90deg, transparent, var(--c-violet), transparent); }
+  @media (max-width: 520px) { .sources, .risks { grid-template-columns: 1fr; } }
+</style>
