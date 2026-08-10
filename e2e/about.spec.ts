@@ -61,6 +61,7 @@ test('about links are explicit and public copy excludes private fields', async (
   await expect(page.locator('[data-project-id="site"] a'))
     .toHaveAttribute('href', 'https://github.com/666qqx666-jpg/personal-website');
   const currentJob = page.locator('.timeline .item').first();
+  await expect(currentJob.locator('li').first()).toContainText('自 2026 年起探索产品 Agent');
   await expect(currentJob).toContainText('服务美的品牌客户');
   await expect(currentJob).toContainText('服务恒太商业集团客户');
   const mainText = await page.locator('main').innerText();
