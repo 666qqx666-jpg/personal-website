@@ -99,8 +99,8 @@ export const aboutData = deepFreeze({
     {
       id: 'commercial',
       eyebrow: '02 · 商业项目经历',
-      title: '每个项目都在当前页讲清楚',
-      description: '详情页继续承接流程图、关键取舍和业务蓝图。',
+      title: '项目经历',
+      description: '针对大型企业的定制开发。',
       projects: [
         view('sales', 'projects/sales-lead-slm/'),
         view('permissions', 'projects/enterprise-permissions/'),

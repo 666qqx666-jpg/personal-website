@@ -19,6 +19,8 @@ test('about page is a complete recruiter-first profile', async ({ page }) => {
   await expect(page.getByAltText('钱麒祥个人照片')).toBeVisible();
   await expect(page.getByRole('heading', { name: '商业产品基本盘' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'AI 产品实践' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '项目经历' })).toBeVisible();
+  await expect(page.getByText('针对大型企业的定制开发。')).toBeVisible();
 
   expect(await page.locator('[data-about-project]').evaluateAll((cards) =>
     cards.map((card) => card.getAttribute('data-project-id')),
@@ -39,9 +41,9 @@ test('about page is a complete recruiter-first profile', async ({ page }) => {
 test('about links are explicit and public copy excludes private fields', async ({ page }) => {
   await page.goto('/about/');
   const basePath = new URL(page.url()).pathname.replace(/about\/?$/, '');
-  await expect(page.getByRole('link', { name: '下载 AI 产品经理简历' }).first())
+  await expect(page.getByRole('link', { name: '下载简历' }).first())
     .toHaveAttribute('href', `${basePath}resume.pdf`);
-  const primaryResumeLinks = page.getByRole('link', { name: '下载 AI 产品经理简历' });
+  const primaryResumeLinks = page.getByRole('link', { name: '下载简历' });
   await expect(primaryResumeLinks).toHaveCount(2);
   expect(await primaryResumeLinks.evaluateAll((links) =>
     links.map((link) => link.getAttribute('download')),
@@ -58,6 +60,9 @@ test('about links are explicit and public copy excludes private fields', async (
   await expect(page.locator('[data-project-id="knowledge"]')).toContainText('渗透率 100%');
   await expect(page.locator('[data-project-id="site"] a'))
     .toHaveAttribute('href', 'https://github.com/666qqx666-jpg/personal-website');
+  const currentJob = page.locator('.timeline .item').first();
+  await expect(currentJob).toContainText('服务美的品牌客户');
+  await expect(currentJob).toContainText('服务恒太商业集团客户');
   const mainText = await page.locator('main').innerText();
   expect(mainText).not.toContain('173 9571 1345');
   expect(mainText).not.toContain('2000.02');
