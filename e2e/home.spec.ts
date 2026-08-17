@@ -44,7 +44,24 @@ test('selected work keeps AI systems first on mobile and loads reviewed visuals'
   await expect(previews.nth(0).locator('[data-knowledge-preview]')).toBeVisible(); await expect(previews.nth(1).locator('img')).toHaveAttribute('alt', /PRD 审查记录/); await expect(previews.nth(3).locator('[data-system-preview="parking-layers"]')).toBeVisible();
   expect(await previews.nth(0).innerText()).not.toMatch(/V1\.5|V2|16\/20|18\/20/); expect(await previews.locator('img').evaluateAll((images) => images.every((image) => { const img = image as HTMLImageElement; return img.complete && img.naturalWidth > 0; }))).toBe(true);
   const columns = await page.locator('.business-pair').evaluate((node) => getComputedStyle(node).gridTemplateColumns.split(' ').length);
+  const deskColumns = await previews.nth(1).evaluate((node) => getComputedStyle(node).gridTemplateColumns.split(' ').length);
   const sales = await previews.nth(2).boundingBox(); const parking = await previews.nth(3).boundingBox();
-  expect(columns).toBe(1); expect(sales?.width).toBeGreaterThan(320); expect(parking?.y).toBeGreaterThan((sales?.y ?? 0) + (sales?.height ?? 0) - 1);
+  expect(columns).toBe(1); expect(deskColumns).toBe(1); expect(sales?.width).toBeGreaterThan(320); expect(parking?.y).toBeGreaterThan((sales?.y ?? 0) + (sales?.height ?? 0) - 1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(await page.evaluate(() => document.documentElement.clientWidth));
+});
+
+test('selected work turns the Desk card into a compact tablet row', async ({ page }) => {
+  await page.setViewportSize({ width: 768, height: 1024 });
+  await page.goto('/');
+
+  const knowledge = page.locator('[data-work-id="knowledge-harness"]');
+  const desk = page.locator('[data-work-id="delivery-harness"]');
+  const [knowledgeBox, deskBox] = await Promise.all([knowledge.boundingBox(), desk.boundingBox()]);
+
+  expect(deskBox?.y).toBeGreaterThan((knowledgeBox?.y ?? 0) + (knowledgeBox?.height ?? 0) - 1);
+  expect(await desk.evaluate((node) => getComputedStyle(node).gridTemplateColumns.split(' ').length)).toBe(2);
+  expect(deskBox?.height).toBeLessThan(460);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(
+    await page.evaluate(() => document.documentElement.clientWidth)
+  );
 });

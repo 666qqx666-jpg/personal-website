@@ -66,4 +66,20 @@ if (!visual && !visualCaption) throw new Error(`Structural preview ${id} needs a
     img, .strip img { height: auto; max-height: 260px; aspect-ratio: 16 / 9; }
     .visual-slot { min-height: 210px; }
   }
+
+  @media (min-width: 641px) and (max-width: 960px) {
+    .work-preview.support {
+      grid-template-columns: minmax(220px, .78fr) minmax(0, 1.22fr);
+      grid-template-rows: auto;
+      align-items: center;
+      height: auto;
+    }
+
+    .support img {
+      height: clamp(180px, 24vw, 220px);
+      max-height: none;
+      object-fit: cover;
+      object-position: top left;
+    }
+  }
 </style>
