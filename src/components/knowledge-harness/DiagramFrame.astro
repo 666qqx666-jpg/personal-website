@@ -9,11 +9,12 @@ interface Props {
   ariaLabel: string;
   caption: string;
   legend: readonly LegendItem[];
+  variant?: 'standard' | 'evidence';
 }
-const { visualId, title, ariaLabel, caption, legend } = Astro.props;
+const { visualId, title, ariaLabel, caption, legend, variant = 'standard' } = Astro.props;
 ---
 
-<figure class="figure kh-frame" data-visual={visualId} aria-label={ariaLabel}>
+<figure class:list={['figure', 'kh-frame', variant]} data-visual={visualId} aria-label={ariaLabel}>
   <div class="kh-title">{title}</div>
   <div class="diagram-labels"><slot /></div>
   <ul class="kh-legend" data-legend aria-label="状态图例">
@@ -24,6 +25,8 @@ const { visualId, title, ariaLabel, caption, legend } = Astro.props;
 
 <style>
   .kh-frame { width: min(100%, 650px); padding: 1.2rem 1.25rem 1rem; }
+  .kh-frame.evidence { width: min(100%, 860px); padding: 1rem 1.05rem .85rem; }
+  .kh-frame.evidence .diagram-labels { min-height: 0; }
   .kh-title { color: var(--text); font-size: .9rem; font-weight: 750; margin-bottom: .9rem; }
   .diagram-labels { min-height: 290px; display: grid; align-content: center; }
   .kh-legend { display: flex; flex-wrap: wrap; gap: .45rem .8rem; margin-top: .8rem; list-style: none; }

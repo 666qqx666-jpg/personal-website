@@ -99,3 +99,18 @@ test('desktop and mobile layouts do not overflow horizontally', async ({ page })
     }
   }
 });
+
+test('V2 evaluation connects five architecture layers, two reports and the no-cutover decision', async ({ page }) => {
+  await page.goto('/ai/knowledge-harness/#s6'); const section = page.locator('#s6');
+  await expect(section.locator('[data-architecture-layer]')).toHaveCount(5); await expect(section.locator('[data-validation-timeline] li')).toHaveCount(2);
+  await expect(section.locator('[data-validation-report="v2-1"]')).toContainText('V1 16/20'); await expect(section.locator('[data-validation-report="v2-1"]')).toContainText('V2 8/20');
+  await expect(section.locator('[data-validation-report="v2-2"]')).toContainText('V1 18/20'); await expect(section.locator('[data-validation-report="v2-2"]')).toContainText('V2 16/20');
+  await expect(section).toContainText('31.9%'); await expect(section).toContainText('87.2%'); await expect(section).toContainText('activation=false'); await expect(section).toContainText('V2 保持 Shadow'); await expect(section).toContainText('有效机制收敛进 V1.5');
+});
+
+test('V1.5 shows two retrieval validations while keeping the overall result incomplete', async ({ page }) => {
+  await page.goto('/ai/knowledge-harness/#s7'); const section = page.locator('#s7');
+  await expect(section.locator('[data-validation-report="v15-1"]')).toContainText('V1.5 11/20'); await expect(section.locator('[data-validation-report="v15-1"]')).toContainText('9 题');
+  await expect(section.locator('[data-validation-report="v15-2"]')).toContainText('V1.5 20/20'); await expect(section.locator('[data-validation-report="v15-2"]')).toContainText('0 题');
+  await expect(section).toContainText('Gate incomplete'); await expect(section).toContainText('模型答案与人工盲评尚未形成最终结论'); await expect(section).not.toContainText('三版本赢家');
+});

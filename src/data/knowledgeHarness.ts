@@ -54,25 +54,25 @@ export const harnessSections = [
   {
     id: 's5', chapter: '05 · V2 Shadow', heading: 'V2：为规模化问题设计影子实验', visualId: 'v2-shadow-runtime',
     narrative: [
-      { label: '假设', body: '更强的检索、排序和可观察性可以为未来规模化留出能力，但不直接接管生产流量。', tone: 'thinking' },
-      { label: '职责', body: 'V2 将查找与审查组装分开，并用 RetrievalTrace 记录候选、排序、门禁和选择结果。', tone: 'decision' },
-      { label: '预算', body: 'Context-Pack 最终字符串使用 6,000 Token 硬上限；五区预算由右侧结构图给出。', tone: 'status' },
+      { label: '规模信号', body: '知识角色、跨项目材料和文件长度同时增长，V1 的文件数量控制开始出现波动。', tone: 'problem' },
+      { label: '实验假设', body: '用更强的检索、排序、质量门和 RetrievalTrace 验证规模化能力，但不直接接管生产流量。', tone: 'thinking' },
+      { label: '状态', body: 'V1 保持 stable，V2 只作为 Shadow 旁路进入同题验证。', tone: 'status' },
     ],
   },
   {
-    id: 's6', chapter: '06 · 人工评测', heading: '更少上下文，没有带来更高工作价值', visualId: 'evaluation-activation-gate',
+    id: 's6', chapter: '06 · 人工评测', heading: '工程能力更完整，为什么仍然没有切流？', visualId: 'evaluation-activation-gate',
     narrative: [
-      { label: '证据', body: '20 组同题盲评中，V1 18，V2 16；安全门与规模门通过，但 activation=false。', tone: 'result' },
-      { label: '判断', body: '更完整的工程能力和更少上下文，不能自动成为切流理由。', tone: 'decision' },
-      { label: '状态', body: 'V2 保持 Shadow，production_enabled=false，不进入 canary；该评测也不证明 V1.5 的结果。', tone: 'status' },
+      { label: '事实', body: 'V2 把查找、排序、冲突处理与组装拆成可观察的分层链路。', tone: 'thinking' },
+      { label: '验证', body: '第一次明显退化；第二次返修缩小差距，但仍有 6 个完成输出回归。', tone: 'result' },
+      { label: '决策', body: 'activation=false：保留 V1 生产基线，V2 保持 Shadow，把有效机制收敛进 V1.5。', tone: 'decision' },
     ],
   },
   {
     id: 's7', chapter: '07 · V1.5 收敛', heading: 'V1.5：把有效性与可扩展性收敛在一起', visualId: 'v15-profile-runtime',
     narrative: [
-      { label: '设计', body: 'Profile 先判断任务、角色与知识边界，再用两阶段完成候选查找和审查组装。', tone: 'decision' },
-      { label: '继承', body: '保留 V1 的人工权威索引与小语料有效性，吸收 V2 的 RetrievalTrace 和可替换检索接口。', tone: 'thinking' },
-      { label: '预算门', body: '当前收敛设计保留 6,000 Token 安全硬上限，待同题评测证明工作价值不降低，且中位数、P90 均低于 V2 后，再决定是否下调。', tone: 'status' },
+      { label: '收敛', body: 'V1.5 保留人工权威索引，用 Profile 固定任务、角色与知识边界，再分两阶段查找和审查组装。', tone: 'decision' },
+      { label: '返修', body: '第一次冻结检索契约只通过 11/20；九题失败推动候选与覆盖判断返修。', tone: 'thinking' },
+      { label: '当前', body: '第二次纯检索契约达到 20/20，但模型答案与人工盲评未形成最终结论，整体仍为 incomplete。', tone: 'status' },
     ],
   },
   {
