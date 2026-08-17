@@ -110,6 +110,22 @@ test('Skill Desk homepage separates unvalidated skills into Lab', async ({ page 
   await expect(lab.locator('a')).toHaveCount(0);
 });
 
+test('Skill Desk stays contained on tablet and mobile widths', async ({ page }) => {
+  for (const viewport of [
+    { width: 1024, height: 768 },
+    { width: 834, height: 1194 },
+    { width: 390, height: 844 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto('/ai/skill-desk/');
+    await expect(page.locator('.skill-desk-page')).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(
+      await page.evaluate(() => document.documentElement.clientWidth)
+    );
+    await expect(page.getByRole('link', { name: /Enterprise Knowledge Harness/ })).toBeVisible();
+  }
+});
+
 test('reading-dialogue flagship has ten sections and core controls', async ({ page }) => {
   await page.goto('/ai/skill-desk/reading-dialogue/');
   await expect(page.getByRole('heading', { name: 'reading-dialogue Skill：把深度阅读变成知识生产' })).toBeVisible();
