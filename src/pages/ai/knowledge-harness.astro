@@ -91,7 +91,7 @@ const toneClass = { problem: 'p', thinking: 't', decision: 'd', result: 'd', sta
       }
       .enterprise-split { grid-template-columns: minmax(0, 1fr); width: min(100%, 760px); gap: 1.2rem; }
       .narrative-copy { width: 100%; }
-      .enterprise-split :global(.kh-frame) { width: 100%; }
+      .enterprise-split :global(.kh-frame) { width: 100%; max-width: none; }
       @supports (height: 100dvh) {
         section[data-section] { min-height: 100dvh; }
       }
