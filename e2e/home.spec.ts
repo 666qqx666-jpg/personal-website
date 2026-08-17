@@ -27,3 +27,18 @@ test('mobile navigation keeps the about page reachable', async ({ page }) => {
   await expect(page).toHaveURL(/\/about\/$/);
   await expect(page.getByRole('heading', { name: '钱麒祥', exact: true })).toBeVisible();
 });
+
+test('home adds selected work without replacing the original section navigation', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 }); await page.goto('/');
+  await expect(page.locator('[data-selected-work]')).toBeVisible(); await expect(page.locator('[data-work-preview]')).toHaveCount(4);
+  await expect(page.locator('.grid a.card')).toHaveCount(3);
+  const heroHeight = await page.locator('.banner').evaluate((node) => node.getBoundingClientRect().height);
+  expect(heroHeight).toBeGreaterThanOrEqual(560); expect(heroHeight).toBeLessThan(900);
+});
+
+test('selected work keeps AI systems first on mobile and loads reviewed visuals', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 }); await page.goto('/'); const previews = page.locator('[data-work-preview]');
+  await expect(previews).toHaveCount(4); await expect(previews.nth(0)).toContainText('Enterprise Knowledge Harness'); await expect(previews.nth(1)).toContainText('Enterprise Product Delivery Agent Harness');
+  await expect(previews.nth(0).locator('[data-knowledge-preview]')).toBeVisible(); await expect(previews.nth(1).locator('img')).toHaveAttribute('alt', /PRD 审查记录/); await expect(previews.nth(3).locator('[data-system-preview="parking-layers"]')).toBeVisible();
+  expect(await previews.nth(0).innerText()).not.toMatch(/V1\.5|V2|16\/20|18\/20/); expect(await previews.locator('img').evaluateAll((images) => images.every((image) => { const img = image as HTMLImageElement; return img.complete && img.naturalWidth > 0; }))).toBe(true);
+});

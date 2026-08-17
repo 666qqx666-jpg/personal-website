@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Banner from '../components/Banner.astro';
+import SelectedWork from '../components/home/SelectedWork.astro';
 import SectionGrid from '../components/SectionGrid.astro';
 import { profile } from '../data/profile';
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
@@ -12,5 +13,6 @@ const sections = [
 ---
 <BaseLayout title={`${profile.name} · 个人主页`} description={profile.summary}>
   <Banner />
+  <SelectedWork />
   <SectionGrid title="作品与思考" items={sections} />
 </BaseLayout>
