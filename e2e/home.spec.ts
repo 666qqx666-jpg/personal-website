@@ -65,3 +65,19 @@ test('selected work turns the Desk card into a compact tablet row', async ({ pag
     await page.evaluate(() => document.documentElement.clientWidth)
   );
 });
+
+test('business previews stay inside their tablet cards', async ({ page }) => {
+  await page.setViewportSize({ width: 834, height: 1194 });
+  await page.goto('/#selected-work');
+
+  for (const id of ['sales-lead', 'smart-parking']) {
+    const card = page.locator(`[data-work-id="${id}"]`);
+    const containment = await card.evaluate((node) => {
+      const cardRect = node.getBoundingClientRect();
+      const figureRect = node.querySelector('figure')?.getBoundingClientRect();
+      if (!figureRect) return false;
+      return figureRect.left >= cardRect.left - 1 && figureRect.right <= cardRect.right + 1;
+    });
+    expect(containment).toBe(true);
+  }
+});
