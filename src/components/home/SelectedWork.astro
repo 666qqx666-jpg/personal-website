@@ -1,0 +1,44 @@
+---
+import WorkPreview from './WorkPreview.astro'; import KnowledgeSystemPreview from './KnowledgeSystemPreview.astro'; import ParkingLayersPreview from '../site/ParkingLayersPreview.astro';
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+<section id="selected-work" class="selected-work section-pad" data-selected-work aria-labelledby="selected-work-title"><div class="container"><div class="section-heading reveal"><span>精选工作</span><h2 id="selected-work-title">把 AI 嵌入真实工作</h2><p>先看企业 AI 工作系统，再看支撑这些判断的复杂业务产品经验。</p></div><div class="selected-grid"><WorkPreview id="knowledge-harness" href={`${base}ai/knowledge-harness/`} eyebrow="企业 AI 工作系统" title="Enterprise Knowledge Harness" summary="让企业经验成为 Agent 可复用、可追溯、可验证的判断力。" visualCaption="五层知识链路与脱敏验证材料切片；不展示未完成的版本比较。" variant="feature"><KnowledgeSystemPreview slot="visual" /></WorkPreview><WorkPreview id="delivery-harness" href={`${base}ai/skill-desk/`} eyebrow="产品交付工作流" title="Enterprise Product Delivery Agent Harness" summary="把需求发现、PRD、独立审查与人工决策连接成可交付工作流。" visualId="delivery-review-sanitized" variant="support" /><div class="business-pair"><WorkPreview id="sales-lead" href={`${base}projects/sales-lead-slm/`} eyebrow="复杂业务系统" title="销售线索管理" summary="从动态匹配到责任链重构，让线索真正到达合适的门店。" visualId="sales-lead-sanitized" variant="strip" /><WorkPreview id="smart-parking" href={`${base}projects/smart-parking/`} eyebrow="复杂业务系统" title="智慧停车系统" summary="从外包黑盒到自有体系，重新获得产品定义权和演进能力。" visualCaption="内部业务、停车服务、中台、适配器与停车场的产品分层。" variant="strip"><ParkingLayersPreview slot="visual" /></WorkPreview></div></div></div></section>
+<style>
+  .selected-work { padding-top: 72px; background: linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%); }
+  .section-heading { display: grid; gap: .7rem; max-width: 720px; margin-bottom: 2rem; }
+  .section-heading > span { color: var(--accent-strong); font-size: .78rem; font-weight: 750; letter-spacing: .12em; }
+  .section-heading h2 { font-size: clamp(1.9rem, 4vw, 3.2rem); }
+  .section-heading p { color: var(--muted); font-size: 1rem; }
+  .selected-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.9fr) minmax(300px, .92fr);
+    grid-template-areas:
+      'feature support'
+      'business business';
+    gap: 1.25rem;
+    align-items: stretch;
+  }
+  .selected-grid > :global(.feature) { grid-area: feature; }
+  .selected-grid > :global(.support) { grid-area: support; }
+  .business-pair {
+    grid-area: business;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  @media (max-width: 960px) {
+    .selected-grid {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas:
+        'feature'
+        'support'
+        'business';
+    }
+  }
+
+  @media (max-width: 640px) {
+    .selected-work { padding-top: 56px; }
+    .business-pair { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>

@@ -8,18 +8,19 @@ import { profile } from '../data/profile';
     <p class="type reveal" data-delay="2"><span id="tw"></span><span class="cursor">|</span></p>
     <p class="sub reveal" data-delay="3">{profile.summary}</p>
   </div>
-  <a class="scroll" href="#main" aria-label="向下滚动">↓</a>
+  <a class="scroll" href="#selected-work" aria-label="查看精选工作">↓</a>
 </section>
 
 <style>
   .banner {
-    min-height: 100vh;
+    position: relative;
+    min-height: clamp(560px, 72vh, 720px);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 0 24px;
+    padding: 60px 24px 40px;
   }
   .inner { max-width: 820px; }
   .badge {
@@ -63,6 +64,9 @@ import { profile } from '../data/profile';
   }
   @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
   @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+  @media (max-width: 640px) {
+    .banner { min-height: min(680px, calc(100svh - 60px)); padding-top: 40px; }
+  }
 </style>
 
 <script>

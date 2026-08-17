@@ -1,25 +1,12 @@
 ---
 import DiagramFrame from './DiagramFrame.astro';
-const legend = [
-  { tone: 'stable', label: 'V1：稳定基线' },
-  { tone: 'shadow', label: 'V2：影子' },
-  { tone: 'gate', label: '激活门：未通过' },
-] as const;
+import V2Architecture from './V2Architecture.astro';
+import ValidationReportExcerpt from './ValidationReportExcerpt.astro';
+import ValidationDecisionFlow from './ValidationDecisionFlow.astro';
+import { v2ValidationRuns } from '../../data/knowledgeHarnessValidation';
+const legend = [{ tone: 'shadow', label: 'V2：影子实验' }, { tone: 'gate', label: '激活门：未通过' }, { tone: 'stable', label: 'V1：生产基线保持' }] as const;
 ---
-<DiagramFrame visualId="evaluation-activation-gate" title="同题盲评决定是否切流" ariaLabel="二十组同题盲评中 V1 工作价值十八、V2 工作价值十六，因此激活门为 false，V2 保持 Shadow 而不进入 canary" caption="安全门与规模门通过，不等于工作价值门通过；该结果不能推出 V1.5 的 Token 或价值结论。" {legend}>
-  <div class="evaluation">
-    <div class="sample">20 组同题盲评</div>
-    <div class="scores"><div class="score stable"><span>V1 工作价值</span><b>18</b></div><div class="score shadow"><span>V2 工作价值</span><b>16</b></div></div>
-    <div class="kh-node gate">activation=false<small>production_enabled=false</small></div>
-    <div class="decision-row"><div class="kh-node shadow">V2 保持 Shadow</div><div class="kh-node muted">canary 未进入</div></div>
-  </div>
+<DiagramFrame visualId="evaluation-activation-gate" title="V2 影子实验的分层链路与两轮报告" ariaLabel="V2 五层架构经过两轮验证后未通过激活门，保持 Shadow 并把有效机制收敛进 V1.5" caption="工程完整度不是切流理由；两轮报告均来自冻结评测，本页只解释当时的不切流决策。" {legend} variant="evidence">
+  <div class="evaluation-canvas"><V2Architecture /><div class="validation-band"><ol class="validation-timeline" data-validation-timeline>{v2ValidationRuns.map((run) => <li><span>{run.label}</span><b>{run.candidateScore}</b><small>{run.decision}</small></li>)}</ol><div class="report-pair">{v2ValidationRuns.map((run) => <ValidationReportExcerpt {run} />)}</div></div><ValidationDecisionFlow /></div>
 </DiagramFrame>
-<style>
-  .evaluation { display: grid; gap: .55rem; justify-items: center; }
-  .sample { color: var(--text-dim); font-size: .68rem; }
-  .scores, .decision-row { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; }
-  .score { display: grid; justify-items: center; padding: .65rem; border: 1px solid var(--glass-border); border-radius: .75rem; }
-  .score span { color: var(--text-dim); font-size: .64rem; } .score b { font-size: 2.2rem; line-height: 1.1; }
-  .score.stable { border-color: #34d399; } .score.shadow { border: 1px dashed var(--c-cyan); }
-  .muted { opacity: .48; }
-</style>
+<style>.evaluation-canvas{display:grid;gap:.65rem}.validation-band{display:grid;grid-template-columns:minmax(120px,.34fr) minmax(0,1.66fr);gap:.75rem;padding-top:.55rem;border-top:1px dashed var(--glass-border)}.validation-timeline{display:grid;gap:.7rem;margin:0;padding:0 0 0 1rem}.validation-timeline li{display:grid;gap:.12rem;color:var(--text-dim)}.validation-timeline span{color:var(--c-blue);font-size:.56rem;font-weight:700}.validation-timeline b{color:var(--text);font-size:.72rem}.validation-timeline small{font-size:.5rem;line-height:1.35}.report-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem}@container kh-frame (max-width:560px){.validation-band,.report-pair{grid-template-columns:1fr}.validation-timeline{grid-template-columns:repeat(2,1fr)}}</style>

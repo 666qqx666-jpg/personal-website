@@ -8,6 +8,7 @@
     "preview": "astro preview",
     "check": "astro check",
     "test:e2e": "playwright test",
+    "portfolio:visuals": "node scripts/verify-portfolio-visuals.mjs",
     "resume:check": "npm run check && playwright test e2e/resume-data.spec.ts e2e/resume.spec.ts e2e/about.spec.ts e2e/resume-pdf.spec.ts",
     "resume:export": "node scripts/export-resumes.mjs"
   },
@@ -17,6 +18,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.0",
+    "@axe-core/playwright": "4.12.1",
     "@playwright/test": "^1.48.0",
     "@types/node": "^26.0.0",
     "typescript": "^5.6.0"

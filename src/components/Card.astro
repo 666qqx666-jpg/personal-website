@@ -1,12 +1,14 @@
 ---
-interface Props {
-  title: string; hook?: string; tags?: string[]; href?: string; cover?: string;
-}
-const { title, hook = '', tags = [], href, cover } = Astro.props;
+import ParkingLayersPreview from './site/ParkingLayersPreview.astro';
+interface CardMedia { src: string; alt: string; width: number; height: number; position?: string; }
+interface Props { title: string; hook?: string; tags?: string[]; href?: string; cover?: string; media?: CardMedia; diagram?: 'parking-layers'; }
+const { title, hook = '', tags = [], href, cover, media, diagram } = Astro.props;
 const Tag = href ? 'a' : 'div';
 ---
 <Tag class="card" href={href}>
-  <div class="cover" style={cover ? `background:${cover}` : undefined}>
+  <div class:list={['cover', (media || diagram) && 'evidence-cover']} style={!media && !diagram && cover ? `background:${cover}` : undefined} data-card-media={(media || diagram) ? '' : undefined}>
+    {media && <img src={media.src} alt={media.alt} width={media.width} height={media.height} loading="lazy" style={`object-position:${media.position ?? 'center'}`} />}
+    {diagram === 'parking-layers' && <ParkingLayersPreview />}
     <span class="shine"></span>
   </div>
   <div class="body">
@@ -34,6 +36,10 @@ const Tag = href ? 'a' : 'div';
     border-color: var(--accent);
   }
   .cover { height: 104px; background: var(--grad); position: relative; overflow: hidden; }
+  .cover.evidence-cover { padding: .25rem; background: var(--bg-soft); }
+  .cover img { width: 100%; height: 100%; object-fit: cover; background: var(--bg-soft); }
+  .cover :global([data-system-preview]) { min-height: 0; height: 100%; }
+  .cover[data-card-media]::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(15, 23, 42, .16)); pointer-events: none; }
   .shine {
     position: absolute; inset: 0;
     background: linear-gradient(120deg, transparent 30%, rgba(255, 255, 255, 0.28) 50%, transparent 70%);
@@ -47,6 +53,6 @@ const Tag = href ? 'a' : 'div';
   .tags { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 14px; }
   .tags span {
     font-size: 11px; border: 1px solid var(--border); border-radius: 999px;
-    padding: 3px 10px; color: var(--muted); background: var(--bg-soft);
+    padding: 3px 10px; color: var(--muted-strong); background: var(--bg-soft);
   }
 </style>
