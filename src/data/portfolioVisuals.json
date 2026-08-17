@@ -13,9 +13,9 @@
     "id": "sales-lead-sanitized",
     "kind": "real-sanitized",
     "src": "/portfolio/sales-lead-sanitized.png",
-    "sha256": "044f7415c6aa5f0eefe9875f19d4778bb5abb1bfd35af519a9e124d2d2b77fc5",
-    "width": 1751,
-    "height": 983,
+    "sha256": "dd808b46e4b4e3d972453d28fef717e5b91d64a88ce83779581c3ccabdd14e01",
+    "width": 1741,
+    "height": 968,
     "alt": "脱敏后的销售线索管理界面，展示筛选、分发状态和列表结构",
     "caption": "真实产品界面，经裁切和脱敏；仅展示与本案例判断相关的结构。"
   }
