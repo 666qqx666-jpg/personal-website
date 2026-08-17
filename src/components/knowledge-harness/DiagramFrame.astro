@@ -24,11 +24,11 @@ const { visualId, title, ariaLabel, caption, legend, variant = 'standard' } = As
 </figure>
 
 <style>
-  .kh-frame { width: min(100%, 650px); padding: 1.2rem 1.25rem 1rem; }
+  .kh-frame { width: min(100%, 650px); min-width: 0; padding: 1.2rem 1.25rem 1rem; container-type: inline-size; container-name: kh-frame; }
   .kh-frame.evidence { width: min(100%, 860px); padding: 1rem 1.05rem .85rem; }
   .kh-frame.evidence .diagram-labels { min-height: 0; }
   .kh-title { color: var(--text); font-size: .9rem; font-weight: 750; margin-bottom: .9rem; }
-  .diagram-labels { min-height: 290px; display: grid; align-content: center; }
+  .diagram-labels { min-width: 0; min-height: 290px; display: grid; align-content: center; }
   .kh-legend { display: flex; flex-wrap: wrap; gap: .45rem .8rem; margin-top: .8rem; list-style: none; }
   .kh-legend-item { display: inline-flex; align-items: center; gap: .35rem; color: var(--text-dim); font-size: .68rem; }
   .kh-legend-item i { width: 1.25rem; height: 0; border-top: 2px solid var(--text-dim); }
@@ -43,9 +43,11 @@ const { visualId, title, ariaLabel, caption, legend, variant = 'standard' } = As
   :global(.kh-node.orchestrator) { border-color: var(--c-violet); background: rgba(139,92,246,.1); }
   :global(.kh-arrow) { color: var(--text-dim); font-size: 1rem; text-align: center; align-self: center; }
   :global(.kh-lane-label) { color: var(--text-dim); font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-  @media (max-width: 760px) {
-    .kh-frame { padding: 1rem; }
+  @container kh-frame (max-width: 650px) {
     .diagram-labels { min-height: 0; }
     .kh-title { margin-bottom: .75rem; }
+  }
+  @media (max-width: 760px) {
+    .kh-frame { padding: 1rem; }
   }
 </style>

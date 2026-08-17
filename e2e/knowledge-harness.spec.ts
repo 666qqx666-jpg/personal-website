@@ -89,14 +89,48 @@ test('deck interactions and source bridge remain available', async ({ page }) =>
   await expect(page.locator('html')).toHaveAttribute('data-theme', /light|dark/);
 });
 
-test('desktop and mobile layouts do not overflow horizontally', async ({ page }) => {
-  for (const viewport of [{ width: 1280, height: 800 }, { width: 390, height: 844 }]) {
+test('approved viewport matrix keeps dense diagrams inside their own frames', async ({ page }) => {
+  const viewports = [
+    { width: 1440, height: 900, columns: 2 },
+    { width: 1280, height: 800, columns: 2 },
+    { width: 1024, height: 768, columns: 1 },
+    { width: 834, height: 1194, columns: 1 },
+    { width: 430, height: 932, columns: 1 },
+    { width: 390, height: 844, columns: 1 },
+    { width: 360, height: 800, columns: 1 },
+  ] as const;
+
+  for (const viewport of viewports) {
     await page.setViewportSize(viewport);
-    for (const id of ['s3', 's5', 's6', 's7']) {
-      await page.goto(`/ai/knowledge-harness/#${id}`);
-      const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
-      expect(overflow).toBe(false);
+    await page.goto('/ai/knowledge-harness/#s6');
+
+    const splitColumns = await page.locator('#s6 .enterprise-split').evaluate(
+      (node) => getComputedStyle(node).gridTemplateColumns.split(' ').length
+    );
+    expect(splitColumns).toBe(viewport.columns);
+
+    for (const id of ['s5', 's6', 's7']) {
+      const frame = page.locator(`#${id} [data-visual]`);
+      const containment = await frame.evaluate((node) => {
+        const frameRect = node.getBoundingClientRect();
+        const offenders = [...node.querySelectorAll<HTMLElement>('*')]
+          .filter((child) => {
+            const rect = child.getBoundingClientRect();
+            if (rect.width === 0 && rect.height === 0) return false;
+            return rect.left < frameRect.left - 1 || rect.right > frameRect.right + 1;
+          })
+          .map((child) => child.className || child.tagName);
+        return {
+          internalOverflow: node.scrollWidth > node.clientWidth + 1,
+          offenders,
+        };
+      });
+      expect(containment).toEqual({ internalOverflow: false, offenders: [] });
     }
+
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(
+      await page.evaluate(() => document.documentElement.clientWidth)
+    );
   }
 });
 
