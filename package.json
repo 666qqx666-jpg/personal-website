@@ -8,6 +8,7 @@
     "preview": "astro preview",
     "check": "astro check",
     "test:e2e": "playwright test",
+    "portfolio:visuals": "node scripts/verify-portfolio-visuals.mjs",
     "resume:check": "npm run check && playwright test e2e/resume-data.spec.ts e2e/resume.spec.ts e2e/about.spec.ts e2e/resume-pdf.spec.ts",
     "resume:export": "node scripts/export-resumes.mjs"
   },
