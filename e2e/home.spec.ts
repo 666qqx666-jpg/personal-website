@@ -32,6 +32,8 @@ test('home adds selected work without replacing the original section navigation'
   await page.setViewportSize({ width: 1440, height: 1000 }); await page.goto('/');
   await expect(page.locator('[data-selected-work]')).toBeVisible(); await expect(page.locator('[data-work-preview]')).toHaveCount(4);
   await expect(page.locator('.grid a.card')).toHaveCount(3);
+  const knowledgeColumns = await page.locator('[data-knowledge-preview]').evaluate((node) => getComputedStyle(node).gridTemplateColumns.split(' ').length);
+  expect(knowledgeColumns).toBe(1);
   const heroHeight = await page.locator('.banner').evaluate((node) => node.getBoundingClientRect().height);
   expect(heroHeight).toBeGreaterThanOrEqual(560); expect(heroHeight).toBeLessThan(900);
 });
@@ -41,4 +43,8 @@ test('selected work keeps AI systems first on mobile and loads reviewed visuals'
   await expect(previews).toHaveCount(4); await expect(previews.nth(0)).toContainText('Enterprise Knowledge Harness'); await expect(previews.nth(1)).toContainText('Enterprise Product Delivery Agent Harness');
   await expect(previews.nth(0).locator('[data-knowledge-preview]')).toBeVisible(); await expect(previews.nth(1).locator('img')).toHaveAttribute('alt', /PRD 审查记录/); await expect(previews.nth(3).locator('[data-system-preview="parking-layers"]')).toBeVisible();
   expect(await previews.nth(0).innerText()).not.toMatch(/V1\.5|V2|16\/20|18\/20/); expect(await previews.locator('img').evaluateAll((images) => images.every((image) => { const img = image as HTMLImageElement; return img.complete && img.naturalWidth > 0; }))).toBe(true);
+  const columns = await page.locator('.business-pair').evaluate((node) => getComputedStyle(node).gridTemplateColumns.split(' ').length);
+  const sales = await previews.nth(2).boundingBox(); const parking = await previews.nth(3).boundingBox();
+  expect(columns).toBe(1); expect(sales?.width).toBeGreaterThan(320); expect(parking?.y).toBeGreaterThan((sales?.y ?? 0) + (sales?.height ?? 0) - 1);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(await page.evaluate(() => document.documentElement.clientWidth));
 });
